@@ -100,3 +100,38 @@ parentheses.
 6 + 9 / 3
 (6 + 9) / 3
 ```
+
+-----
+
+Within the `tidyverse` (or `magrittr`), there is also another way to
+specify the order in which expressions are evaluated. Namely, by
+‘**piping**’ the different operations in the very order they must be
+executed by R. The ‘pipe’ is designated by the `%>%` operator. This
+operator is so useful that it has its own key-binding in RStudio, which
+is Ctrl/Cmd + Shift + M.
+
+We can obtain the same result as above with
+
+``` r
+library(magrittr) # allow to use pipe
+
+9 %>% divide_by(3) %>% add(6) 
+6 %>% add(9) %>% divide_by(3)
+```
+
+Piping is very effective, when multiple functions would be nested.
+
+``` r
+# compare ...
+asin(sqrt(divide_by(sum(1, 2, 3, 4), 10)))
+
+# ... and ...
+sum(1, 2, 3, 4) %>% 
+  # comments may be interspresed to give rationales
+  divide_by(10) %>% 
+  # functions with a single argument, may omit brackets ...
+  sqrt %>% 
+  asin
+```
+
+We will see how to use piping when it comes to data manipulation.
