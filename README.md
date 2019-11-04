@@ -1,3 +1,9 @@
+---
+layout: default
+title: Syllabus
+nav_order: 1
+---
+
 # R Workshop
 
 
