@@ -20,9 +20,11 @@ install.packages("tidyverse")
 install.packages("data.table")
 ```
 
-_Note to macOS users:_ To use `data.table`’s parallel processing capability, you will need a version of OpenMP to be installed on your machine. Consider following the instructions on [https://github.com/Rdatatable/data.table/](https://github.com/Rdatatable/data.table/wiki/Installation#openmp-enabled-compiler-for-mac).
+_Note to macOS users:_ To use `data.table`’s parallel processing capability, you will need a version of OpenMP to be installed on your machine. Consider to follow the instructions on [https://github.com/Rdatatable/data.table/](https://github.com/Rdatatable/data.table/wiki/Installation#openmp-enabled-compiler-for-mac).
 
-### [Getting Started](part_0-basic_interaction.md)
+### Getting Started
+
+In this [first part](part_01-basic_interactions.md), we will explore how to interact with R.
 
 
 
