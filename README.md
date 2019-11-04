@@ -1,6 +1,11 @@
 # R Workshop
 
+
 ## Prerequisites
+
+Before we can get started, you need to install R and famliarize with some concepts.
+
+### Installing R 
 
 Install the latest version of **R** from [https://cran.rstudio.com/](https://cran.rstudio.com). Most of the code will probably run also on older versions of R. Beware that you will need to re-install packages after updating R to a newver version.
 
@@ -17,5 +22,11 @@ install.packages("data.table")
 
 _Note to macOS users:_ To use `data.table`’s parallel processing capability, you will need a version of OpenMP to be installed on your machine. Consider following the instructions on [https://github.com/Rdatatable/data.table/](https://github.com/Rdatatable/data.table/wiki/Installation#openmp-enabled-compiler-for-mac).
 
+### [Getting Started](part_0-basic_interaction.md)
+
+
+
+
 ## Syllabus
 
+1. 
