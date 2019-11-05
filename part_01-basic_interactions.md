@@ -29,8 +29,8 @@ by yourself. For the sake of reproducibility, some of the chunks are
 directly followed by the output you should obtain on your machine. Here,
 these lines are prefixed with a ‘\#\#’ mark.
 
-In R, the ‘\#’ sign serves as comment character. Anything typed behind
-this sign will be invisible to R.
+> In R, the ‘\#’ sign serves as comment character. Anything typed behind
+> this sign will be invisible to R.
 
 ## Expressions and Assignments
 
@@ -39,13 +39,13 @@ Code to interact with R will fall into one of two categories.
 *Expressions:*
 
 ``` r
-1 + sin(pi/2)
+1 + sin(pi/2) 
 ```
 
     ## [1] 2
 
 ``` r
-nchar("math")
+nchar("math") # number of characters in the word “math”
 ```
 
     ## [1] 4
@@ -135,3 +135,253 @@ sum(1, 2, 3, 4) %>%
 ```
 
 We will see how to use piping when it comes to data manipulation.
+
+### Assignments
+
+While using R as a calculator is interesting, to do useful things, we
+need to assign *values to objects*. In R, the assignment operator `<-`
+(or `->`) points from the value to the object. The ‘=’ sign can also be
+used for assignments.
+
+Objects can be given any (case-sensitive) ‘name’ (also known as the
+object’s ‘symbol’), except that
+
+  - names cannot start with a number, and
+  - names cannot be identical to reserved words such as `if`, `TRUE`,
+    `NA`, `...` etc. (type `?Reserved` for a complete list).
+
+> Beware that you might unintentionally **overwrite built-in objects**
+> such as `mean`, `data`, `df` etc. When in doubt, check the help to see
+> if the name is already in use. RStudio will show you a list of all
+> currently loaded object and function names starting with the word you
+> typed when you hit the tab key.
+
+In practice, you want your object names to be explicit and not too long.
+
+``` r
+N_Avogrado = 6.022e23 # we cannot use NA as name!
+
+N_fmol = 2
+N_abs  = N_fmol * N_Avogrado * 1e-15
+
+# print the result
+N_abs
+```
+
+    ## [1] 1204400000
+
+You can see which objects are currently loaded in R’s memory (‘Global
+Environment’) checking the ‘Environment’ tab in RStudio or by typing
+`ls()` in the R console.
+
+To remove objects from R’s memory, use the `rm(...)` function.
+
+``` r
+ls()
+```
+
+    ## [1] "N_abs"      "N_Avogrado" "N_fmol"
+
+``` r
+rm(N_abs, N_Avogrado)
+ls()
+```
+
+    ## [1] "N_fmol"
+
+### Functions
+
+If a set of operations will be repeatedly used, it can be useful to
+summarize these as a function. The return value of the function will
+dependend on the arguments the function is called with.
+
+A function is created with `function(...) {...}`. As every R object,
+functions can be assigned to a name for future reference. The arguments
+(variables *and* parameters) on which the function depends, are written
+between the round brackets of the call, the operations to execute follow
+in curly brackets.
+
+``` r
+fmol_to_abs <- function(fmol) {
+  
+  N_Avogrado = 6.022e23
+  
+  N_abs = fmol * N_Avogrado * 1e-15
+  
+  return(N_abs)
+  
+}
+
+fmol_to_abs(N_fmol)
+```
+
+    ## [1] 1204400000
+
+Note that neither `N_abs` nor `N_Avogrado` have been added to the
+‘Global Environment’.
+
+``` r
+ls()
+```
+
+    ## [1] "fmol_to_abs" "N_fmol"
+
+If the last statement in a function is an expression, it is implicitly
+returned. So, we could simplify.
+
+``` r
+fmol_to_abs <- function(fmol) {
+  
+  N_Avogrado = 6.022e23
+  
+  fmol * N_Avogrado * 1e-15
+  
+}
+
+fmol_to_abs(N_fmol)
+```
+
+    ## [1] 1204400000
+
+Of course, it is possible to add parameters to a function. These
+parameters can have default values.
+
+``` r
+mol_to_abs <- function(mol, prefix = "f") {
+  
+  prefix_meaning = c("a" = 1e-18,
+                     "f" = 1e-15, 
+                     "p" = 1e-12,
+                     "n" = 1e-09,
+                     "µ" = 1e-06,
+                     "m" = 1e-03)
+  
+  mol * 6.022e23 * prefix_meaning[[prefix]]
+  
+}
+
+# the default "f" is assumed for the omitted prefix parameter
+mol_to_abs(N_fmol) 
+```
+
+    ## [1] 1204400000
+
+``` r
+# with the prefix specified, the default is ignored
+mol_to_abs(20, prefix = "µ")
+```
+
+    ## [1] 1.2044e+19
+
+``` r
+# unnamed arguments are interpreted in the order of the function's definition; 
+# when named, arguments can be provided in any order
+mol_to_abs(prefix = "µ", mol = 20)
+```
+
+    ## [1] 1.2044e+19
+
+## Packages
+
+Not all functions are loaded by default into R’s memory. Also, not all
+functionality required for a certain task might even be programmed in
+base R. Therefore, users can write, deposit and load ‘extensions’ to the
+R software, which most frequently comes as a bundle of functions (and/or
+data) in so-called ‘packages’.
+
+Packages can be found anywhere in the internet, but most reliably, they
+are obtained from the ‘Comprehensive R Archive Network’
+([CRAN](https://cran.rstudio.com)) and in many cases actively maintained
+and developed by the community on github.
+
+To install, e.g. the `magrittr` package from CRAN.
+
+``` r
+install.packages("magrittr")
+```
+
+To uninstall a package, use `remove.packages(...)`.
+
+To load a package into R’s memory, use
+
+``` r
+library("magrittr")
+```
+
+All of its functions will now be available: Their namespace has been
+attached to the search path of the current environment. To check the
+currently loaded namespaces, type `loadedNamespaces()`. To remove a
+namespace from the current session, type `unloadNamespace(...)`
+providing the package name.
+
+If you intend to use a single function from a package only once, or if
+there are multiple functions with the same name from different packages
+loaded in the current namespace, you can be more explicit, prefixing the
+package name with `::` before the function call, e.g.
+`magrittr::divide_by(...)`.
+
+### Getting Help on Functions and Other Objects
+
+To ‘see’ the code that a function executes, just type its name without
+the bracktes into the R console.
+
+``` r
+mol_to_abs
+```
+
+    ## function(mol, prefix = "f") {
+    ##   
+    ##   prefix_meaning = c("a" = 1e-18,
+    ##                      "f" = 1e-15, 
+    ##                      "p" = 1e-12,
+    ##                      "n" = 1e-09,
+    ##                      "µ" = 1e-06,
+    ##                      "m" = 1e-03)
+    ##   
+    ##   mol * 6.022e23 * prefix_meaning[[prefix]]
+    ##   
+    ## }
+    ## <bytecode: 0x7ff45c823898>
+
+As this code can be sometimes rather enigmatic, each function comes with
+an extensive built-in documentation within R.
+
+-----
+
+*If you know the command’s name,* the following approach will open the
+appropriate documentation. As an example, examine the help for the
+`sum(...)` function.
+
+``` r
+help(sum)
+help("sum")
+?sum
+```
+
+Typically, the help page includes the following sections:
+
+  - *Description*, a brief summary,
+  - *Usage*, showing all arguments (variables and parameters) along with
+    their default values, where `...` represents any abitrary number of
+    comma-separated (unquoted) arguments,
+  - *Arguments*, explicitly describing each argument and the data type
+    expected,
+  - *Details*, summarizing the function’s behaviour and its intended
+    usage,
+  - *Value*, explicitly describing the return value of the function,
+  - *References* for the algorithms implemented,
+  - *See Also*, listing similar functions for different data types, or
+    shortcuts for commonly used operations,
+  - *Examples* with illustrative code that helps better understanding
+    the functions behavior.
+
+-----
+
+*If you do not know the exact name of the function you are looking for,*
+but you know what the function *should* be able to do for you, the
+following commands will be helpful.
+
+``` r
+help.search("histogram")
+??histogram
+```

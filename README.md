@@ -1,13 +1,10 @@
-# R Workshop
-
-
 ## Prerequisites
 
 Before we can get started, you need to install R and famliarize with some concepts.
 
 ### Installing R 
 
-Install the latest version of **R** from [https://cran.rstudio.com/](https://cran.rstudio.com). Most of the code will probably run also on older versions of R. Beware that you will need to re-install packages after updating R to a newver version.
+Install the latest version of **R** from [https://cran.rstudio.com/](https://cran.rstudio.com). Most of the code will probably run also on older versions of R. Beware that you will need to re-install packages after updating R to a newer version.
 
 We will be using an Integrated Development Environment (IDE) called **RStudio** to interact with R. However, there is nothing to prohibit using R at the command line or in some other interface. You can download RStudio for free from [https://rstudio.com/products/rstudio/download/](https://rstudio.com/products/rstudio/download/#download).
 
@@ -24,7 +21,7 @@ _Note to macOS users:_ To use `data.table`’s parallel processing capability, y
 
 ### Getting Started
 
-In this [first part](part_01-basic_interactions.md), we will explore how to interact with R.
+[Introductory Part 1](part_01-basic_interactions.md) will explore how to interact with R.
 
 
 
@@ -32,3 +29,7 @@ In this [first part](part_01-basic_interactions.md), we will explore how to inte
 ## Syllabus
 
 1. 
+
+## Acknowledgements
+
+Some of the material has been adapted from Sean Davi's [Introduction to R](https://seandavi.github.io/ITR/index.html). 
