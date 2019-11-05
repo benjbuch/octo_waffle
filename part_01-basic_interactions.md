@@ -10,7 +10,7 @@ The prompt looks like this:
     > _
 
 In the absence of the prompt, R is busy with calculations. Anything you
-type in meanwhile, will be evaluated *after* the current command has
+type meanwhile, will be evaluated *after* the current command has
 completed.
 
 In case a line is (syntactically) incomplete after you hit the return
@@ -23,14 +23,74 @@ complete the command.
 
 ## Code and Comments
 
-In the following, you will see pieces of R code (‘chunks’) in grey
-boxes. You can copy and paste this code to your R console and execute it
-by yourself. For the sake of reproducibility, some of the chunks are
-directly followed by the output you should obtain on your machine. Here,
-these lines are prefixed with a ‘\#\#’ mark.
+In the following, pieces of R code (‘chunks’) are presented in grey
+boxes. You can copy the commands from these chunks to your R console and
+execute them by yourself. Beware that R is a case-sensitive language; so
+`A` and `a` are different symbols.
 
-> In R, the ‘\#’ sign serves as comment character. Anything typed behind
-> this sign will be invisible to R.
+For the sake of reproducibility, some chunks are directly followed by
+the output you should obtain on your machine. In this case, the lines
+are prefixed with a ‘\#\#’ mark.
+
+> In R, the ‘\#’ sign serves as comment character and can appear nearly
+> anywhere in the code. Anything typed behind this sign will be
+> invisible to R.
+
+If you want to recall, (modify) and reexecute a previous command, you
+can navigate the command history by using the up- and down-arrow keys on
+your keyboard. In RStudio, you can access your command history in the
+‘History’ pane, which is next to the ‘Environment’ pane by default.
+
+## A Sample Session
+
+If you like, you can run the following chunk that will demonstrate one
+simple application of R: Fitting a linear regression model to some noisy
+data.
+
+``` r
+# create a “list” of values from 1 to 20
+x <- 1:20
+# use this list to create a “table” with two columns x and y; add
+# some noise to the y observations
+d <- data.frame(x = x, y = x + rnorm(x))
+# make a plot
+plot(d)
+# fit a linear regression
+r <- lm(y ~ x, data = d)
+# add to plot
+lines(x, r$fitted.values, col = "red")
+```
+
+![](part_01-basic_interactions_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+
+``` r
+# get the statistics of the fit
+summary(r)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = y ~ x, data = d)
+    ## 
+    ## Residuals:
+    ##      Min       1Q   Median       3Q      Max 
+    ## -1.62784 -0.55062 -0.04571  0.43422  3.13560 
+    ## 
+    ## Coefficients:
+    ##             Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept) -0.28409    0.55261  -0.514    0.613    
+    ## x            1.03371    0.04613  22.408 1.34e-14 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 1.19 on 18 degrees of freedom
+    ## Multiple R-squared:  0.9654, Adjusted R-squared:  0.9635 
+    ## F-statistic: 502.1 on 1 and 18 DF,  p-value: 1.342e-14
+
+``` r
+# clean up
+rm(x, d, r)
+```
 
 ## Expressions and Assignments
 
@@ -59,13 +119,20 @@ y <- 2 # RHS is assigned to LHS
 3 -> z # LHS is assigned to RHS
 ```
 
+When expressions are typed, R will evaluate them and print the result
+(unless specifically made invisible). The result of an expression is
+however ‘lost’. Assignments on the other hand do not print to the
+console, but store the result to the current R environment (‘Global
+Environment’).
+
 ### Expressions
 
-When expressions are typed, R will evaluate them and return the result.
+Although, expressions are not limited to mathematical expressions in a
+colloquial sense, R comes with a lot of operators and functions to do
+anything from boolean to matrix algebra, over statistics and modelling.
+Thus, R can be used as a very fancy calculator.
 
-Expressions can be (but are not limited to) mathematical expressions in
-a colloquial sense. Thus, R can be used as a very fancy calculator. Some
-of the arithmetic operators implemented in R include:
+Some of the arithmetic operators implemented in R include:
 
 | operator    | effect             |
 | ----------- | ------------------ |
@@ -89,11 +156,9 @@ of the arithmetic operators implemented in R include:
 
 There are many (a lot of\!) built-in functions for other mathemtatical
 operations including `abs(...)`, `floor(...)`, `round(...)`,
-`sqrt(...)`, `exp(...)`, `log(...)`, `sin(...)`, `cos(...)`, etc. R is
-designed to work out boolean and matrix algebra, and offers a large
-statistical toolbox.
+`sqrt(...)`, `exp(...)`, `log(...)`, `sin(...)`, `cos(...)`, etc.
 
-R follows the standard order of operations, groupings based on
+R follows the standard order of operations and groupings based on
 parentheses.
 
 ``` r
@@ -101,11 +166,11 @@ parentheses.
 (6 + 9) / 3
 ```
 
------
+### Using a Pipe
 
 Within the `tidyverse` (or `magrittr`), there is also another way to
 specify the order in which expressions are evaluated. Namely, by
-‘**piping**’ the different operations in the very order they must be
+*piping* the different operations in the very order they must be
 executed by R. The ‘pipe’ is designated by the `%>%` operator. This
 operator is so useful that it has its own key-binding in RStudio, which
 is Ctrl/Cmd + Shift + M.
@@ -119,7 +184,7 @@ library(magrittr) # allow to use pipe
 6 %>% add(9) %>% divide_by(3)
 ```
 
-Piping is very effective, when multiple functions would be nested.
+Piping is very effective, when multiple functions would else be nested.
 
 ``` r
 # compare ...
@@ -134,7 +199,7 @@ sum(1, 2, 3, 4) %>%
   asin
 ```
 
-We will see how to use piping when it comes to data manipulation.
+We will see how useful piping is when it comes to data manipulation.
 
 ### Assignments
 
@@ -143,8 +208,8 @@ need to assign *values to objects*. In R, the assignment operator `<-`
 (or `->`) points from the value to the object. The ‘=’ sign can also be
 used for assignments.
 
-Objects can be given any (case-sensitive) ‘name’ (also known as the
-object’s ‘symbol’), except that
+Objects can be given any name (also known as the object’s ‘symbol’),
+except that
 
   - names cannot start with a number, and
   - names cannot be identical to reserved words such as `if`, `TRUE`,
@@ -153,10 +218,11 @@ object’s ‘symbol’), except that
 > Beware that you might unintentionally **overwrite built-in objects**
 > such as `mean`, `data`, `df` etc. When in doubt, check the help to see
 > if the name is already in use. RStudio will show you a list of all
-> currently loaded object and function names starting with the word you
-> typed when you hit the tab key.
+> currently known objects and functions that start with the characters
+> you just typed, when you hit the ‘tab’ key.
 
-In practice, you want your object names to be explicit and not too long.
+Although there is no restriction in the length of object names, in
+practice, you want your object names to be explicit and not too long.
 
 ``` r
 N_Avogrado = 6.022e23 # we cannot use NA as name!
@@ -170,9 +236,9 @@ N_abs
 
     ## [1] 1204400000
 
-You can see which objects are currently loaded in R’s memory (‘Global
-Environment’) checking the ‘Environment’ tab in RStudio or by typing
-`ls()` in the R console.
+You can see which objects are currently loaded in R’s memory (the
+‘Global Environment’) by checking the ‘Environment’ pane in RStudio or
+by typing `ls()` (or `objects()`) in the R console.
 
 To remove objects from R’s memory, use the `rm(...)` function.
 
@@ -191,15 +257,17 @@ ls()
 
 ### Functions
 
-If a set of operations will be repeatedly used, it can be useful to
-summarize these as a function. The return value of the function will
-dependend on the arguments the function is called with.
+If a sequence of operations has to be repeatedly performed, it can be
+very effective to evoke this sequence of operations using a single
+command: A named function. By making its return value dependend on the
+arguments the function is called with, your code will gain enormously in
+power, convenience and elegance.
 
 A function is created with `function(...) {...}`. As every R object,
-functions can be assigned to a name for future reference. The arguments
-(variables *and* parameters) on which the function depends, are written
-between the round brackets of the call, the operations to execute follow
-in curly brackets.
+functions can be assigned to a symbol for future reference. The
+arguments (variables *and/or* parameters) are given between round
+brackets in the function call, the operations to execute follow in curly
+brackets.
 
 ``` r
 fmol_to_abs <- function(fmol) {
@@ -227,7 +295,7 @@ ls()
     ## [1] "fmol_to_abs" "N_fmol"
 
 If the last statement in a function is an expression, it is implicitly
-returned. So, we could simplify.
+returned. So, we can simplify.
 
 ``` r
 fmol_to_abs <- function(fmol) {
@@ -243,8 +311,8 @@ fmol_to_abs(N_fmol)
 
     ## [1] 1204400000
 
-Of course, it is possible to add parameters to a function. These
-parameters can have default values.
+Of course, it is possible to add parameters to a function. Parameters
+can have default values.
 
 ``` r
 mol_to_abs <- function(mol, prefix = "f") {
@@ -260,21 +328,27 @@ mol_to_abs <- function(mol, prefix = "f") {
   
 }
 
-# the default "f" is assumed for the omitted prefix parameter
+# the default "f" is assumed for the omitted ‘prefix’ parameter
 mol_to_abs(N_fmol) 
 ```
 
     ## [1] 1204400000
 
 ``` r
-# with the prefix specified, the default is ignored
+# with ‘prefix’ being specified, the default is ignored
 mol_to_abs(20, prefix = "µ")
 ```
 
     ## [1] 1.2044e+19
 
 ``` r
-# unnamed arguments are interpreted in the order of the function's definition; 
+# unnamed arguments are interpreted in the order of the function's definition
+mol_to_abs(20, "µ")
+```
+
+    ## [1] 1.2044e+19
+
+``` r
 # when named, arguments can be provided in any order
 mol_to_abs(prefix = "µ", mol = 20)
 ```
@@ -284,15 +358,15 @@ mol_to_abs(prefix = "µ", mol = 20)
 ## Packages
 
 Not all functions are loaded by default into R’s memory. Also, not all
-functionality required for a certain task might even be programmed in
-base R. Therefore, users can write, deposit and load ‘extensions’ to the
-R software, which most frequently comes as a bundle of functions (and/or
-data) in so-called ‘packages’.
+functions required for a task might even be available with the standard
+distribution of R. Therefore, users can write, deposit and load
+extensions to the R software, which come as bundles of functions and/or
+other objects such as data in so-called ‘packages’.
 
-Packages can be found anywhere in the internet, but most reliably, they
-are obtained from the ‘Comprehensive R Archive Network’
-([CRAN](https://cran.rstudio.com)) and in many cases actively maintained
-and developed by the community on github.
+R packages can be found anywhere on the internet, but most reliably,
+they are obtained from the ‘Comprehensive R Archive Network’
+([CRAN](https://cran.rstudio.com)). A good R packages is actively
+maintained and developed by the R community.
 
 To install, e.g. the `magrittr` package from CRAN.
 
@@ -308,17 +382,17 @@ To load a package into R’s memory, use
 library("magrittr")
 ```
 
-All of its functions will now be available: Their namespace has been
-attached to the search path of the current environment. To check the
-currently loaded namespaces, type `loadedNamespaces()`. To remove a
-namespace from the current session, type `unloadNamespace(...)`
-providing the package name.
+All of the package’s function will now be known in the current R
+session. Their namespace has been attached to the search path of the
+current environment. To check the currently loaded namespaces, type
+`loadedNamespaces()`. To remove a namespace from the current session,
+type `unloadNamespace(...)` with the respective package name.
 
-If you intend to use a single function from a package only once, or if
-there are multiple functions with the same name from different packages
-loaded in the current namespace, you can be more explicit, prefixing the
-package name with `::` before the function call, e.g.
-`magrittr::divide_by(...)`.
+If you intend to use only a single function from a package (and do not
+want to load the entire namespace), or if there are multiple functions
+with the same name from different packages in the current namespace, you
+must be more explicit and prefix the function call with the package name
+separated by `::`, e.g. `magrittr::divide_by(...)`.
 
 ### Getting Help on Functions and Other Objects
 
@@ -341,7 +415,7 @@ mol_to_abs
     ##   mol * 6.022e23 * prefix_meaning[[prefix]]
     ##   
     ## }
-    ## <bytecode: 0x7ff45c823898>
+    ## <bytecode: 0x7fd5d8eed6b8>
 
 As this code can be sometimes rather enigmatic, each function comes with
 an extensive built-in documentation within R.
@@ -385,3 +459,22 @@ following commands will be helpful.
 help.search("histogram")
 ??histogram
 ```
+
+## Learning Objectives
+
+In this section you should have learned
+
+  - how to create an object, consisting of a value and a name,
+  - how to check which objects are currently in R’s memory, and
+  - how to remove them,
+  - what a ‘function’ does conceptually,
+  - what a ‘package’ is conceptually,
+  - how to find help, and
+  - which information is in the documentation.
+
+Quick questions.
+
+1.  What do `#`, `%>%`, `%%` and `->` mean?
+2.  How do you type `{`, `}`, `[`, and `]` on your keyboard?
+3.  Check out the documentation for `rm`. Can you figure out what
+    `rm(list = ls())` will do? Do it\!

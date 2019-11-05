@@ -14,12 +14,17 @@ Once you installed R, please run the following lines of code.
 
 ``` r
 install.packages("tidyverse")
+install.packages("magrittr")
 install.packages("data.table")
 ```
 
 _Note to macOS users:_ To use `data.table`’s parallel processing capability, you will need a version of OpenMP to be installed on your machine. Consider to follow the instructions on [https://github.com/Rdatatable/data.table/](https://github.com/Rdatatable/data.table/wiki/Installation#openmp-enabled-compiler-for-mac).
 
 ### Getting Started
+
+Please check out the following sections to grasp an idea of some concepts in R and to familiarize with its usage. You do not need to understand everything and some things might be puzzling right now, but this will soon disappear.
+
+At the end of each section, you will find some questions for self-study.
 
 [Introductory Part 1](part_01-basic_interactions.md) will explore how to interact with R.
 
