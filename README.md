@@ -1,10 +1,10 @@
 ## Prerequisites
 
-Before we can get started, you need to install R and famliarize with some concepts.
+Before we can get started, please work through the next sections to install R and to familiarize with some concepts in R.
 
 ### Installing R 
 
-Install the latest version of **R** from [https://cran.rstudio.com/](https://cran.rstudio.com). Most of the code will probably run also on older versions of R. Beware that you will need to re-install packages after updating R to a newer version.
+Install the latest version of **R** from [https://cran.rstudio.com/](https://cran.rstudio.com). Most of the code will probably run also with older versions of R. Beware that once you installed R, you will need to re-install packages after updating R to a newer version.
 
 We will be using an Integrated Development Environment (IDE) called **RStudio** to interact with R. However, there is nothing to prohibit using R at the command line or in some other interface. You can download RStudio for free from [https://rstudio.com/products/rstudio/download/](https://rstudio.com/products/rstudio/download/#download).
 
@@ -18,17 +18,17 @@ install.packages("magrittr")
 install.packages("data.table")
 ```
 
-_Note to macOS users:_ To use `data.table`’s parallel processing capability, you will need a version of OpenMP to be installed on your machine. Consider to follow the instructions on [https://github.com/Rdatatable/data.table/](https://github.com/Rdatatable/data.table/wiki/Installation#openmp-enabled-compiler-for-mac).
+_Note to macOS users:_ To use `data.table`’s parallel processing capability, you will need a version of OpenMP to be installed on your machine. Consider to follow the instructions on [https://github.com/Rdatatable/data.table/](https://github.com/Rdatatable/data.table/wiki/Installation#openmp-enabled-compiler-for-mac). For this workshop, this is optional.
 
 ### Getting Started
 
-Please check out the following sections to grasp an idea of some concepts in R and to familiarize with its usage. You do not need to understand everything and some things might be puzzling right now, but this will soon disappear.
+The following introductions are intended to give you some ‘background’ of R. You do not need to understand every line of code or recall everything from the text; some things might seem puzzling right now, but this will soon disappear.
 
-At the end of each section, you will find some questions for self-study.
+At the end of each part, you will find some questions for self-study.
 
 [Introductory Part 1](part_01-basic_interactions.md) will explore how to interact with R.
 
-
+[Introductory Part 2](part_02-data_structures.md) will introduce some common data types in R.
 
 
 ## Syllabus

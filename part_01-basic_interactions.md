@@ -29,8 +29,8 @@ execute them by yourself. Beware that R is a case-sensitive language; so
 `A` and `a` are different symbols.
 
 For the sake of reproducibility, some chunks are directly followed by
-the output you should obtain on your machine. In this case, the lines
-are prefixed with a ‘\#\#’ mark.
+the output that you should obtain on your machine. In this case, the
+lines are prefixed with a ‘\#\#’ mark.
 
 > In R, the ‘\#’ sign serves as comment character and can appear nearly
 > anywhere in the code. Anything typed behind this sign will be
@@ -43,9 +43,9 @@ your keyboard. In RStudio, you can access your command history in the
 
 ## A Sample Session
 
-If you like, you can run the following chunk that will demonstrate one
-simple application of R: Fitting a linear regression model to some noisy
-data.
+To break the ice, you can run the following chunk that will demonstrate
+one simple application of R: Fitting a linear regression model to some
+noisy data.
 
 ``` r
 # create a “list” of values from 1 to 20
@@ -74,18 +74,18 @@ summary(r)
     ## 
     ## Residuals:
     ##      Min       1Q   Median       3Q      Max 
-    ## -1.62784 -0.55062 -0.04571  0.43422  3.13560 
+    ## -1.33987 -0.74106  0.01089  0.62442  1.89050 
     ## 
     ## Coefficients:
     ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept) -0.28409    0.55261  -0.514    0.613    
-    ## x            1.03371    0.04613  22.408 1.34e-14 ***
+    ## (Intercept) -0.73455    0.44330  -1.657    0.115    
+    ## x            1.06717    0.03701  28.837   <2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 1.19 on 18 degrees of freedom
-    ## Multiple R-squared:  0.9654, Adjusted R-squared:  0.9635 
-    ## F-statistic: 502.1 on 1 and 18 DF,  p-value: 1.342e-14
+    ## Residual standard error: 0.9543 on 18 degrees of freedom
+    ## Multiple R-squared:  0.9788, Adjusted R-squared:  0.9776 
+    ## F-statistic: 831.6 on 1 and 18 DF,  p-value: < 2.2e-16
 
 ``` r
 # clean up
@@ -121,13 +121,13 @@ y <- 2 # RHS is assigned to LHS
 
 When expressions are typed, R will evaluate them and print the result
 (unless specifically made invisible). The result of an expression is
-however ‘lost’. Assignments on the other hand do not print to the
-console, but store the result to the current R environment (‘Global
-Environment’).
+however ‘lost’ for further usage. Assignments on the other hand do not
+print to the console, but either store the result in the current
+environment or modify an existing object.
 
 ### Expressions
 
-Although, expressions are not limited to mathematical expressions in a
+Although expressions are not limited to mathematical expressions in a
 colloquial sense, R comes with a lot of operators and functions to do
 anything from boolean to matrix algebra, over statistics and modelling.
 Thus, R can be used as a very fancy calculator.
@@ -154,9 +154,9 @@ Some of the arithmetic operators implemented in R include:
 (-8)^(1/3)
 ```
 
-There are many (a lot of\!) built-in functions for other mathemtatical
-operations including `abs(...)`, `floor(...)`, `round(...)`,
-`sqrt(...)`, `exp(...)`, `log(...)`, `sin(...)`, `cos(...)`, etc.
+Some of the built-in functions for other mathemtatical operations
+include `abs(...)`, `floor(...)`, `round(...)`, `sqrt(...)`, `exp(...)`,
+`log(...)`, `sin(...)`, `cos(...)`, etc.
 
 R follows the standard order of operations and groupings based on
 parentheses.
@@ -168,12 +168,11 @@ parentheses.
 
 ### Using a Pipe
 
-Within the `tidyverse` (or `magrittr`), there is also another way to
-specify the order in which expressions are evaluated. Namely, by
-*piping* the different operations in the very order they must be
-executed by R. The ‘pipe’ is designated by the `%>%` operator. This
-operator is so useful that it has its own key-binding in RStudio, which
-is Ctrl/Cmd + Shift + M.
+There is also another way to specify the order in which expressions are
+evaluated. Namely, by *piping* the different operations in the very
+order they must be executed by R. The ‘pipe’ is designated by the `%>%`
+operator. This operator is so useful that it has its own key-binding in
+RStudio, which is Ctrl/Cmd + Shift + M.
 
 We can obtain the same result as above with
 
@@ -221,8 +220,8 @@ except that
 > currently known objects and functions that start with the characters
 > you just typed, when you hit the ‘tab’ key.
 
-Although there is no restriction in the length of object names, in
-practice, you want your object names to be explicit and not too long.
+Although there is no restriction in length for object names, in
+practice, you want your names to be explicit and not too long.
 
 ``` r
 N_Avogrado = 6.022e23 # we cannot use NA as name!
@@ -259,9 +258,9 @@ ls()
 
 If a sequence of operations has to be repeatedly performed, it can be
 very effective to evoke this sequence of operations using a single
-command: A named function. By making its return value dependend on the
-arguments the function is called with, your code will gain enormously in
-power, convenience and elegance.
+command: A function. If you make the return value of the function
+dependend on the arguments that the function was called with, your code
+will gain enormously in power, convenience and elegance.
 
 A function is created with `function(...) {...}`. As every R object,
 functions can be assigned to a symbol for future reference. The
@@ -374,7 +373,8 @@ To install, e.g. the `magrittr` package from CRAN.
 install.packages("magrittr")
 ```
 
-To uninstall a package, use `remove.packages(...)`.
+To uninstall a package, use `remove.packages(...)`. You will rarely need
+this.
 
 To load a package into R’s memory, use
 
@@ -383,16 +383,20 @@ library("magrittr")
 ```
 
 All of the package’s function will now be known in the current R
-session. Their namespace has been attached to the search path of the
-current environment. To check the currently loaded namespaces, type
-`loadedNamespaces()`. To remove a namespace from the current session,
-type `unloadNamespace(...)` with the respective package name.
+session. More specifically, their ‘namespace’ has been attached to the
+search path of the current environment. To check the currently loaded
+namespaces, type `loadedNamespaces()`. To remove a namespace from the
+current session, type `unloadNamespace(...)` with the respective package
+name.
 
 If you intend to use only a single function from a package (and do not
-want to load the entire namespace), or if there are multiple functions
-with the same name from different packages in the current namespace, you
-must be more explicit and prefix the function call with the package name
-separated by `::`, e.g. `magrittr::divide_by(...)`.
+want to load the entire namespace), or if there are functions with the
+same name from different packages loaded, you must be more explicit and
+prefix the function call with the package name separated by `::`, e.g.
+`magrittr::divide_by(...)`.
+
+> When you load a package with conflicting names, R will print a warning
+> message.
 
 ### Getting Help on Functions and Other Objects
 
@@ -415,12 +419,12 @@ mol_to_abs
     ##   mol * 6.022e23 * prefix_meaning[[prefix]]
     ##   
     ## }
-    ## <bytecode: 0x7fd5d8eed6b8>
+    ## <bytecode: 0x7f981688d598>
 
-As this code can be sometimes rather enigmatic, each function comes with
-an extensive built-in documentation within R.
-
------
+Most R functions are written in R and therefore no different from
+user-defined functions. Sometimes however, just reading this code can be
+rather enigmatic. Therefore, each function comes with an extensive
+built-in documentation within R. Here is how you get there.
 
 *If you know the command’s name,* the following approach will open the
 appropriate documentation. As an example, examine the help for the
@@ -436,7 +440,7 @@ Typically, the help page includes the following sections:
 
   - *Description*, a brief summary,
   - *Usage*, showing all arguments (variables and parameters) along with
-    their default values, where `...` represents any abitrary number of
+    their default values, where `...` represents any arbitrary number of
     comma-separated (unquoted) arguments,
   - *Arguments*, explicitly describing each argument and the data type
     expected,
@@ -446,10 +450,8 @@ Typically, the help page includes the following sections:
   - *References* for the algorithms implemented,
   - *See Also*, listing similar functions for different data types, or
     shortcuts for commonly used operations,
-  - *Examples* with illustrative code that helps better understanding
-    the functions behavior.
-
------
+  - *Examples* with illustrative code that helps the better
+    understanding the functions behavior.
 
 *If you do not know the exact name of the function you are looking for,*
 but you know what the function *should* be able to do for you, the
@@ -474,7 +476,7 @@ In this section you should have learned
 
 Quick questions.
 
-1.  What do `#`, `%>%`, `%%` and `->` mean?
+1.  What do `#`, `%>%`, and `->` mean?
 2.  How do you type `{`, `}`, `[`, and `]` on your keyboard?
 3.  Check out the documentation for `rm`. Can you figure out what
     `rm(list = ls())` will do? Do it\!

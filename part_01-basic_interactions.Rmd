@@ -25,7 +25,7 @@ In case a line is (syntactically) incomplete after you hit the return key, R wil
 
 In the following, pieces of R code (‘chunks’) are presented in grey boxes. You can copy the commands from these chunks to your R console and execute them by yourself. Beware that R is a case-sensitive language; so `A` and `a` are different symbols.
 
-For the sake of reproducibility, some chunks are directly followed by the output you should obtain on your machine. In this case, the lines are prefixed with a ‘##’ mark.
+For the sake of reproducibility, some chunks are directly followed by the output that you should obtain on your machine. In this case, the lines are prefixed with a ‘##’ mark.
 
 > In R, the ‘#’ sign serves as comment character and can appear nearly anywhere in the code. Anything typed behind this sign will be invisible to R.
 
@@ -33,7 +33,7 @@ If you want to recall, (modify) and reexecute a previous command, you can naviga
 
 ## A Sample Session
 
-If you like, you can run the following chunk that will demonstrate one simple application of R: Fitting a linear regression model to some noisy data. 
+To break the ice, you can run the following chunk that will demonstrate one simple application of R: Fitting a linear regression model to some noisy data. 
 
 ```{r}
 # create a “list” of values from 1 to 20
@@ -74,11 +74,11 @@ y <- 2 # RHS is assigned to LHS
 3 -> z # LHS is assigned to RHS
 ```
 
-When expressions are typed, R will evaluate them and print the result (unless specifically made invisible). The result of an expression is however ‘lost’. Assignments on the other hand do not print to the console, but store the result to the current R environment (‘Global Environment’).
+When expressions are typed, R will evaluate them and print the result (unless specifically made invisible). The result of an expression is however ‘lost’ for further usage. Assignments on the other hand do not print to the console, but either store the result in the current environment or modify an existing object.
 
 ### Expressions
 
-Although, expressions are not limited to mathematical expressions in a colloquial sense, R comes with a lot of  operators and functions to do anything from boolean to matrix algebra, over statistics and modelling. Thus, R can be used as a very fancy calculator. 
+Although expressions are not limited to mathematical expressions in a colloquial sense, R comes with a lot of  operators and functions to do anything from boolean to matrix algebra, over statistics and modelling. Thus, R can be used as a very fancy calculator. 
 
 Some of the arithmetic operators implemented in R include:
 
@@ -102,7 +102,7 @@ Some of the arithmetic operators implemented in R include:
 (-8)^(1/3)
 ```
 
-There are many (a lot of!) built-in functions for other mathemtatical operations including `abs(...)`, `floor(...)`, `round(...)`, `sqrt(...)`, `exp(...)`, `log(...)`, `sin(...)`, `cos(...)`, etc.
+Some of the built-in functions for other mathemtatical operations include `abs(...)`, `floor(...)`, `round(...)`, `sqrt(...)`, `exp(...)`, `log(...)`, `sin(...)`, `cos(...)`, etc.
 
 R follows the standard order of operations and groupings based on parentheses.
 
@@ -113,7 +113,7 @@ R follows the standard order of operations and groupings based on parentheses.
 
 ### Using a Pipe
 
-Within the `tidyverse` (or `magrittr`), there is also another way to specify the order in which expressions are evaluated. Namely, by _piping_ the different operations in the very order they must be executed by R. The ‘pipe’ is designated by the `%>%` operator. This operator is so useful that it has its own key-binding in RStudio, which is Ctrl/Cmd + Shift + M.
+There is also another way to specify the order in which expressions are evaluated. Namely, by _piping_ the different operations in the very order they must be executed by R. The ‘pipe’ is designated by the `%>%` operator. This operator is so useful that it has its own key-binding in RStudio, which is Ctrl/Cmd + Shift + M.
 
 We can obtain the same result as above with
 
@@ -152,7 +152,7 @@ Objects can be given any name (also known as the object's ‘symbol’), except 
 
 > Beware that you might unintentionally **overwrite built-in objects** such as `mean`, `data`, `df` etc. When in doubt, check the help to see if the name is already in use. RStudio will show you a list of all currently known objects and functions that start with the characters you just typed, when you hit the ‘tab’ key. 
 
-Although there is no restriction in the length of object names, in practice, you want your object names to be explicit and not too long. 
+Although there is no restriction in length for object names, in practice, you want your names to be explicit and not too long. 
 
 ```{r}
 N_Avogrado = 6.022e23 # we cannot use NA as name!
@@ -176,7 +176,7 @@ ls()
 
 ### Functions
 
-If a sequence of operations has to be repeatedly performed, it can be very effective to evoke this sequence of operations using a single command: A named function. By making its return value dependend on the arguments the function is called with, your code will gain enormously in power, convenience and elegance.
+If a sequence of operations has to be repeatedly performed, it can be very effective to evoke this sequence of operations using a single command: A function. If you make the return value of the function dependend on the arguments that the function was called with, your code will gain enormously in power, convenience and elegance.
 
 A function is created with `function(...) {...}`. As every R object, functions can be assigned to a symbol for future reference. The arguments (variables _and/or_ parameters) are given between round brackets in the function call, the operations to execute follow in curly brackets.
 
@@ -252,7 +252,7 @@ To install, e.g. the `magrittr` package from CRAN.
 install.packages("magrittr")
 ```
 
-To uninstall a package, use `remove.packages(...)`.
+To uninstall a package, use `remove.packages(...)`. You will rarely need this.
 
 To load a package into R's memory, use
 
@@ -260,9 +260,11 @@ To load a package into R's memory, use
 library("magrittr")
 ```
 
-All of the package's function will now be known in the current R session. Their namespace has been attached to the search path of the current environment. To check the currently loaded namespaces, type `loadedNamespaces()`. To remove a namespace from the current session, type `unloadNamespace(...)` with the respective package name.
+All of the package's function will now be known in the current R session. More specifically, their ‘namespace’ has been attached to the search path of the current environment. To check the currently loaded namespaces, type `loadedNamespaces()`. To remove a namespace from the current session, type `unloadNamespace(...)` with the respective package name.
 
-If you intend to use only a single function from a package (and do not want to load the entire namespace), or if there are multiple functions with the same name from different packages in the current namespace, you must be more explicit and prefix the function call with the package name separated by `::`, e.g. `magrittr::divide_by(...)`. 
+If you intend to use only a single function from a package (and do not want to load the entire namespace), or if there are functions with the same name from different packages loaded, you must be more explicit and prefix the function call with the package name separated by `::`, e.g. `magrittr::divide_by(...)`. 
+
+> When you load a package with conflicting names, R will print a warning message.
 
 ### Getting Help on Functions and Other Objects
 
@@ -272,9 +274,7 @@ To ‘see’ the code that a function executes, just type its name without the b
 mol_to_abs
 ```
 
-As this code can be sometimes rather enigmatic, each function comes with an extensive built-in documentation within R. 
-
-***
+Most R functions are written in R and therefore no different from user-defined functions. Sometimes however, just reading this code can be rather enigmatic. Therefore, each function comes with an extensive built-in documentation within R. Here is how you get there.
 
 _If you know the command's name,_ the following approach will open the appropriate documentation. As an example, examine the help for the `sum(...)` function.
 
@@ -287,15 +287,13 @@ help("sum")
 Typically, the help page includes the following sections:
 
 * _Description_, a brief summary,
-* _Usage_, showing all arguments (variables and parameters) along with their default values, where `...` represents any abitrary number of comma-separated (unquoted) arguments,
+* _Usage_, showing all arguments (variables and parameters) along with their default values, where `...` represents any arbitrary number of comma-separated (unquoted) arguments,
 * _Arguments_, explicitly describing each argument and the data type expected,
 * _Details_, summarizing the function's behaviour and its intended usage,
 * _Value_, explicitly describing the return value of the function,
 * _References_ for the algorithms implemented,
 * _See Also_, listing similar functions for different data types, or shortcuts for commonly used operations,
-* _Examples_ with illustrative code that helps better understanding the functions behavior.
-
-***
+* _Examples_ with illustrative code that helps the better understanding the functions behavior.
 
 _If you do not know the exact name of the function you are looking for,_ but you know what the function _should_ be able to do for you, the following commands will be helpful.
 
@@ -318,6 +316,6 @@ In this section you should have learned
 
 Quick questions.
 
-1. What do `#`, `%>%`, `%%` and `->` mean?
+1. What do `#`, `%>%`, and `->` mean?
 2. How do you type `{`, `}`, `[`, and `]` on your keyboard?
 3. Check out the documentation for `rm`. Can you figure out what `rm(list = ls())` will do? Do it!
