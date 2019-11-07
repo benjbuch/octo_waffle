@@ -354,7 +354,7 @@ Quick questions.
 1. Which data type is the vector `c("tagesgericht" = 1.60, "menü 1" = 2.00, "menü 2" = 2.50, "aktionsteller" = 3.50)`?
 2. Can you assign this vector to the variable `prizes_students`? How could you access the costs for “Menü 2”?
 3. Which menus cost more than two euros?
-4. Your colleagues order twice the Tagesgericht, three times Menü 1, three times Menü 2, and once Aktionsteller. The boss pays. How much does he need to pay?
-5. The canteen has increased prizes by 50 cents. Calculate the new prizes!
-6. The prizes for the respective menus for employees are `c(3.10, 3.50, 4.00, 5.00)`. Create a new vector called `prizes_employees` and assign the names of `prizes_students` to the names of this vector.
-7. Let's make a list containing both vectors called `prizes`. (If you want you can include the prizes for guests, which is 0.50 cents higher than the costs for employees.) Apply the rise in prices to all groups.
+4. Your colleagues order twice the Tagesgericht, three times Menü 1, three times Menü 2, and once Aktionsteller. The boss pays. How much does he or she need to pay?
+5. The canteen has increased the prizes by 50 cents. Calculate the new prizes!
+6. The prizes of the menus for employees are `c(3.10, 3.50, 4.00, 5.00)` respectively. Create a new vector called `prizes_employees` and assign the names of `prizes_students` to the names of this vector.
+7. Let's make a list containing both vectors called `prizes`. (If you want you can include the prizes for guests, which is 50 cents higher than the costs for employees.) Apply the rise in prices to all groups.
