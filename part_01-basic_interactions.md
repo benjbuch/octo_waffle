@@ -73,19 +73,19 @@ summary(r)
     ## lm(formula = y ~ x, data = d)
     ## 
     ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -1.33987 -0.74106  0.01089  0.62442  1.89050 
+    ##     Min      1Q  Median      3Q     Max 
+    ## -1.4885 -0.4503 -0.1685  0.5590  1.5676 
     ## 
     ## Coefficients:
     ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept) -0.73455    0.44330  -1.657    0.115    
-    ## x            1.06717    0.03701  28.837   <2e-16 ***
+    ## (Intercept) -0.77583    0.41818  -1.855     0.08 .  
+    ## x            1.07423    0.03491  30.772   <2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 0.9543 on 18 degrees of freedom
-    ## Multiple R-squared:  0.9788, Adjusted R-squared:  0.9776 
-    ## F-statistic: 831.6 on 1 and 18 DF,  p-value: < 2.2e-16
+    ## Residual standard error: 0.9002 on 18 degrees of freedom
+    ## Multiple R-squared:  0.9813, Adjusted R-squared:  0.9803 
+    ## F-statistic: 946.9 on 1 and 18 DF,  p-value: < 2.2e-16
 
 ``` r
 # clean up
@@ -121,9 +121,9 @@ y <- 2 # RHS is assigned to LHS
 
 When expressions are typed, R will evaluate them and print the result
 (unless specifically made invisible). The result of an expression is
-however ‘lost’ for further usage. Assignments on the other hand do not
-print to the console, but either store the result in the current
-environment or modify an existing object.
+however ‘lost’ for further usage. — Assignments on the other hand do not
+print to the console, but store the result in the current environment or
+modify an existing value in the memory.
 
 ### Expressions
 
@@ -168,11 +168,12 @@ parentheses.
 
 ### Using a Pipe
 
-There is also another way to specify the order in which expressions are
-evaluated. Namely, by *piping* the different operations in the very
-order they must be executed by R. The ‘pipe’ is designated by the `%>%`
-operator. This operator is so useful that it has its own key-binding in
-RStudio, which is Ctrl/Cmd + Shift + M.
+Besides grouping by parentheses, there is also another way to specify
+the order in which expressions are evaluated. Namely, by *piping* the
+different operations in the very order they must be executed by R. The
+‘pipe’ is designated by the `%>%` operator. This operator is so useful
+that it has its own key-binding in RStudio, which is Ctrl/Cmd + Shift +
+M.
 
 We can obtain the same result as above with
 
@@ -183,7 +184,8 @@ library(magrittr) # allow to use pipe
 6 %>% add(9) %>% divide_by(3)
 ```
 
-Piping is very effective, when multiple functions would else be nested.
+Piping is very effective, when multiple functions would else be nested:
+It helps to unclutter code.
 
 ``` r
 # compare ...
@@ -197,8 +199,6 @@ sum(1, 2, 3, 4) %>%
   sqrt %>% 
   asin
 ```
-
-We will see how useful piping is when it comes to data manipulation.
 
 ### Assignments
 
@@ -258,9 +258,8 @@ ls()
 
 If a sequence of operations has to be repeatedly performed, it can be
 very effective to evoke this sequence of operations using a single
-command: A function. If you make the return value of the function
-dependend on the arguments that the function was called with, your code
-will gain enormously in power, convenience and elegance.
+command: A function. In doing so, your code will gain enormously in
+power, convenience and elegance.
 
 A function is created with `function(...) {...}`. As every R object,
 functions can be assigned to a symbol for future reference. The
@@ -293,8 +292,8 @@ ls()
 
     ## [1] "fmol_to_abs" "N_fmol"
 
-If the last statement in a function is an expression, it is implicitly
-returned. So, we can simplify.
+If the last statement in a function is an expression (instead of an
+assignment), it is implicitly returned. So, we can simplify.
 
 ``` r
 fmol_to_abs <- function(fmol) {
@@ -310,13 +309,15 @@ fmol_to_abs(N_fmol)
 
     ## [1] 1204400000
 
-Of course, it is possible to add parameters to a function. Parameters
-can have default values.
+It is possible to make the the return value of the function dependend on
+additional parameters, so that the function can be applied to different,
+yet similar problems. If a function takes a number of parameters, it can
+be convenient to assign default values to some arguments.
 
 ``` r
 mol_to_abs <- function(mol, prefix = "f") {
   
-  prefix_meaning = c("a" = 1e-18,
+  prefix_meaning = c("a" = 1e-18, # “c” is a function that combines values into a “list”
                      "f" = 1e-15, 
                      "p" = 1e-12,
                      "n" = 1e-09,
@@ -326,33 +327,24 @@ mol_to_abs <- function(mol, prefix = "f") {
   mol * 6.022e23 * prefix_meaning[[prefix]]
   
 }
-
-# the default "f" is assumed for the omitted ‘prefix’ parameter
-mol_to_abs(N_fmol) 
 ```
 
-    ## [1] 1204400000
+If an argument that has a default value, is omitted from the function
+call, R will silently use the default value.
 
 ``` r
-# with ‘prefix’ being specified, the default is ignored
-mol_to_abs(20, prefix = "µ")
+mol_to_abs(N_fmol)           # amount in fmol to absolute numbers
+mol_to_abs(20, prefix = "µ") # amount in µmol to absolute numbers
 ```
 
-    ## [1] 1.2044e+19
+Unnamed arguments are interpreted in the positional order given in the
+function’s definition. Named arguments can be provided in any order. The
+following expressions return the same value.
 
 ``` r
-# unnamed arguments are interpreted in the order of the function's definition
 mol_to_abs(20, "µ")
-```
-
-    ## [1] 1.2044e+19
-
-``` r
-# when named, arguments can be provided in any order
 mol_to_abs(prefix = "µ", mol = 20)
 ```
-
-    ## [1] 1.2044e+19
 
 ## Packages
 
@@ -360,11 +352,13 @@ Not all functions are loaded by default into R’s memory. Also, not all
 functions required for a task might even be available with the standard
 distribution of R. Therefore, users can write, deposit and load
 extensions to the R software, which come as bundles of functions and/or
-other objects such as data in so-called ‘packages’.
+other objects in so-called ‘packages’.
+
+### Installing a New Package
 
 R packages can be found anywhere on the internet, but most reliably,
 they are obtained from the ‘Comprehensive R Archive Network’
-([CRAN](https://cran.rstudio.com)). A good R packages is actively
+([CRAN](https://cran.rstudio.com)). A good R package will be actively
 maintained and developed by the R community.
 
 To install, e.g. the `magrittr` package from CRAN.
@@ -373,8 +367,10 @@ To install, e.g. the `magrittr` package from CRAN.
 install.packages("magrittr")
 ```
 
-To uninstall a package, use `remove.packages(...)`. You will rarely need
-this.
+To uninstall a package, use `remove.packages(...)`. (You will rarely
+need this.)
+
+### Loading a Package
 
 To load a package into R’s memory, use
 
@@ -384,13 +380,20 @@ library("magrittr")
 
 All of the package’s function will now be known in the current R
 session. More specifically, their ‘namespace’ has been attached to the
-search path of the current environment. To check the currently loaded
-namespaces, type `loadedNamespaces()`. To remove a namespace from the
-current session, type `unloadNamespace(...)` with the respective package
-name.
+search path of the current environment. To check which namespaces are
+currently known, type `loadedNamespaces()`. To remove a namespace from
+the current session, type `unloadNamespace(...)` with the respective
+package name.
+
+Note that packages may depend on functions provided by other packages
+(which are automatically installed and silently loaded along with it).
+You cannot unload their namespaces unless you unload all the dependend
+packages.
+
+### Referring to Functions from a Specific Package
 
 If you intend to use only a single function from a package (and do not
-want to load the entire namespace), or if there are functions with the
+want to attach the entire namespace), or if there are functions with the
 same name from different packages loaded, you must be more explicit and
 prefix the function call with the package name separated by `::`, e.g.
 `magrittr::divide_by(...)`.
@@ -398,10 +401,17 @@ prefix the function call with the package name separated by `::`, e.g.
 > When you load a package with conflicting names, R will print a warning
 > message.
 
-### Getting Help on Functions and Other Objects
+## Getting Help
+
+No need to say, there are probably very few questions and problems that
+another person has not yet dared asking on the internet. However, if you
+want to work offline and/or get to know the how and why, you can do it
+with R\!
+
+### Checking the Source Code
 
 To ‘see’ the code that a function executes, just type its name without
-the bracktes into the R console.
+parentheses into the R console.
 
 ``` r
 mol_to_abs
@@ -409,7 +419,7 @@ mol_to_abs
 
     ## function(mol, prefix = "f") {
     ##   
-    ##   prefix_meaning = c("a" = 1e-18,
+    ##   prefix_meaning = c("a" = 1e-18, # “c” is a function that combines values into a “list”
     ##                      "f" = 1e-15, 
     ##                      "p" = 1e-12,
     ##                      "n" = 1e-09,
@@ -419,12 +429,15 @@ mol_to_abs
     ##   mol * 6.022e23 * prefix_meaning[[prefix]]
     ##   
     ## }
-    ## <bytecode: 0x7f981688d598>
 
-Most R functions are written in R and therefore no different from
-user-defined functions. Sometimes however, just reading this code can be
-rather enigmatic. Therefore, each function comes with an extensive
-built-in documentation within R. Here is how you get there.
+Most R functions (except for the primitve ones) are written in R and
+therefore no different from user-defined functions.
+
+### Checking the Documentation
+
+Sometimes, just reading a function’s code can be rather enigmatic.
+Therefore, all (all\!) of the built-in functions come with an extensive
+documentation. Here is how you get there.
 
 *If you know the command’s name,* the following approach will open the
 appropriate documentation. As an example, examine the help for the
