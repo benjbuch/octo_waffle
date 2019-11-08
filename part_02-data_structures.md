@@ -7,7 +7,7 @@ manipulated is important. In this regard, the terms ‘data structure’ and
 your data.
 
 This introduction might become rather technical, but don’t get upset. It
-is less important to remember everything as we will recapitulate the
+is less important to remember everything since we will recapitulate the
 contents on a needs basis during the workshop.
 
 ## Data Types in R
@@ -38,6 +38,11 @@ below.
 
 <!-- | `expression` | a set of (incoherent) expressions | `typeof(expression(x = 1 + 1, 2 + 3))` | -->
 
+> By convention, if you type any number (including integers without an
+> `L` suffix), R will store it as `double`. This allows to do accurate
+> maths with it. `double` stands for ‘double-precision floating-point
+> format’.
+
 The data type can be queried using the `typeof(...)` function.
 
 ``` r
@@ -65,6 +70,10 @@ least a vector with length one.
 
 ``` r
 x <- c(1, 2, 3)
+typeof(x)
+length(x)
+
+x <- c(c(1, 2, 3), c(4, 5, 6))
 typeof(x)
 length(x)
 
@@ -108,9 +117,17 @@ noble_gases
     ##  Helium    Neon   Argon Krypton   Xenon 
     ##       2      10      18      36      54
 
-When we try to concatenate objects of different data types, the objects
-with the ‘least compatible’ data type will be *coerced* to an object of
-the ‘most compatible’ data type.
+We can add another entry by concatenation.
+
+``` r
+noble_gases <- c(noble_gases, "Radon" = 86)
+```
+
+When we try to concatenate *objects of different data types*, the
+objects with the ‘least compatible’ data type will be *coerced* to an
+object of the ‘most compatible’ data type. The ordering is roughly
+`logical` \< `integer` \< `double` \< `complex` \< `character` \<
+`list`.
 
 ``` r
 # coercion to character
@@ -131,40 +148,91 @@ lists\!
 ## Advanced Data Structures: Classes
 
 R allows to create more sophisticated data structures from the simpler
-atomic data types. The structure of such objectes is called the object’s
-‘class’. Besides its usefulness for an object-oriented programming
-style, having a class associated to an object will cause functions such
-as `plot(...)` and `summary(...)` to respond in an appropriate manner.
-Some functions operate only on objects of specific classes.
+atomic data types. The structure of such objectes is called a ‘class’.
+Besides its usefulness for an object-oriented programming style, having
+a class associated to an object will cause functions such as `plot(...)`
+and `summary(...)` to respond in an appropriate manner. Some functions
+operate only on objects of specific classes.
 
-All objects in R can have additional “metadata” associated with them.
-Classes define which ‘attributes’ an object must (at least) implement to
-belong to a class.
+> All objects in R can have additional “metadata” associated with them,
+> so-called ‘attributes’. Classes define which ‘attributes’ an object
+> must (at least) implement to belong to a class.
 
 Here are two examples to illustrate the concept.
 
-*‘Tables’* (class `data.frame` or `data.table`) are objects of type
-`list`.
+1.  *‘Tables’* (class `data.frame` or `data.table`) are objects of type
+    `list`.
+    
+      - They combine columns (each a vector with a single data type), so
+        that different data types can be stored side-by-side.
+      - They have attributes such as column- and rownames to reference
+        each entry in the table.
 
-  - They combine columns (each a vector with a single data type), so
-    that different data types can be stored side-by-side.
-  - They have attributes such as column- and rownames to reference each
-    entry in the table.
+2.  *‘Factors’* (class `factor`) are object of type `integer` and hold
+    categorical data.
+    
+    In statistics, many experiments involve the recording of categorical
+    data, e.g. male and female, or the different cell lines, treatments
+    etc. used in an experiment. As they would be stored as `character`,
+    this can take a lot of memory to store.
+    
+      - Each category (‘level’) is assigned a number. Instead of the
+        `character` vector, a much smaller `integer` vector is stored.
+      - The assignments are saved as an attribute to the `factor`
+        object.
+    
+    If you look for an example, here you go.
+    
+    ``` r
+    x <- c("m", "f", "m", "m", "f", "m", "d")
+    x
+    ```
+    
+        ## [1] "m" "f" "m" "m" "f" "m" "d"
+    
+    ``` r
+    typeof(x)
+    ```
+    
+        ## [1] "character"
+    
+    ``` r
+    x <- factor(x)
+    x
+    ```
+    
+        ## [1] m f m m f m d
+        ## Levels: d f m
+    
+    ``` r
+    typeof(x)
+    ```
+    
+        ## [1] "integer"
+    
+    ``` r
+    # get the integer representation of the factor
+    as.integer(x)
+    ```
+    
+        ## [1] 3 2 3 3 2 3 1
+    
+    ``` r
+    # get the assignments of the levels
+    attributes(x)$levels
+    ```
+    
+        ## [1] "d" "f" "m"
+    
+    ``` r
+    levels(x) # short-hand for objects of class ‘factor’
+    ```
+    
+        ## [1] "d" "f" "m"
 
-*‘Factors’* (class `factor`) are object of type `integer` and hold
-categorical data.
-
-In statistics, many experiments involve the recording of categorical
-data, e.g. male and female, or the different cell lines, treatments etc.
-used in an experiment. As they would be stored as `character`, this can
-take a lot of memory to store.
-
-  - Each category (‘level’) is assigned a number. Instead of the
-    `character` vector, a much smaller `integer` vector is stored.
-  - The assignments are saved as an attribute to the `factor` object.
-
-You can query the object’s class with the `class(...)` function and the
-attributes associated with it using the `attributes(...)` function.
+You can get (and modify) the object’s class with the `class(...)`
+function and the attributes associated with it using the
+`attributes(...)` function.
 
 ## Vectorization in R
 
@@ -269,7 +337,7 @@ y <- x > 2
 z <- x %% 2 == 1
 ```
 
-The `!` sign is used to negate logical vectors or boolean operations.
+The `!` sign is used to *negate* logical vectors or boolean operations.
 
 ``` r
 !y
@@ -307,7 +375,7 @@ xor(y, z)
     ## [1]  TRUE FALSE FALSE  TRUE
 
 To test if there is at least one logical `TRUE` in a vector, there is
-the `any(...)` function. It’s complement is the `all(...)` function.
+the `any(...)` function. Its complement is the `all(...)` function.
 
 ### Indexing Vectors
 
@@ -325,7 +393,8 @@ x[4] # fourth element in the vector
 
     ## [1] 14
 
-Numeric vectors can be used as index vectors.
+Numeric vectors can be used as index
+vectors.
 
 ``` r
 x[c(1, 3, 5)]
@@ -334,13 +403,13 @@ x[c(1, 3, 5)]
     ## [1] 11 13 15
 
 ``` r
-LETTERS[x]      # built-in vector with A-Z
+LETTERS[x]      # LETTERS is a built-in vector with A, B, C, ..., X, Y, Z
 ```
 
     ##  [1] "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T"
 
 ``` r
-letters[x - 10] # built-in vector with a-z
+letters[x - 10] # letters is a built-in vector with a, b, c, ..., x, y, z
 ```
 
     ##  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j"
@@ -388,8 +457,7 @@ noble_gases[["Krypton"]]
 
 ### Indexing Lists
 
-*(This section is included for sake of completeness, but you may as well
-skip it.)*
+*(This section is included for sake of completeness. You may skip it.)*
 
 In contrast to atomic vectors, lists can be recursively indexed with
 `[[`. Compare.
@@ -474,11 +542,12 @@ z[["A"]][["b"]]
 ### Applying Functions to Vectors
 
 The most powerful aspect of R is the vectorization of tasks. If you are
-familiar with some other programming language, this is equivalent, but
-much faster than, to writing a `for`-loop (which also exists in R).
+familiar with some other programming language, this is equivalent to,
+but much faster than, writing a `for`-loop (which also exists in R).
 
 Many functions in R are *vectorized*. If applied to a vector, the
-function will be applied to each element individually.
+function will be applied to each element individually. The result will
+be a vector.
 
 ``` r
 x <- 1:10
@@ -488,17 +557,19 @@ sqrt(x)
     ##  [1] 1.000000 1.414214 1.732051 2.000000 2.236068 2.449490 2.645751
     ##  [8] 2.828427 3.000000 3.162278
 
-In case of more complex functions, we will use an `apply(...)` function.
-There are six different kinds:
+If we have more complex functions to apply on a vector or list, we can
+quickly make use of an `apply(...)` statement. There are six different
+kinds:
 
   - `apply` to go along in either direction of a matrix (not to be
     discussed in this workshop),
   - `lapply`, `vapply` and `sapply` to go along vectors and lists,
     i.e. one-dimensional matrices; each of the three functions comes
     with a different set of options,
-  - `tapply` to use factors to split a vector or list into groups and
-    then apply a function to each group (not discussed, since we will
-    use a different approach), and
+  - `tapply` to split a vector or list based on a factor into groups and
+    then apply a function to each group (useful, but not discussed,
+    since we will have a different approach for `data.frame` objects),
+    and
   - `mapply` to go along multiple vectors or lists simultaneously (not
     discussed in this workshop).
 
@@ -533,22 +604,21 @@ lapply(x, function(i) mean(i**2))
     ## $c
     ## [1] 23350
 
-As an illustration, this is how the code above would look as a
-`for`-loop.
+Have a look how the one-liner from above would look as a `for`-loop.
 
 ``` r
 for (i in x) {
   
-  print(mean(i**2))
+  print(mean(i**2)) # no implicit printing from within flow control statetments
   
 }
 ```
 
-If we would like to save the result as well, this becomes even more
-tedious.
+This becomes even more tedious if we wanted to save the results as well
+in a vector.
 
 ``` r
-y <- x[] # copy attributes of x if any; in this case names
+y <- x[] # copy attributes of x if any; in this case x has names
 
 for (i in seq_along(x)) {  # need to create indexing variable manually
   
@@ -581,21 +651,21 @@ In this introduction you should have learned
 
 Quick questions.
 
-1.  Which data type is the vector `c("tagesgericht" = 1.60, "menü 1"
-    = 2.00, "menü 2" = 2.50, "aktionsteller" = 3.50)`?
+1.  Which data type is the vector `c("Tagesgericht" = 1.60, "Menü 1"
+    = 2.00, "Menü 2" = 2.50, "Aktionsteller" = 3.50)`?
 2.  Can you assign this vector to the variable `prizes_students`? How
     could you access the costs for “Menü 2”?
 3.  Which menus cost more than two euros?
-4.  Your colleagues order twice the Tagesgericht, three times Menü 1,
-    three times Menü 2, and once Aktionsteller. The boss pays. How much
-    does he or she need to pay?
-5.  The canteen has increased the prizes by 50 cents. Calculate the new
-    prizes\!
+4.  Your colleagues order twice the “Tagesgericht”, three times “Menü
+    1”, three times “Menü 2”, and once “Aktionsteller”. The boss pays.
+    How much does he or she need to pay?
+5.  The canteen wants to increase the prizes by 50 cents. Calculate the
+    new prizes\!
 6.  The prizes of the menus for employees are
     `c(3.10, 3.50, 4.00, 5.00)` respectively. Create a new vector called
     `prizes_employees` and assign the names of `prizes_students` to the
     names of this vector.
-7.  Let’s make a list containing both vectors called `prizes`. (If you
-    want you can include the prizes for guests, which is 50 cents higher
-    than the costs for employees.) Apply the rise in prices to all
-    groups.
+7.  Let’s make a list containing both vectors called `prizes`. If you
+    want, you can include the prizes for guests, which are 50 cents
+    higher than the costs for employees. Apply the rise in prices to all
+    groups\!

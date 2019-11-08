@@ -58,23 +58,25 @@ rm(x, d, r)
 
 Code to interact with R will fall into one of two categories.
 
-_Expressions:_
+1. Expressions:
 
-```{r}
+    ```{r}
 1 + sin(pi/2) 
 nchar("math") # number of characters in the word “math”
-```
+    ```
 
-_Assignments:_
+2. Assignments:
   
-```{r eval=FALSE}
+    ```{r eval=FALSE}
 x = 1  # right-hand side (RHS) is assigned to left-hand side (LHS)
 
 y <- 2 # RHS is assigned to LHS
 3 -> z # LHS is assigned to RHS
-```
+    ```
 
 When expressions are typed, R will evaluate them and print the result (unless specifically made invisible). The result of an expression is however ‘lost’ for further usage. — Assignments on the other hand do not print to the console, but store the result in the current environment or modify an existing value in the memory.
+
+> It is not important (but good practice) to leave a space between the LHS and RHS of `=`, `->`, `<-`, and after `,`. 
 
 ### Expressions
 
@@ -179,17 +181,18 @@ If a sequence of operations has to be repeatedly performed, it can be very effec
 A function is created with `function(...) {...}`. As every R object, functions can be assigned to a symbol for future reference. The arguments (variables _and/or_ parameters) are given between round brackets in the function call, the operations to execute follow in curly brackets.
 
 ```{r}
-fmol_to_abs <- function(fmol) {
+fmol_to_abs <- function(x_in_fmol) {
   
   N_Avogrado = 6.022e23
   
-  N_abs = fmol * N_Avogrado * 1e-15
+  N_abs = x_in_fmol * N_Avogrado * 1e-15
   
   return(N_abs)
   
 }
 
-fmol_to_abs(N_fmol)
+fmol_to_abs(10)     # calculate for x_in_fmol = 10
+fmol_to_abs(N_fmol) # calculate for x_in_fmol = N_fmol, which is still assigned the value 2
 ```
 
 Note that neither `N_abs` nor `N_Avogrado` have been added to the ‘Global Environment’.
@@ -198,14 +201,16 @@ Note that neither `N_abs` nor `N_Avogrado` have been added to the ‘Global Envi
 ls()
 ```
 
+Note that even if we had_assigned the same symbol `N_Avogrado = 1` in the ‘Global Environment’, our function _would still prioritize_ the ‘locally’ defined symbol `N_Avogrado`, which is `6.022e23`. Only if we had _not_ defined this variable _inside_ the function, R would start looking for it outside the function. This is called ‘scoping’. 
+
 If the last statement in a function is an expression (instead of an assignment), it is implicitly returned. So, we can simplify.
 
 ```{r}
-fmol_to_abs <- function(fmol) {
+fmol_to_abs <- function(x_in_fmol) {
   
   N_Avogrado = 6.022e23
   
-  fmol * N_Avogrado * 1e-15
+  x_in_fmol * N_Avogrado * 1e-15
   
 }
 
@@ -215,7 +220,7 @@ fmol_to_abs(N_fmol)
 It is possible to make the the return value of the function dependend on additional parameters, so that the function can be applied to different, yet similar problems. If a function takes a number of parameters, it can be convenient to assign default values to some arguments.
 
 ```{r}
-mol_to_abs <- function(mol, prefix = "f") {
+mol_to_abs <- function(x, prefix = "f") {
   
   prefix_meaning = c("a" = 1e-18, # “c” is a function that combines values into a “list”
                      "f" = 1e-15, 
@@ -224,28 +229,28 @@ mol_to_abs <- function(mol, prefix = "f") {
                      "µ" = 1e-06,
                      "m" = 1e-03)
   
-  mol * 6.022e23 * prefix_meaning[[prefix]]
+  x * 6.022e23 * prefix_meaning[[prefix]]
   
 }
 ```
 
-If an argument that has a default value, is omitted from the function call, R will silently use the default value.
+If an argument with a default is omitted from the function call, R will silently use the default value.
 
 ```{r eval=FALSE}
 mol_to_abs(N_fmol)           # amount in fmol to absolute numbers
 mol_to_abs(20, prefix = "µ") # amount in µmol to absolute numbers
 ```
 
-Unnamed arguments are interpreted in the positional order given in the function's definition. Named arguments can be provided in any order. The following expressions return the same value.
+Unnamed arguments are interpreted in the positional order given in the function's definition. Named arguments can be provided in any order. The following expressions thus return the same value.
 
 ```{r eval=FALSE}
 mol_to_abs(20, "µ")
-mol_to_abs(prefix = "µ", mol = 20)
+mol_to_abs(prefix = "µ", x = 20)
 ```
 
 ## Packages
 
-Not all functions are loaded by default into R's memory. Also, not all functions required for a task might even be available with the standard distribution of R. Therefore, users can write, deposit and load extensions to the R software, which come as bundles of functions and/or other objects in so-called ‘packages’. 
+Not all functions are loaded by default into R's memory. Also, not all functions required for a task might even be included in the “standard distribution” of R. Therefore, users can write, deposit and load extensions to the R software, which come as bundles of functions and/or other objects in so-called ‘packages’. 
 
 ### Installing a New Package
 
@@ -295,31 +300,31 @@ Most R functions (except for the primitve ones) are written in R and therefore n
 
 Sometimes, just reading a function's code can be rather enigmatic. Therefore, all (all!) of the built-in functions come with an extensive documentation. Here is how you get there.
 
-_If you know the command's name,_ the following approach will open the appropriate documentation. As an example, examine the help for the `sum(...)` function.
+1. _If you know the command's name,_ the following approach will open the appropriate documentation. As an example, examine the help for the `sum(...)` function.
 
-```{r eval=FALSE}
+    ```{r eval=FALSE}
 help(sum)
 help("sum")
 ?sum
-```
+    ```
 
-Typically, the help page includes the following sections:
+    Typically, the help page includes the following sections:
 
-* _Description_, a brief summary,
-* _Usage_, showing all arguments (variables and parameters) along with their default values, where `...` represents any arbitrary number of comma-separated (unquoted) arguments,
-* _Arguments_, explicitly describing each argument and the data type expected,
-* _Details_, summarizing the function's behaviour and its intended usage,
-* _Value_, explicitly describing the return value of the function,
-* _References_ for the algorithms implemented,
-* _See Also_, listing similar functions for different data types, or shortcuts for commonly used operations,
-* _Examples_ with illustrative code that helps the better understanding the functions behavior.
+    * _Description_, a brief summary,
+    * _Usage_, showing all arguments (variables and parameters) along with their default values, where `...` represents any arbitrary number of comma-separated (unquoted) arguments,
+    * _Arguments_, explicitly describing each argument and the data type expected,
+    * _Details_, summarizing the function's behaviour and its intended usage,
+    * _Value_, explicitly describing the return value of the function,
+    * _References_ for the algorithms implemented,
+    * _See Also_, listing similar functions for different data types, or shortcuts for commonly used operations,
+    * _Examples_ with illustrative code that helps the better understanding the functions behavior.
 
-_If you do not know the exact name of the function you are looking for,_ but you know what the function _should_ be able to do for you, the following commands will be helpful.
+2. _If you do not know the exact name of the function you are looking for,_ but you know what the function _should_ be able to do for you, the following commands will be helpful.
 
-```{r eval=FALSE}
+    ```{r eval=FALSE}
 help.search("histogram")
 ??histogram
-```
+    ```
 
 ## Learning Objectives
 

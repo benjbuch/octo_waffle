@@ -22,18 +22,21 @@ _Note to macOS users:_ To use `data.table`’s parallel processing capability, y
 
 ### Getting Started
 
-The following introductions are intended to give you some ‘background’ of R. You do not need to understand every line of code or recall everything from the text; some things might seem puzzling right now, but this will soon disappear.
+The following introductions are intended to give you some ‘background’ of R. So, you do not need to understand every line of code or recall everything from the lessons. Certainly, some things might seem puzzling right now, but this will soon disappear.
 
-At the end of each part, you will find some questions for self-study.
+At the end of each introduction, you will find some questions for self-study.
 
-[Introductory Part 1](part_01-basic_interactions.md) will explore how to interact with R.
+[Introductory Part 1](part_01-basic_interactions.md) will explore how to interact with R. _(Recommended.)_
 
-[Introductory Part 2](part_02-data_structures.md) will introduce some common data types in R.
+[Introductory Part 2](part_02-data_structures.md) will introduce some common data types in R. _(Recommended.)_
 
+[Introductory Part 3](part_03-working_with_strings.md) will explore how to work with text in R. _(Optional.)_
+
+You may wish to consult the [answer key](answer_key) on certain problems.
 
 ## Syllabus
 
-1. 
+_(To be announced.)_
 
 ## Acknowledgements
 

@@ -73,19 +73,19 @@ summary(r)
     ## lm(formula = y ~ x, data = d)
     ## 
     ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -1.4885 -0.4503 -0.1685  0.5590  1.5676 
+    ##      Min       1Q   Median       3Q      Max 
+    ## -2.28182 -0.77072  0.05107  0.62995  2.07527 
     ## 
     ## Coefficients:
     ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept) -0.77583    0.41818  -1.855     0.08 .  
-    ## x            1.07423    0.03491  30.772   <2e-16 ***
+    ## (Intercept) -0.30334    0.53689  -0.565    0.579    
+    ## x            1.06322    0.04482  23.722 4.97e-15 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 0.9002 on 18 degrees of freedom
-    ## Multiple R-squared:  0.9813, Adjusted R-squared:  0.9803 
-    ## F-statistic: 946.9 on 1 and 18 DF,  p-value: < 2.2e-16
+    ## Residual standard error: 1.156 on 18 degrees of freedom
+    ## Multiple R-squared:  0.969,  Adjusted R-squared:  0.9673 
+    ## F-statistic: 562.8 on 1 and 18 DF,  p-value: 4.965e-15
 
 ``` r
 # clean up
@@ -96,34 +96,37 @@ rm(x, d, r)
 
 Code to interact with R will fall into one of two categories.
 
-*Expressions:*
+1.  Expressions:
+    
+    ``` r
+    1 + sin(pi/2) 
+    ```
+    
+        ## [1] 2
+    
+    ``` r
+    nchar("math") # number of characters in the word “math”
+    ```
+    
+        ## [1] 4
 
-``` r
-1 + sin(pi/2) 
-```
-
-    ## [1] 2
-
-``` r
-nchar("math") # number of characters in the word “math”
-```
-
-    ## [1] 4
-
-*Assignments:*
-
-``` r
-x = 1  # right-hand side (RHS) is assigned to left-hand side (LHS)
-
-y <- 2 # RHS is assigned to LHS
-3 -> z # LHS is assigned to RHS
-```
+2.  Assignments:
+    
+    ``` r
+    x = 1  # right-hand side (RHS) is assigned to left-hand side (LHS)
+    
+    y <- 2 # RHS is assigned to LHS
+    3 -> z # LHS is assigned to RHS
+    ```
 
 When expressions are typed, R will evaluate them and print the result
 (unless specifically made invisible). The result of an expression is
 however ‘lost’ for further usage. — Assignments on the other hand do not
 print to the console, but store the result in the current environment or
 modify an existing value in the memory.
+
+> It is not important (but good practice) to leave a space between the
+> LHS and RHS of `=`, `->`, `<-`, and after `,`.
 
 ### Expressions
 
@@ -268,17 +271,23 @@ brackets in the function call, the operations to execute follow in curly
 brackets.
 
 ``` r
-fmol_to_abs <- function(fmol) {
+fmol_to_abs <- function(x_in_fmol) {
   
   N_Avogrado = 6.022e23
   
-  N_abs = fmol * N_Avogrado * 1e-15
+  N_abs = x_in_fmol * N_Avogrado * 1e-15
   
   return(N_abs)
   
 }
 
-fmol_to_abs(N_fmol)
+fmol_to_abs(10)     # calculate for x_in_fmol = 10
+```
+
+    ## [1] 6.022e+09
+
+``` r
+fmol_to_abs(N_fmol) # calculate for x_in_fmol = N_fmol, which is still assigned the value 2
 ```
 
     ## [1] 1204400000
@@ -292,15 +301,21 @@ ls()
 
     ## [1] "fmol_to_abs" "N_fmol"
 
+Note that even if we had\_assigned the same symbol `N_Avogrado = 1` in
+the ‘Global Environment’, our function *would still prioritize* the
+‘locally’ defined symbol `N_Avogrado`, which is `6.022e23`. Only if we
+had *not* defined this variable *inside* the function, R would start
+looking for it outside the function. This is called ‘scoping’.
+
 If the last statement in a function is an expression (instead of an
 assignment), it is implicitly returned. So, we can simplify.
 
 ``` r
-fmol_to_abs <- function(fmol) {
+fmol_to_abs <- function(x_in_fmol) {
   
   N_Avogrado = 6.022e23
   
-  fmol * N_Avogrado * 1e-15
+  x_in_fmol * N_Avogrado * 1e-15
   
 }
 
@@ -315,7 +330,7 @@ yet similar problems. If a function takes a number of parameters, it can
 be convenient to assign default values to some arguments.
 
 ``` r
-mol_to_abs <- function(mol, prefix = "f") {
+mol_to_abs <- function(x, prefix = "f") {
   
   prefix_meaning = c("a" = 1e-18, # “c” is a function that combines values into a “list”
                      "f" = 1e-15, 
@@ -324,13 +339,13 @@ mol_to_abs <- function(mol, prefix = "f") {
                      "µ" = 1e-06,
                      "m" = 1e-03)
   
-  mol * 6.022e23 * prefix_meaning[[prefix]]
+  x * 6.022e23 * prefix_meaning[[prefix]]
   
 }
 ```
 
-If an argument that has a default value, is omitted from the function
-call, R will silently use the default value.
+If an argument with a default is omitted from the function call, R will
+silently use the default value.
 
 ``` r
 mol_to_abs(N_fmol)           # amount in fmol to absolute numbers
@@ -339,18 +354,18 @@ mol_to_abs(20, prefix = "µ") # amount in µmol to absolute numbers
 
 Unnamed arguments are interpreted in the positional order given in the
 function’s definition. Named arguments can be provided in any order. The
-following expressions return the same value.
+following expressions thus return the same value.
 
 ``` r
 mol_to_abs(20, "µ")
-mol_to_abs(prefix = "µ", mol = 20)
+mol_to_abs(prefix = "µ", x = 20)
 ```
 
 ## Packages
 
 Not all functions are loaded by default into R’s memory. Also, not all
-functions required for a task might even be available with the standard
-distribution of R. Therefore, users can write, deposit and load
+functions required for a task might even be included in the “standard
+distribution” of R. Therefore, users can write, deposit and load
 extensions to the R software, which come as bundles of functions and/or
 other objects in so-called ‘packages’.
 
@@ -417,7 +432,7 @@ parentheses into the R console.
 mol_to_abs
 ```
 
-    ## function(mol, prefix = "f") {
+    ## function(x, prefix = "f") {
     ##   
     ##   prefix_meaning = c("a" = 1e-18, # “c” is a function that combines values into a “list”
     ##                      "f" = 1e-15, 
@@ -426,7 +441,7 @@ mol_to_abs
     ##                      "µ" = 1e-06,
     ##                      "m" = 1e-03)
     ##   
-    ##   mol * 6.022e23 * prefix_meaning[[prefix]]
+    ##   x * 6.022e23 * prefix_meaning[[prefix]]
     ##   
     ## }
 
@@ -439,45 +454,45 @@ Sometimes, just reading a function’s code can be rather enigmatic.
 Therefore, all (all\!) of the built-in functions come with an extensive
 documentation. Here is how you get there.
 
-*If you know the command’s name,* the following approach will open the
-appropriate documentation. As an example, examine the help for the
-`sum(...)` function.
+1.  *If you know the command’s name,* the following approach will open
+    the appropriate documentation. As an example, examine the help for
+    the `sum(...)` function.
+    
+    ``` r
+    help(sum)
+    help("sum")
+    ?sum
+    ```
+    
+    Typically, the help page includes the following sections:
+    
+      - *Description*, a brief summary,
+      - *Usage*, showing all arguments (variables and parameters) along
+        with their default values, where `...` represents any arbitrary
+        number of comma-separated (unquoted) arguments,
+      - *Arguments*, explicitly describing each argument and the data
+        type expected,
+      - *Details*, summarizing the function’s behaviour and its intended
+        usage,
+      - *Value*, explicitly describing the return value of the function,
+      - *References* for the algorithms implemented,
+      - *See Also*, listing similar functions for different data types,
+        or shortcuts for commonly used operations,
+      - *Examples* with illustrative code that helps the better
+        understanding the functions behavior.
 
-``` r
-help(sum)
-help("sum")
-?sum
-```
-
-Typically, the help page includes the following sections:
-
-  - *Description*, a brief summary,
-  - *Usage*, showing all arguments (variables and parameters) along with
-    their default values, where `...` represents any arbitrary number of
-    comma-separated (unquoted) arguments,
-  - *Arguments*, explicitly describing each argument and the data type
-    expected,
-  - *Details*, summarizing the function’s behaviour and its intended
-    usage,
-  - *Value*, explicitly describing the return value of the function,
-  - *References* for the algorithms implemented,
-  - *See Also*, listing similar functions for different data types, or
-    shortcuts for commonly used operations,
-  - *Examples* with illustrative code that helps the better
-    understanding the functions behavior.
-
-*If you do not know the exact name of the function you are looking for,*
-but you know what the function *should* be able to do for you, the
-following commands will be helpful.
-
-``` r
-help.search("histogram")
-??histogram
-```
+2.  *If you do not know the exact name of the function you are looking
+    for,* but you know what the function *should* be able to do for you,
+    the following commands will be helpful.
+    
+    ``` r
+    help.search("histogram")
+    ??histogram
+    ```
 
 ## Learning Objectives
 
-In this section you should have learned
+In this introduction you should have learned
 
   - how to create an object, consisting of a value and a name,
   - how to check which objects are currently in R’s memory, and
