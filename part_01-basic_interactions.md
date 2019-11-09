@@ -2,8 +2,9 @@ Basic Interactions
 ================
 
 The only meaningful way of interacting with R is by typing code into the
-R console. R’s command prompt is a ‘\>’ sign. When present, R is waiting
-for the next line of code.
+R console. R’s command prompt is a ‘\>’ sign. (You don’t type the ‘\>’.)
+When present, R is waiting for the next line of code. (You do hit the
+return key at the end of the line.)
 
 The prompt looks like this:
 
@@ -20,6 +21,8 @@ complete the command.
 > If at any point you want to abort the execution of a running command,
 > or if you cannot figure out how to correctly complete the current line
 > of input, hit Ctrl + C.
+
+You quit the R session with the command `q()` or `quit()`.
 
 ## Code and Comments
 
@@ -73,19 +76,19 @@ summary(r)
     ## lm(formula = y ~ x, data = d)
     ## 
     ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -2.28182 -0.77072  0.05107  0.62995  2.07527 
+    ##     Min      1Q  Median      3Q     Max 
+    ## -1.7087 -0.9659  0.3053  0.7392  1.5154 
     ## 
     ## Coefficients:
     ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept) -0.30334    0.53689  -0.565    0.579    
-    ## x            1.06322    0.04482  23.722 4.97e-15 ***
+    ## (Intercept)  -0.6472     0.4947  -1.308    0.207    
+    ## x             1.0534     0.0413  25.506  1.4e-15 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 1.156 on 18 degrees of freedom
-    ## Multiple R-squared:  0.969,  Adjusted R-squared:  0.9673 
-    ## F-statistic: 562.8 on 1 and 18 DF,  p-value: 4.965e-15
+    ## Residual standard error: 1.065 on 18 degrees of freedom
+    ## Multiple R-squared:  0.9731, Adjusted R-squared:  0.9716 
+    ## F-statistic: 650.6 on 1 and 18 DF,  p-value: 1.396e-15
 
 ``` r
 # clean up
@@ -373,10 +376,11 @@ other objects in so-called ‘packages’.
 
 R packages can be found anywhere on the internet, but most reliably,
 they are obtained from the ‘Comprehensive R Archive Network’
-([CRAN](https://cran.rstudio.com)). A good R package will be actively
-maintained and developed by the R community.
+([CRAN](https://cran.rstudio.com)), the main repository of contriubted R
+packages.
 
-To install, e.g. the `magrittr` package from CRAN.
+To install a CRAN package that is not on your machine, e.g. the
+`magrittr` package from CRAN.
 
 ``` r
 install.packages("magrittr")
@@ -387,7 +391,8 @@ need this.)
 
 ### Loading a Package
 
-To load a package into R’s memory, use
+A few packages are attached when R starts up. To load an additional
+package into R’s memory, use
 
 ``` r
 library("magrittr")
@@ -419,9 +424,12 @@ prefix the function call with the package name separated by `::`, e.g.
 ## Getting Help
 
 No need to say, there are probably very few questions and problems that
-another person has not yet dared asking on the internet. However, if you
-want to work offline and/or get to know the how and why, you can do it
-with R\!
+another person has not yet dared asking on the internet. Some
+suggestions are listed on
+[https://www.r-project.org/help.html](https://www.r-project.org/help.html#r-help-on-the-internet).
+
+However, if you want to work offline and/or get to know the how and why,
+you can do it with R\!
 
 ### Checking the Source Code
 
@@ -466,20 +474,30 @@ documentation. Here is how you get there.
     
     Typically, the help page includes the following sections:
     
-      - *Description*, a brief summary,
-      - *Usage*, showing all arguments (variables and parameters) along
-        with their default values, where `...` represents any arbitrary
-        number of comma-separated (unquoted) arguments,
-      - *Arguments*, explicitly describing each argument and the data
-        type expected,
-      - *Details*, summarizing the function’s behaviour and its intended
-        usage,
-      - *Value*, explicitly describing the return value of the function,
-      - *References* for the algorithms implemented,
-      - *See Also*, listing similar functions for different data types,
-        or shortcuts for commonly used operations,
-      - *Examples* with illustrative code that helps the better
-        understanding the functions behavior.
+      - **Description** states briefly what the function does,
+      - **Usage** specifies all arguments (variables and parameters) in
+        positional order with their default values; here `...`
+        represents any arbitrary number of comma-separated (unquoted)
+        arguments,
+      - **Arguments** enlists each of the arguments and the data type
+        expected,
+      - **Details** is a (often long) section that describes the
+        function’s behaviour, its intended usage, and any other
+        important details on how the function operates,
+      - **Value** explicitly describes the return value of the function,
+      - **Examples** gives illustrative code that serves the better
+        understanding the function’s behavior.
+    
+    Here is some useful advice on how to read a help file from Patrick
+    Burns’ [Impatient
+    R](https://www.burns-stat.com/documents/tutorials/impatient-r/#readhelp):
+    
+      - Help files are not novels. Don’t feel compelled to read them
+        from start to finish\!
+      - Focusing on the examples may be a good strategy, provided there
+        are good examples in the help file of course …
+      - Try it out\! It may not be wise to expect yourself to understand
+        everything before you use the function.
 
 2.  *If you do not know the exact name of the function you are looking
     for,* but you know what the function *should* be able to do for you,
@@ -489,6 +507,14 @@ documentation. Here is how you get there.
     help.search("histogram")
     ??histogram
     ```
+
+Many packages include ‘vignettes’, which are documents to illustrate and
+explain facilities in the package. You can discover vignettes by
+accessing the index of the help page for a package or e.g. via
+`browseVignettes(package = "magrittr")`.
+
+Many packages may also include extended code demonstrations, called
+‘demos’. Access e.g. via `demo(package = "stats")`.
 
 ## Learning Objectives
 

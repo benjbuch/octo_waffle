@@ -7,7 +7,7 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-The only meaningful way of interacting with R is by typing code into the R console. R's command prompt is a ‘>’ sign. When present, R is waiting for the next line of code. 
+The only meaningful way of interacting with R is by typing code into the R console. R's command prompt is a ‘>’ sign. (You don't type the ‘>’.) When present, R is waiting for the next line of code. (You do hit the return key at the end of the line.)
 
 The prompt looks like this:
 
@@ -20,6 +20,8 @@ In the absence of the prompt, R is busy with calculations. Anything you type mea
 In case a line is (syntactically) incomplete after you hit the return key, R will continue the next line with a ‘+’ waiting for you to complete the command.
 
 > If at any point you want to abort the execution of a running command, or if you cannot figure out how to correctly complete the current line of input, hit Ctrl + C.
+
+You quit the R session with the command `q()` or `quit()`.
 
 ## Code and Comments
 
@@ -254,9 +256,9 @@ Not all functions are loaded by default into R's memory. Also, not all functions
 
 ### Installing a New Package
 
-R packages can be found anywhere on the internet, but most reliably, they are obtained from the ‘Comprehensive R Archive Network’ ([CRAN](https://cran.rstudio.com)). A good R package will be actively maintained and developed by the R community. 
+R packages can be found anywhere on the internet, but most reliably, they are obtained from the ‘Comprehensive R Archive Network’ ([CRAN](https://cran.rstudio.com)), the main repository of contriubted R packages. 
 
-To install, e.g. the `magrittr` package from CRAN.
+To install a CRAN package that is not on your machine, e.g. the `magrittr` package from CRAN.
 
 ```{r eval=FALSE}
 install.packages("magrittr")
@@ -266,7 +268,7 @@ To uninstall a package, use `remove.packages(...)`. (You will rarely need this.)
 
 ### Loading a Package
 
-To load a package into R's memory, use
+A few packages are attached when R starts up. To load an additional package into R's memory, use
 
 ```{r eval=FALSE}
 library("magrittr")
@@ -284,7 +286,9 @@ If you intend to use only a single function from a package (and do not want to a
 
 ## Getting Help
 
-No need to say, there are probably very few questions and problems that another person has not yet dared asking on the internet. However, if you want to work offline and/or get to know the how and why, you can do it with R!
+No need to say, there are probably very few questions and problems that another person has not yet dared asking on the internet. Some suggestions are listed on [https://www.r-project.org/help.html](https://www.r-project.org/help.html#r-help-on-the-internet).
+
+However, if you want to work offline and/or get to know the how and why, you can do it with R!
 
 ### Checking the Source Code
 
@@ -310,14 +314,18 @@ help("sum")
 
     Typically, the help page includes the following sections:
 
-    * _Description_, a brief summary,
-    * _Usage_, showing all arguments (variables and parameters) along with their default values, where `...` represents any arbitrary number of comma-separated (unquoted) arguments,
-    * _Arguments_, explicitly describing each argument and the data type expected,
-    * _Details_, summarizing the function's behaviour and its intended usage,
-    * _Value_, explicitly describing the return value of the function,
-    * _References_ for the algorithms implemented,
-    * _See Also_, listing similar functions for different data types, or shortcuts for commonly used operations,
-    * _Examples_ with illustrative code that helps the better understanding the functions behavior.
+    * **Description** states briefly what the function does,
+    * **Usage** specifies all arguments (variables and parameters) in positional order with their default values; here `...` represents any arbitrary number of comma-separated (unquoted) arguments,
+    * **Arguments** enlists each of the arguments and the data type expected,
+    * **Details** is a (often long) section that describes the function's behaviour, its intended usage, and any other important details on how the function operates,
+    * **Value** explicitly describes the return value of the function,
+    * **Examples** gives illustrative code that serves the better understanding the function's behavior.
+    
+    Here is some useful advice on how to read a help file from Patrick Burns' [Impatient R](https://www.burns-stat.com/documents/tutorials/impatient-r/#readhelp):
+    
+    * Help files are not novels. Don't feel compelled to read them from start to finish!
+    * Focusing on the examples may be a good strategy, provided there are good examples in the help file of course ...
+    * Try it out! It may not be wise to expect yourself to understand everything before you use the function.
 
 2. _If you do not know the exact name of the function you are looking for,_ but you know what the function _should_ be able to do for you, the following commands will be helpful.
 
@@ -325,6 +333,10 @@ help("sum")
 help.search("histogram")
 ??histogram
     ```
+
+Many packages include ‘vignettes’, which are documents to illustrate and explain facilities in the package. You can discover vignettes by accessing the index of the help page for a package or e.g. via `browseVignettes(package = "magrittr")`.
+
+Many packages may also include extended code demonstrations, called ‘demos’. Access e.g. via `demo(package = "stats")`.
 
 ## Learning Objectives
 
