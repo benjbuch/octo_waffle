@@ -2,11 +2,17 @@ Working with Strings
 ================
 
 This introduction will be on objects of type `character`. This is all
-text which appears between quotation marks (`""` or `''`) and is
-therefore not executed by R. In informatics, such text objects are
-called ‘strings’.
+text which appears between quotation marks (`""` or `''`) and is not
+executed by R. In informatics, such text objects are called ‘strings’.
 
-Note how to get the “length” of a string in R, i.e. the number of
+Base R has a set of functions to combine and split strings, to find and
+replace text within strings etc. For the sake of consistency and its
+more powerful language, we will limit our discussion to the equivalent
+functions of the `stringr` package for more complex string operations.
+
+## Properties of Strings
+
+Note how we get the “length” of a string in R, i.e. the number of
 characters.
 
 ``` r
@@ -42,10 +48,13 @@ sapply(fruits, nchar); sapply(fruits, length)
     ##  apple banana  lemon 
     ##      1      1      1
 
+The `stringr` equivalent of `nchar("apple")` is
+`stringr::str_length("apple")`.
+
 ## Combining Strings
 
-The `paste(...)` function can be used to contract strings (e.g. two
-`character` objects) into a single string (one `charachter` object).
+The `paste(...)` contracts strings (e.g. two `character` objects) into a
+single string (one `charachter` object).
 
 ``` r
 paste("banana", "cake")
@@ -53,8 +62,8 @@ paste("banana", "cake")
 
     ## [1] "banana cake"
 
-If you supply two vectors, the shorter is repeated over the length of
-the longer one. Vectorization will make a vector from the vectors.
+If two vectors of different length are supplied, the shorter is repeated
+over the length of the longer one.
 
 ``` r
 paste(c("banana", "chocolate", "doughnut"), "cake")
@@ -62,7 +71,8 @@ paste(c("banana", "chocolate", "doughnut"), "cake")
 
     ## [1] "banana cake"    "chocolate cake" "doughnut cake"
 
-Here is an illustration of the agruments `sep=...` and `collapse=...`.
+Here is an illustration of the agruments `sep = ...` and `collapse =
+...`.
 
 ``` r
 x <- paste(c("A", "B", "C", "D"), c(1, 2), sep = "_")
@@ -90,13 +100,18 @@ length(x) # a vector with one element
 
     ## [1] 1
 
-The function `paste(..., sep = "")` which glues all arguments without
-spaces, has a shortcut, `paste0(...)`.
+The default separator of `paste` is a space `sep = " "`. `paste0(...)`
+is a shortcut for `paste(..., sep = "")`, which glues all arguments
+without spaces.
+
+The `stringr` equivalent of `paste("pipet", "boy")` is
+`stringr::str_c("pipet", "boy")` with the default separator being no
+space `sep = ""`. It has an `collapse = ...` argument too.
 
 ## Splitting Strings
 
-Strings can be split after a specific character with base R’s
-`strsplit()` function.
+Strings can be split after a specific character with base R’s `strsplit`
+function.
 
 ``` r
 strsplit(x = "one,2;three,4", split = ",")
@@ -105,9 +120,19 @@ strsplit(x = "one,2;three,4", split = ",")
     ## [[1]]
     ## [1] "one"     "2;three" "4"
 
-An equivalent, but slightly more powerful function is implemented in the
-`stringr` package. It is vectorized over both arguments, `string` and
+In the `stringr` package, `stringr::str_split` is vectorized over either
+arguments, `string` or
 `pattern`.
+
+``` r
+stringr::str_split(string = c("one,2;three,4", "five,six,7"), pattern = ",")
+```
+
+    ## [[1]]
+    ## [1] "one"     "2;three" "4"      
+    ## 
+    ## [[2]]
+    ## [1] "five" "six"  "7"
 
 ``` r
 stringr::str_split(string = "one,2;three,4", pattern = c(",", ";"))
@@ -122,12 +147,10 @@ stringr::str_split(string = "one,2;three,4", pattern = c(",", ";"))
 ## Subsetting Strings
 
 To extract a substring from a string, base R has a function called
-`substr()`. For the sake of consistency however, we will focus the
-equivalent functions of the `stringr` package, which is part of the
-`tidyverse`.
+`substr`.
 
-Subsetting is done by position. Negative indices (in `stringr`, not
-available in base R) count from the end.
+Subsetting is done by position. Negative indices (in `stringr`; not
+available in base R\!) count from the end.
 
 ``` r
 library(stringr)
@@ -147,7 +170,7 @@ str_sub(fruits, start = 3, end = -2)
 
     ## [1] "pl"  "nan" "mo"
 
-You can use `str_sub()` to modify strings too.
+You can use `stringr::str_sub` to modify strings too.
 
 ``` r
 str_sub(fruits, start = 3, end = -2) <- "x"
@@ -167,8 +190,8 @@ str_trim("   chitchat  ")
 ## Finding and Replacing Strings in Strings
 
 In its easiest implementation, finding and replacing strings works as
-follows with the `stringr`
-package.
+follows with
+`stringr::str_replace`.
 
 ``` r
 str_replace(string  = "One small step for a man, one giant leap for mankind!",
@@ -178,9 +201,9 @@ str_replace(string  = "One small step for a man, one giant leap for mankind!",
 
     ## [1] "One small step for a mouse, one giant leap for mankind!"
 
-Note that `str_replace()` replaces only the *first* occurence of a the
-‘pattern’. If you want to replace *all* occurences, use
-`str_replace_all()`.
+Note that `stringr::str_replace` replaces only the *first* occurence of
+a the ‘pattern’. If you want to replace *all* occurences, use
+`stringr::str_replace_all`.
 
 ``` r
 str_replace_all(string  = "One small step for a man, one giant leap for mankind!",
@@ -199,12 +222,13 @@ which such patterns are given is called ‘[regular
 expression](https://www.regular-expressions.info/tutorial.html)’ and is
 by far not limited to R, but applicable to many programming languages.
 
-This is a brief overview with some examples modified from the [`stringr`
-vignette on regular
+This is a brief overview with some examples modified from the `stringr`
+[vignette on regular
 expressions](https://stringr.tidyverse.org/articles/regular-expressions.html).
 
 In almost all `stringr` functions, you can use regular expressions as
-`pattern=...`.
+`pattern =
+...`.
 
 ``` r
 str_replace_all(string  = "One small step for a man, one giant leap for mankind!",
@@ -214,23 +238,23 @@ str_replace_all(string  = "One small step for a man, one giant leap for mankind!
 
     ## [1] "One small piece of cake for a man, one giant piece of cake for mankind!"
 
-In the next examples, we will use the `str_extract_all()` function,
-which will return the matching substrings of each element in the
-`character` vector provided as `string=...`. Since we have only one
-element in this vector, we use index `[[1]]` to print out the matches
-for the first (and only)
-element.
+> In the next examples, we will use the `stringr::str_extract_all`
+> function to return the substrings matching the regular expression.
+> Since we provide a `character` vector with only a single element as
+> `string = ...`, we immediatly index the returned list with `[[1]]` to
+> save space while
+printing.
 
 ``` r
 str_extract_all(string  = "One small step for a man, one giant leap for mankind!", # one element only
-                pattern = "step|leap")[[1]]
+                pattern = "step|leap")[[1]] # print it immediatly
 ```
 
     ## [1] "step" "leap"
 
 ``` r
 str_extract_all(string  = c("One small step", "one giant leap"), # character vector with two elements
-                pattern = "step|leap")
+                pattern = "step|leap") # prints the entire list containing character vectors
 ```
 
     ## [[1]]
@@ -238,6 +262,8 @@ str_extract_all(string  = c("One small step", "one giant leap"), # character vec
     ## 
     ## [[2]]
     ## [1] "leap"
+
+### Placeholders
 
 Regular expressions can have placeholder symbols. First, `.` will match
 any character (except a
@@ -257,14 +283,13 @@ str_extract_all(string  = "I keep pressing the space bar, but I'm still on plane
 
     ## [1] "bar," "Eart"
 
-If you need to match a point, you need to use an ‘escape’ to tell the
-regular expression not to use the special meaning of `.`, but its
-literal.
-
-> The ‘escape’ sign for regular expressions is `\`, so you would need
-> `\.`. However, `\` is also the escape sign for R. So, in order to
-> *perserve* the escape sign for the regular expression, you need to
-> escape the escape sign as well. (Sounds confusing, I know.)
+> If you need to match a point, you need to use an ‘escape’ to tell the
+> regular expression not to use the special meaning of “`.`”, but its
+> literal meaning. The ‘escape’ sign for regular expressions is `\`, so
+> you regex `\.`. However, `\` is also the escape sign for R. In order
+> to *perserve* the escape sign for the evaluation of the regular
+> expression, you need to escape the escape sign as well. (Sounds
+> confusing.)
 
 You will need `\\.` to match a fullstop
 literally.
@@ -320,9 +345,9 @@ str_extract_all(x, "C{1,2}")[[1]]
 
     ## [1] "CC" "C"  "C"
 
-By default, these matches are ‘greedy’. They will match the longest
-string possible. To make them match the shortest string possible, put a
-`?` after them.
+By default, these matches are ‘greedy’. They will match the *longest*
+string possible. To make them match the *shortest* string possible, put
+a `?` after them.
 
 | operator | repetitions                                     |
 | -------- | ----------------------------------------------- |
@@ -358,7 +383,7 @@ type.
     
         ## [1] "If there is no space in space, I will leave. "
 
-Escapes can also be useful to specify entire classes of characters.
+Escapes can also be useful to specify certain classes of characters.
 
   - `\d` matches any digit (0, 1, 2, …, 9). The complement, `\D`,
     matches any character that is not a decimal
@@ -394,7 +419,7 @@ Escapes can also be useful to specify entire classes of characters.
         ## [1] "'" " " " " " " " " "!"
 
   - `\b` matches the transition between word and non-word characters.
-    (Rarely needed.)
+    (Rarely needed; example below.)
 
 You can specify your own *character classes* using `[]`:
 
@@ -402,7 +427,7 @@ You can specify your own *character classes* using `[]`:
   - `[a-z]` matches every character between a and z (case-sensitive),
   - `[^abc]` matches anything except a, b, or c.
 
-There are a number of pre-built character classes:
+There are a number of pre-built character classes in `stringr`:
 
   - `[:punct:]` punctuation,
   - `[:alpha:]` letters,
@@ -422,32 +447,32 @@ In some cases, you want to match a pattern only if it occurs at the
 start or the end of a line. There are
 
   - `^` to match the start of a line, and
-  - `$` to match the end of the line.
+  - `$` to match the end of the
+line.
 
 <!-- end list -->
 
 ``` r
-str_extract_all("papaya or banana", "[yn]a")[[1]]
+str_extract_all("papaya or banana", "[yn]a")[[1]]    # all occurences of “ya” or “na”
 ```
 
     ## [1] "ya" "na" "na"
 
 ``` r
-str_extract_all("papaya or banana", "[yn]a$")[[1]]
+str_extract_all("papaya or banana", "[yn]a$")[[1]]   # matches at the end of a line only
 ```
 
     ## [1] "na"
 
 ``` r
-str_extract_all("papaya or banana", "[yn]a\\b")[[1]]
+str_extract_all("papaya or banana", "[yn]a\\b")[[1]] # matches at word boundaries only
 ```
 
     ## [1] "ya" "na"
 
-To remember which one is which, this
-[mnemonic](https://twitter.com/emisshula/status/323863393167613953)
-might help you: ‘If you begin with power (`^`), you end up with money
-(`$`).’
+To remember which one is which, [this
+mnemonic](https://twitter.com/emisshula/status/323863393167613953) might
+help you: ‘If you begin with power (`^`), you end up with money (`$`).’
 
 ## Learning Objectives
 
@@ -465,7 +490,7 @@ Quick questions.
     "GC")`?
 2.  Suppose you have the vector `c("ÁlM", "AnJ", "DaS", "DmS", "JaW",
     "ShP", "SuB")`. Using regular expressions, how do you identify all
-    words that contain
+    elements that contain
     1.  the lowercase ‘a’,
     2.  ‘a’ or ‘A’,
     3.  any non-Latin character,

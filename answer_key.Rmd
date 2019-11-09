@@ -67,7 +67,7 @@ lapply(prizes, function(x) x + 0.5)
 strsplit(paste0("AG", "CGT", "A", "TGCT"), "GC")
     ```
 
-2. Suppose you have the vector `c("ÁlM", "AnJ", "DaS", "DmS", "JaW", "ShP", "SuB")`. Using regular expressions, how do you identify all words that contain
+2. Suppose you have the vector `c("ÁlM", "AnJ", "DaS", "DmS", "JaW", "ShP", "SuB")`. Using regular expressions, how do you identify all elements that contain
     1. the lowercase ‘a’,
     
         ```{r}

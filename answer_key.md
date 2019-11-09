@@ -119,7 +119,7 @@ suggested answers.
 
 2.  Suppose you have the vector `c("ÁlM", "AnJ", "DaS", "DmS", "JaW",
     "ShP", "SuB")`. Using regular expressions, how do you identify all
-    words that contain
+    elements that contain
     
     1.  the lowercase ‘a’,
         
