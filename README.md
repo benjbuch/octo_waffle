@@ -42,4 +42,4 @@ _(To be announced.)_
 
 ## Acknowledgements
 
-Some of the material has been adapted from Sean Davi's [Introduction to R](https://seandavi.github.io/ITR/index.html). 
+Some of the material has been adapted from Sean Davi's [Introduction to R](https://seandavi.github.io/ITR/index.html) and Patrick Burn's [Impatient R](https://www.burns-stat.com/documents/tutorials/impatient-r/). 
