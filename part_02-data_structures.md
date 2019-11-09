@@ -630,9 +630,9 @@ in a vector.
 ``` r
 y <- x[] # copy attributes of x if any; in this case x has names
 
-for (i in seq_along(x)) {  # need to create indexing variable manually
+for (i in seq_along(x)) {   # need to create indexing variable manually
   
-  y[[i]] <- mean(1/x[[i]]) # need to access each element individually
+  y[[i]] <- mean(x[[i]]**2) # need to access each element individually
 
 }
 
@@ -640,13 +640,13 @@ y
 ```
 
     ## $a
-    ## [1] 0.2745343
+    ## [1] 46
     ## 
     ## $b
-    ## [1] 0.03904596
+    ## [1] 686
     ## 
     ## $c
-    ## [1] 0.006937163
+    ## [1] 23350
 
 So, using `lapply` saves you a lot of work\!
 

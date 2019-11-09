@@ -363,9 +363,9 @@ This becomes even more tedious if we wanted to save the results as well in a vec
 ```{r}
 y <- x[] # copy attributes of x if any; in this case x has names
 
-for (i in seq_along(x)) {  # need to create indexing variable manually
+for (i in seq_along(x)) {   # need to create indexing variable manually
   
-  y[[i]] <- mean(1/x[[i]]) # need to access each element individually
+  y[[i]] <- mean(x[[i]]**2) # need to access each element individually
 
 }
 
