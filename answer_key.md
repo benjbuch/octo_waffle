@@ -2,15 +2,15 @@ Answer Key
 ================
 
 Certainly, there’s more than one way to skin a cat. This is one set of
-suggestions to answer the questions of the introductory lessons.
+suggested answers.
 
 ## [Introductory Part 2](part_02-data_structures.md)
 
 1.  Which data type is the vector `c("Tagesgericht" = 1.60, "Menü 1"
     = 2.00, "Menü 2" = 2.50, "Aktionsteller" = 3.50)`?
     
-    It’s a named numeric vector of type `double` (floating point
-    numbers).
+    It’s a named numeric vector of type `double`, i.e. floating point
+    numbers.
 
 2.  Can you assign this vector to the variable `prizes_students`? How
     could you access the costs for “Menü

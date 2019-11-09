@@ -26,15 +26,15 @@ The following introductions are intended to give you some ‘background’ of R.
 
 At the end of each introduction, you will find some questions for self-study.
 
-[Introductory Part 1](part_01-basic_interactions.md) will explore how to interact with R. _(Recommended.)_
+* [Introductory Part 1](part_01-basic_interactions.md) will explore how to interact with R. _(Recommended.)_
 
-[Introductory Part 2](part_02-data_structures.md) will introduce some common data types in R. _(Recommended.)_
+* [Introductory Part 2](part_02-data_structures.md) will introduce some common data types in R. _(Recommended.)_
 
-[Introductory Part 3](part_03-working_with_strings.md) will explore how to work with text in R. _(Optional.)_
+* [Introductory Part 3](part_03-working_with_strings.md) will explore how to work with text in R. _(Optional.)_
 
 You may wish to consult the [answer key](answer_key) on certain problems.
 
-A cheat sheet for the introduction in [RMD](part_00-cheat_sheet.Rmd) or [DOCX](part_00-cheat_sheet.docx) at your disposal.
+A cheat sheet for the introduction in [RMD](part_00-cheat_sheet.Rmd) or [DOCX](part_00-cheat_sheet.docx) format at your disposal.
 
 ## Syllabus
 
