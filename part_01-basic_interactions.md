@@ -76,19 +76,19 @@ summary(r)
     ## lm(formula = y ~ x, data = d)
     ## 
     ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -1.7087 -0.9659  0.3053  0.7392  1.5154 
+    ##      Min       1Q   Median       3Q      Max 
+    ## -2.35138 -0.08822  0.24190  0.61132  1.57256 
     ## 
     ## Coefficients:
     ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)  -0.6472     0.4947  -1.308    0.207    
-    ## x             1.0534     0.0413  25.506  1.4e-15 ***
+    ## (Intercept)  0.07681    0.45867   0.167    0.869    
+    ## x            0.97944    0.03829  25.580 1.33e-15 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 1.065 on 18 degrees of freedom
-    ## Multiple R-squared:  0.9731, Adjusted R-squared:  0.9716 
-    ## F-statistic: 650.6 on 1 and 18 DF,  p-value: 1.396e-15
+    ## Residual standard error: 0.9874 on 18 degrees of freedom
+    ## Multiple R-squared:  0.9732, Adjusted R-squared:  0.9717 
+    ## F-statistic: 654.4 on 1 and 18 DF,  p-value: 1.326e-15
 
 ``` r
 # clean up
@@ -515,6 +515,31 @@ accessing the index of the help page for a package or e.g. via
 
 Many packages may also include extended code demonstrations, called
 ‘demos’. Access e.g. via `demo(package = "stats")`.
+
+## Errors and Warnings
+
+R produces errors and warnings. Both write a message to your console.
+The difference is that errors halt the execution of the command, but
+warnings don’t.
+
+Although there are endless ways of getting an error, R is usually very
+good in pointing you to the source of an error.
+
+Common sources of errors include
+
+  - missing **commas**,
+  - unmatched **parentheses**, or trying to match parentheses of
+    different kinds,
+  - **names/symbols** being incorrectly spelled, or their capitalization
+    being wrong, or the
+  - packages or files with the object’s definition not being attached to
+    the current namespace.
+
+Warnings are not as serious as an error. However, ignoring a warning can
+be very serious if it is suggesting that the answer you got was bogus.
+
+> Always (always\!) *read* the warning messages to check if they
+> indicate a real problem or not.
 
 ## Learning Objectives
 

@@ -338,6 +338,23 @@ Many packages include ‘vignettes’, which are documents to illustrate and exp
 
 Many packages may also include extended code demonstrations, called ‘demos’. Access e.g. via `demo(package = "stats")`.
 
+## Errors and Warnings
+
+R produces errors and warnings. Both write a message to your console. The difference is that errors halt the execution of the command, but warnings don't.
+
+Although there are endless ways of getting an error, R is usually very good in pointing you to the source of an error. 
+
+Common sources of errors include
+
+* missing **commas**,
+* unmatched **parentheses**, or trying to match parentheses of different kinds,
+* **names/symbols** being incorrectly spelled, or their capitalization being wrong, or the
+* packages or files with the object's definition not being attached to the current namespace.
+
+Warnings are not as serious as an error. However, ignoring a warning can be very serious if it is suggesting that the answer you got was bogus.
+
+> Always (always!) _read_ the warning messages to check if they indicate a real problem or not. 
+
 ## Learning Objectives
 
 In this introduction you should have learned
