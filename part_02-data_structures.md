@@ -550,12 +550,11 @@ function will be applied to each element individually. The result will
 be a vector.
 
 ``` r
-x <- 1:10
-sqrt(x)
+# the command ...
+sqrt(c(4, 9, 16, 25))
+# ... has the same result as ...
+c(sqrt(4), sqrt(9), sqrt(16), sqrt(25))
 ```
-
-    ##  [1] 1.000000 1.414214 1.732051 2.000000 2.236068 2.449490 2.645751
-    ##  [8] 2.828427 3.000000 3.162278
 
 If we have more complex functions to apply on a vector or list, we can
 quickly make use of an `apply(...)` statement. There are six different

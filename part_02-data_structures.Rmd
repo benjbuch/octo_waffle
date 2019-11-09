@@ -322,9 +322,11 @@ The most powerful aspect of R is the vectorization of tasks. If you are familiar
 
 Many functions in R are _vectorized_. If applied to a vector, the function will be applied to each element individually. The result will be a vector.
 
-```{r}
-x <- 1:10
-sqrt(x)
+```{r eval=FALSE}
+# the command ...
+sqrt(c(4, 9, 16, 25))
+# ... has the same result as ...
+c(sqrt(4), sqrt(9), sqrt(16), sqrt(25))
 ```
 
 If we have more complex functions to apply on a vector or list, we can quickly make use of an `apply(...)` statement. There are six different kinds:
