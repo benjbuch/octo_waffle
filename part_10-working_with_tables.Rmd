@@ -155,9 +155,9 @@ Here are some guidelines:
 3. Don't store variables in both rows and columns.
 4. Avoid storing multiple types of observational units in the same table.
 
-Typically, if the table with your data is wider than long (if it is in the ‘wide’ format), it's easy to encounter messy data. For example, `plate_1` is in one (of many possible) wide and messy formats: The parameter concentration is stored along the header row, not in a separate column. 
+Typically, if the table with your data is wider than long (if it is in the ‘wide’ format), it's easy to encounter messy data. For example, `plate_1` is in one (of many possible) wide and messy formats: The concentration parameter is stored along the header row, not in a separate column. 
 
-A tidyer wide format would look like that:
+A tidyer wide format of the same data would look like that:
 
 ```{r echo=FALSE}
 plate_1 %>% 
@@ -235,3 +235,6 @@ plate_1 %>%
   head(3) 
 ```
 
+### Uniting and Splitting Columns
+
+sample_id + replicate_id. how can this be useful? spreading multiple parameters (not possible in tidyr)
