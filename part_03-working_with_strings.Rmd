@@ -11,6 +11,8 @@ This introduction will be on objects of type `character`. This is all text which
 
 Base R has a set of functions to combine and split strings, to find and replace text within strings etc. For the sake of consistency and its more powerful language, we will limit our discussion to the equivalent functions of the `stringr` package for more complex string operations.
 
+`stringr` is part of the `tidyverse`.
+
 ## Properties of Strings
 
 Note how we get the “length” of a string in R, i.e. the number of characters.
