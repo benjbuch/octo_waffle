@@ -76,9 +76,6 @@ seq(1, 10, 0.5) # vector of type double
 
 ```{r eval=FALSE}
 1:4 > 2         # vector of type logical
-```
-
-```{r eval=FALSE}
 # negation of logical vectors
 !(1:4 > 2)
 # boolean operations 

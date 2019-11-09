@@ -34,6 +34,8 @@ At the end of each introduction, you will find some questions for self-study.
 
 You may wish to consult the [answer key](answer_key) on certain problems.
 
+A cheat sheet for the introduction in [RMD](part_00-cheat_sheet.Rmd) or [DOCX](part_00-cheat_sheet.docx) at your disposal.
+
 ## Syllabus
 
 _(To be announced.)_
