@@ -7,24 +7,14 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## GitHub Documents
+A ‘table’, in R called a `data.frame`, is organized in columns and rows. Each column can hold only a _single_ data type; but columns can have _different_ data types. `data.frame`s are thus created _by column_. (Technically speaking, `data.frame`s are `list` objects in which each element of the list is an atomic vector of the same length.)
 
-This is an R Markdown format used for publishing markdown documents to GitHub. When you click the **Knit** button all R code chunks are run and a markdown file (.md) suitable for publishing to GitHub is generated.
+There are (at least) three different flavours to work with `data.frame` in R:
 
-## Including Code
+1. Base R, which uses `list`-like syntax to access `data.frame` objects; this can easily get cumbersome to work with.
+2. The **`data.table` package**, which uses SQL-like syntax to access `data.table` objects, a class similar to `data.frame`, but built for maximum efficiency. 
+3. The **`dplyr` package**, which uses language-like syntax to describe the actions applied to `tibble` objects, another class similar to `data.frame`.
 
-You can include R code in the document as follows:
+We will focus on using `dplyr` (which is part of the `tidyverse`).
 
-```{r cars}
-summary(cars)
-```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
