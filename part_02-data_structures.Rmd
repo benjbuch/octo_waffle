@@ -114,7 +114,7 @@ To preserve the original data type of each element, we need to use lists!
 
 ## Advanced Data Structures: Classes
 
-R allows to create more sophisticated data structures from the simpler atomic data types. The structure of such objectes is called a ‘class’. Besides its usefulness for an object-oriented programming style, having a class associated to an object will cause functions such as `plot(...)` and `summary(...)` to respond in an appropriate manner. Some functions operate only on objects of specific classes.
+R allows to create more sophisticated data structures from the simpler atomic data types. The structure of such objectes is called a ‘class’. Besides its usefulness for an object-oriented programming style, having a class associated to an object will cause functions such as `print(...)`, `plot(...)` and `summary(...)` to respond in an appropriate manner. Some functions operate only on objects of specific classes.
 
 > All objects in R can have additional “metadata” associated with them, so-called ‘attributes’. Classes define which ‘attributes’ an object must (at least) implement to belong to a class.
 
@@ -152,9 +152,11 @@ levels(x) # short-hand for objects of class ‘factor’
 
 You can get (and modify) the object's class with the `class(...)` function and the attributes associated with it using the `attributes(...)` function.
 
+> Having said that `print(...)` is aware of an object's class, you should note: The _good thing_ is that when you print the object to the console (e.g. implicitly by typing the object's name), you will see the important aspects of the object. The _bad thing_ is that you can easily think that you are seeing the real object. In reality, you are just seeing the self-portrait of the object that it wants you to see.
+
 ## Vectorization in R
 
-Recall that the basic unit in R is a vector.
+Recall that the basic unit in R is a vector. Sometimes there will be dozens, sometimes millions of elements stored in a single vector. Vectorization makes sure an operation treats the object as a whole rather than each element in the vector separately.
 
 ### Numerical Vectors and Operations
 
@@ -320,7 +322,7 @@ z[["A"]][["b"]]
 
 The most powerful aspect of R is the vectorization of tasks. If you are familiar with some other programming language, this is equivalent to, but much faster than, writing a `for`-loop (which also exists in R).
 
-Many functions in R are _vectorized_. If applied to a vector, the function will be applied to each element individually. The result will be a vector.
+Many functions in R are _vectorized_. If applied to a vector, the function will be applied to each of the elements in the whole vector ‘at once’. The result will be a vector.
 
 ```{r eval=FALSE}
 # the command ...
