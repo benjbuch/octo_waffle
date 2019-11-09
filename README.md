@@ -38,7 +38,16 @@ A cheat sheet for the introduction in [RMD](part_00-cheat_sheet.Rmd) or [DOCX](p
 
 ## Syllabus
 
-_(To be announced.)_
+1. Working with Tables
+2. Making Figures
+3. Import, Export, Save
+    * Navigating the file directory
+    * Using RStudio's `*.Rproj`
+    * Saving and restoring an R session _vs_ Saving selected R objects
+    * Importing data from `*.txt`, `*.csv` etc.
+    * Importing data from Microsoft Excel
+    * Importing data from multiple files
+    * Exporting data as `*.txt`, `*.csv` etc.
 
 ## Acknowledgements
 
