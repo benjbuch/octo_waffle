@@ -1,0 +1,183 @@
+---
+title: "Getting Started---A Cheat Sheet"
+author: "Benjamin Buchmuller"
+output: 
+  word_document:
+    df_print: kable
+    reference_docx: word_styles_references.docx
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Basic Interactions
+
+### Code and Comments
+
+* `#` is the comment character
+* `a = b` and `a <- b` or `b -> a` **assigns** the value of `b` to a variable named `a`
+* `function_a %>% function_b` **pipes** the result of `function_a` to `function_b` as input
+
+Object names cannot start with a number, some names are reserved.
+
+### Functions and Packages
+
+The basic idiom to define a function is `new_function <- function(arg1, arg2, ...) {...}`.
+
+Packages
+
+* include new functions for a specific task,
+* are installed with `install.packages("some_package")`,
+* are loaded with `library(some_package)`.
+
+Functions from a package can be specifically pointed with `some_package::this_function(...)`.
+
+### Getting Help
+
+If you know the command's name use `?command`.
+
+If you don't know the name, but a keyword, use `??keyword`.
+
+## Data Types
+
+| data type | stores | example |
+|-----------|--------|---------|
+| `double` | floating point numbers | `3.141, 1.8e-3` |
+| `integer` | integers | `-5L, 1L, 2L, 3L` |
+| `character` | strings | `"banana", "apple", "melon"` |
+| `logical` | boolean values | `TRUE, FALSE` |
+| `list` | sets with different data types | `list(3, "apple")` |
+
+```{r eval=FALSE}
+typeof(obj)     # data type of obj
+class(obj)      # class of obj; will tell functions how treat obj
+attributes(obj) # metadata of obj; a named list
+```
+
+## Vectors
+
+> Vectors contain elements of one single data type only!
+
+```{r eval=FALSE}
+length(obj)     # number of elements in obj
+c(obj_a, obj_b) # concatenate obj_a and obj_b; may involve coercion 
+names(obj)      # names of each element in obj; if set, a character vector 
+```
+
+### Numerical Vectors
+
+```{r eval=FALSE}
+1:10            # vector of type integer
+seq(1, 10, 0.5) # vector of type double
+```
+
+### Logical Vectors
+
+```{r eval=FALSE}
+1:4 > 2         # vector of type logical
+```
+
+```{r eval=FALSE}
+# negation of logical vectors
+!(1:4 > 2)
+# boolean operations 
+c(TRUE, FALSE) & c(TRUE, TRUE) # AND : c(TRUE, FALSE)
+c(TRUE, FALSE) | c(TRUE, TRUE) # OR  : c(TRUE, TRUE)
+# boolean queries
+any(...) # at least one element TRUE?
+all(...) # all elements TRUE?
+```
+
+### Indexing Vectors
+
+```{r eval=FALSE}
+# index by position
+noble_gases[c(1, 3, 5)]
+# index by exclusion
+noble_gases[c(-1, -3)]
+# index by name
+noble_gases[c("Argon", "Radon")]
+# index by logical
+noble_gases[noble_gases < 20]
+```
+
+### Applying Functions to Vectors
+
+Functions that take _one_ vector as input are applied `fun(obj)`. 
+
+Functions that take _two_ vectors as input are applied `fun(obj_a, obj_b)`, this includes arithmetic operations `obj_a + obj_b`.
+
+* If `obj_a` and `obj_b` have the same number of elements, `fun` is applied by pairs,
+* if `length(obj_a)` is a multiple of `length(obj_b)`, `obj_b` is recycled along `obj_a` to make pairs,
+* else, there will be a result with a warning.
+
+To apply a function to vectors inside a `list`, the basic idiom for is `lapply(obj, fun)`.
+
+One can apply even complicated functions using `lapply(obj, function(i) ...)`.
+
+> Using vectorization is preferred over `for`-loops!
+
+## Working with Strings
+
+```{r eval=FALSE}
+# number of characters
+nchar(chr)
+
+# glue together chr_a and chr_b by pairs of elements
+paste(chr_a, chr_b)  # with sep=...
+paste0(chr_a, chr_b) # with no separator
+# glue together chr_a and chr_b by pairs of elements, then combine in a single string
+paste(chr_a, chr_b, collapse = ...)  # with sep=... between elements
+paste0(chr_a, chr_b, collapse = ...) # with no separator
+# split chr_a at each occurence of chr_b
+stringr::str_split(chr_a, pattern = chr_b)
+
+# extract the substring from the fourth to the eighths character
+stringr::str_sub(chr, start = 4, end = 8)
+
+# find first chr_b (can be regex) in chr_a
+stringr::str_extract(chr_a, pattern = chr_b)
+# find all chr_b (can be regex) in chr_a
+stringr::str_extract_all(chr_a, pattern = chr_b)
+
+# replace first chr_b (can be regex) in chr_a with chr_c
+stringr::str_replace(chr_a, pattern = chr_b, replacement = chr_c)
+# replace all chr_b (can be regex) in chr_a with chr_c
+stringr::str_replace_all(chr_a, pattern = chr_b, replacement = chr_c)
+```
+
+### Regular Expressions
+
+#### Character classes.
+
+| operator | meaning |
+|----------|---------|
+| `.` | any character (except `\n`) |
+| `\s` | any whitespace |
+| `\t` | horizontal tabulation signs |
+| `\n` or `\r` | line feeds or carriage returns |
+| `\d` | any digit (0, 1, 2, ..., 9) |
+| `\w` | any alphabetic and decimal numbers | 
+| `[abc]` | a, b, or c |
+| `[a-c]` | every character between a and z (case-sensitive) |
+| `[^abc]` | anything except a, b, or c | 
+
+#### Quantifiers.
+
+| operator | repetitions |
+|----------|-------------|
+| `?` | 0 or 1 |
+| `+` | 1 or more |
+| `*` | 0 or more |
+| `{n}` | exactly _n_ times |
+| `{n,}` | _n_ or more times |
+| `{n,m}` | between _n_ and _m_ |
+| `...?` | (make not greedy) |
+
+#### Anchors.
+
+| operator | position |
+|----------|----------|
+| `^` | start of a line |
+| `$` | end of a line |
