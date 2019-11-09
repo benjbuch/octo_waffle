@@ -146,11 +146,13 @@ stringr::str_split(string = "one,2;three,4", pattern = c(",", ";"))
 
 ## Subsetting Strings
 
-To extract a substring from a string, base R has a function called
-`substr`.
+Subsetting is done by position. The first character in a string has
+index number 1.
 
-Subsetting is done by position. Negative indices (in `stringr`; not
-available in base R\!) count from the end.
+To extract a substring from a string, base R has `substr`. We will not
+discuss it. The equivalent function in `stringr` is `stringr::str_sub`.
+It allows also counting from the end of a string, when negative indices
+are provided.
 
 ``` r
 library(stringr)
@@ -179,7 +181,8 @@ fruits
 
     ## [1] "apxe" "baxa" "lexn"
 
-To remove whitespace from the ends of a string, there is `str_trim()`.
+To remove whitespace from the ends of a string, there is
+`stringr::str_trim`.
 
 ``` r
 str_trim("   chitchat  ")
@@ -222,9 +225,9 @@ which such patterns are given is called ‘[regular
 expression](https://www.regular-expressions.info/tutorial.html)’ and is
 by far not limited to R, but applicable to many programming languages.
 
-This is a brief overview with some examples modified from the `stringr`
-[vignette on regular
-expressions](https://stringr.tidyverse.org/articles/regular-expressions.html).
+*(This is a brief overview with some examples modified from the
+`stringr` [vignette on regular
+expressions](https://stringr.tidyverse.org/articles/regular-expressions.html).)*
 
 In almost all `stringr` functions, you can use regular expressions as
 `pattern =
@@ -265,8 +268,8 @@ str_extract_all(string  = c("One small step", "one giant leap"), # character vec
 
 ### Placeholders
 
-Regular expressions can have placeholder symbols. First, `.` will match
-any character (except a
+Regular expressions can have placeholders: `.` will match any character
+(except a
 newline).
 
 ``` r
@@ -283,15 +286,15 @@ str_extract_all(string  = "I keep pressing the space bar, but I'm still on plane
 
     ## [1] "bar," "Eart"
 
-> If you need to match a point, you need to use an ‘escape’ to tell the
-> regular expression not to use the special meaning of “`.`”, but its
-> literal meaning. The ‘escape’ sign for regular expressions is `\`, so
-> you regex `\.`. However, `\` is also the escape sign for R. In order
-> to *perserve* the escape sign for the evaluation of the regular
+> If you need to match a fullstop, you need to use an ‘escape’ to tell
+> the regular expression not to use the special meaning of “`.`”, but
+> its literal meaning. The ‘escape’ sign for regular expressions is `\`,
+> so you regex `\.`. However, `\` is also the escape sign for R. In
+> order to *perserve* the escape sign for the evaluation of the regular
 > expression, you need to escape the escape sign as well. (Sounds
 > confusing.)
 
-You will need `\\.` to match a fullstop
+You need `\\.` to match a fullstop
 literally.
 
 ``` r
@@ -345,9 +348,10 @@ str_extract_all(x, "C{1,2}")[[1]]
 
     ## [1] "CC" "C"  "C"
 
-By default, these matches are ‘greedy’. They will match the *longest*
-string possible. To make them match the *shortest* string possible, put
-a `?` after them.
+By default, the repetition operators are ‘greedy’ in matching. They will
+match the *longest* string possible.
+
+To make them match the *shortest* string possible, put a `?` after them.
 
 | operator | repetitions                                     |
 | -------- | ----------------------------------------------- |
@@ -365,8 +369,7 @@ str_extract(x, c("C{2,3}", "C{2,3}?"))
 
 ### Special Characters
 
-Escapes allow to specify individual chracters that are otherwise hard to
-type.
+Escapes allow to specify chracters that are otherwise hard to type.
 
   - `\s` matches any whitespace. This includes horizontal tabulation
     signs (`\t`), line feeds (`\n`), carriage returns (`\r`), as well as
@@ -383,7 +386,7 @@ type.
     
         ## [1] "If there is no space in space, I will leave. "
 
-Escapes can also be useful to specify certain classes of characters.
+Escapes can also define entire classes of characters.
 
   - `\d` matches any digit (0, 1, 2, …, 9). The complement, `\D`,
     matches any character that is not a decimal
