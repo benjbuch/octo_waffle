@@ -1,22 +1,25 @@
 Working with Tables
 ================
 
-A ‘table’, in R called a `data.frame`, is organized in columns and rows.
-Each column can hold only a *single* data type; but columns can have
-*different* data types. `data.frame`s are thus created *by column*.
-(Technically speaking, `data.frame`s are `list` objects in which each
-element of the list is an atomic vector of the same length.)
+A ‘table’—in R called a `data.frame`—is organized in columns and rows.
+Each column of a `data.frame` can hold only a *single* [data
+type](part_02-data_structures.md#data-types-in-r), but columns can have
+*different* data types. `data.frame` objects are thus created *by
+column*. (Technically speaking, [a `data.frame` is a
+`list`](part_02-data_structures.html#advanced-data-structures-classes)
+in which each element of the list is an atomic vector of the same
+length.)
 
-There are (at least) three different flavours to work with `data.frame`
-in R:
+There are (at least) three different flavours to work with a
+`data.frame` in R:
 
-1.  Base R uses `list`-like syntax to access `data.frame` objects; this
-    can however easily get cumbersome to work with.
-2.  The **`data.table` package**, which uses SQL-like syntax to access
+1.  Base R uses `list`-like syntax; this can however easily get
+    cumbersome to work with.
+2.  The **`data.table` package** uses SQL-like syntax to access
     `data.table` objects, a class similar to `data.frame`, but built for
     maximum efficiency.
-3.  The **`dplyr` package**, which uses language-like syntax to describe
-    the actions applied to `tibble` objects, another class similar to
+3.  The **`dplyr` package** uses language-like syntax to describe the
+    actions applied to `tibble` objects, another class similar to
     `data.frame`.
 
 We will focus on using `dplyr`, which is part of the
@@ -37,21 +40,27 @@ library(tidyverse)
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
 
-> Note that in the `tidyverse` you will see extensive use of
-> quasiquotation. This means you can refer e.g. to column names (which
-> are usually `character`) without quotation marks (`""` or `''`).
-> Though, some arguments accept `character` vectors only. These must be
+> Note that the `tidyverse` makes extensive use of ‘quasiquotation’.
+> This means that you can refer e.g. to column names (which are usually
+> of type `character`) without using quotation marks (`""` or `''`). But
+> beware, some arguments accept `character` vectors only. These must be
 > quoted.
 
 > Related to this, you might see underscore versions of some `tidyverse`
-> commands popping up in RStudio’s command completion. Ignore them.
+> commands popping up in RStudio’s command completion such as `spread_`
+> for `spread`. Ignore them (and any resource on the internet that urges
+> you to use them), they are superfluous (``?tidyr::`deprecated-se` ``).
 
-## A Typical Table in Biosciences
+The `tidyverse` also imports [the pipe
+`%>%`](part_01-basic_interactions.html#using-a-pipe) from the `magrittr`
+package.
+
+## Motivation: A Typical Table in Biosciences
 
 The plate is the experimental default table in the Biosciences.
 
 In the worst case, the data acquired from each position (well, spot,
-etc.) on the plate is saved like this:
+etc.) on the plate was saved like this:
 
 |          |   A   |    B    |    C    |    D    |    E    |
 | :------: | :---: | :-----: | :-----: | :-----: | :-----: |
@@ -60,8 +69,8 @@ etc.) on the plate is saved like this:
 | <b>3</b> | 6.477 |  3.839  |  3.064  |  0.479  |  0.182  |
 | <b>4</b> | 5.755 |  3.728  |  2.153  | \-0.080 |  0.204  |
 
-Of course, the sample assignments have been documented (somewhere). So,
-we know that *the actual data* should be annotated like
+Of course, the sample assignments had been documented (somewhere). So,
+we know that *the actual data* should have been annotated like
 this.
 
 |                     |                     | conc\_1 | conc\_2 | conc\_3 | conc\_4 | conc\_0 |
@@ -121,8 +130,9 @@ Which class and data type do these objects belong to?
 
 Data can be tabulated in one of two ways: A tidy and a messy one.
 
-> If each variable forms a column and each row represents a single
-> observation, we refer to this as **tidy data**.
+> If each variable forms a column, each row represents a single
+> observation, and each cell represents a single value, we refer to this
+> as **tidy data**.
 
 Having your data tidied is crucial for facilitating data manipulation,
 modelling, and visualization\!
@@ -137,12 +147,12 @@ Here are some guidelines:
     table.
 
 Typically, if the table with your data is wider than long (if it is in
-the ‘wide’ format), it’s easy to encounter messy data. For example,
+the ‘wide format’), it’s easy to encounter messy data. For example,
 `plate_1` is in one (of many possible) wide and messy formats: The
-parameter concentration is stored along the header row, not in a
+concentration parameter is stored along the header row, not in a
 separate column.
 
-A tidyer wide format would look like that:
+A tidyer ‘wide format’ of the same data would look like that:
 
 |    replicate\_id    | concentration  | control | treatment\_A |
 | :-----------------: | :------------: | :-----: | :----------: |
@@ -154,10 +164,10 @@ A tidyer wide format would look like that:
 | <b>replicate\_2</b> | <b>conc\_0</b> | \-0.704 |    0.204     |
 | <b>replicate\_2</b> | <b>conc\_1</b> |  0.049  |    5.755     |
 
-*(table abridged)*
+    _(table abridged)_
 
-The longer the table (‘long’ format), the tidyer the
-data:
+The longer the table, the tidyer the data. Here is the ‘long format’ of
+`plate_1`:
 
 |     sample\_id      |    replicate\_id    | concentration  | intensity |
 | :-----------------: | :-----------------: | :------------: | :-------: |
@@ -171,22 +181,31 @@ data:
 | <b>treatment\_A</b> | <b>replicate\_2</b> | <b>conc\_2</b> |   3.728   |
 |   <b>control</b>    | <b>replicate\_1</b> | <b>conc\_3</b> |  \-0.307  |
 
-*(table abridged)*
+    _(table abridged)_
 
 The `tidyr` package (part of the `tidyverse`) provides functions to help
-you tidy your data. In this session, the package has already been
-attached to the namespace.
+you tidy messy data. In this R session, the package has already been
+attached to your namespace.
 
 ### Interconverting Wide and Long Table Formats
 
-The degree to which you want to make your table ‘longer than wide’
-depends on the manipulation you want to perform. Typically, the
-‘longest’ format serves as the linchpin to produce the ‘wider’
-formats.
+The degree to which you want to make your table ‘longer’ than ‘wide’
+depends on the manipulation you want to perform. Typically, the ‘longest
+format’ serves as the linchpin to produce the ‘wider formats’.
+
+For your convenience, this is an overview of the different functions
+that have been developed in the past to interconvert wide and long table
+formats. (In case you encounter one of these or need help on related
+topics.)
+
+| action                           | `tidyr` ≥ v1.0.0 | `tidyr` \< v1.0.0 | `data.table` | `reshape`/`reshape2` |
+| -------------------------------- | ---------------- | ----------------- | ------------ | -------------------- |
+| make wide table long (‘melting’) | `pivot_longer()` | `gather()`        | `melt()`     | `melt()`             |
+| make long table wide (‘casting’) | `pivot_wider()`  | `spread()`        | `dcast()`    | `acast()`, `dcast()` |
 
   - `tidyr::gather(...)` will gather information presented along the
-    rows into a column. Sometimes this process is also called ‘melting’
-    because of the equivalent `data.table::melt(...)` function.
+    rows into a column. Sometimes this process is called ‘melting’
+    because of an equivalent `data.table::melt(...)` function.
   - `tidyr::spread(...)` will do the reverse: It makes long tables wide.
     Another term is ‘casting’ because of the `data.table::dcast(...)`
     and `reshape2::acast(...)` functions.
@@ -211,8 +230,8 @@ plate_1 %>%
 
 Instead of selecting the columns `conc_1:conc_0`, we could have
 specified the columns which *not* to gather; these are somtimes called
-the ‘identifying columns’. The following commands evaluate to the same
-result.
+the ‘identifying (id) columns’. The following commands evaluate to the
+same result.
 
 ``` r
 plate_1 %>% 
@@ -229,7 +248,7 @@ plate_1 %>%
 ```
 
 Let’s next spread the gathered representation of `plate_1` into a wide
-table\! Maybe, we would like to see the measured intensities for
+format\! Maybe, we would like to see the measured intensities for
 `control` and `treatment_A` side-by-side given each concentration and
 the replicate.
 
@@ -249,3 +268,12 @@ plate_1 %>%
     ## 1  replicate_1        conc_0   0.007       0.182
     ## 2  replicate_1        conc_1   0.016       6.477
     ## 3  replicate_1        conc_2   0.941       3.839
+
+### Uniting and Splitting Columns
+
+The `tidyr::unite(...)` function takes multiple column names and pastes
+the column contents together. This can be useful if you want to spread a
+table based on two columns
+
+sample\_id + replicate\_id. how can this be useful? spreading multiple
+parameters (not possible in tidyr)

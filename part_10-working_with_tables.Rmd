@@ -7,13 +7,13 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-A ‘table’, in R called a `data.frame`, is organized in columns and rows. Each column can hold only a _single_ data type; but columns can have _different_ data types. `data.frame`s are thus created _by column_. (Technically speaking, `data.frame`s are `list` objects in which each element of the list is an atomic vector of the same length.)
+A ‘table’---in R called a `data.frame`---is organized in columns and rows. Each column of a `data.frame` can hold only a _single_ [data type](part_02-data_structures.md#data-types-in-r), but columns can have _different_ data types. `data.frame` objects are thus created _by column_. (Technically speaking, [a `data.frame` is a `list`](part_02-data_structures.html#advanced-data-structures-classes) in which each element of the list is an atomic vector of the same length.)
 
-There are (at least) three different flavours to work with `data.frame` in R:
+There are (at least) three different flavours to work with a `data.frame` in R:
 
-1. Base R uses `list`-like syntax to access `data.frame` objects; this can however easily get cumbersome to work with.
-2. The **`data.table` package**, which uses SQL-like syntax to access `data.table` objects, a class similar to `data.frame`, but built for maximum efficiency. 
-3. The **`dplyr` package**, which uses language-like syntax to describe the actions applied to `tibble` objects, another class similar to `data.frame`.
+1. Base R uses `list`-like syntax; this can however easily get cumbersome to work with.
+2. The **`data.table` package** uses SQL-like syntax to access `data.table` objects, a class similar to `data.frame`, but built for maximum efficiency. 
+3. The **`dplyr` package** uses language-like syntax to describe the actions applied to `tibble` objects, another class similar to `data.frame`.
 
 We will focus on using `dplyr`, which is part of the `tidyverse`.
 
@@ -21,15 +21,17 @@ We will focus on using `dplyr`, which is part of the `tidyverse`.
 library(tidyverse)
 ```
 
-> Note that in the `tidyverse` you will see extensive use of quasiquotation. This means you can refer e.g. to column names (which are usually `character`) without quotation marks (`""` or `''`). Though, some arguments accept `character` vectors only. These must be quoted.
+> Note that the `tidyverse` makes extensive use of ‘quasiquotation’. This means that you can refer e.g. to column names (which are usually of type `character`) without using quotation marks (`""` or `''`). But beware, some arguments accept `character` vectors only. These must be quoted.
 
-> Related to this, you might see underscore versions of some `tidyverse` commands popping up in RStudio's command completion. Ignore them.
+> Related to this, you might see underscore versions of some `tidyverse` commands popping up in RStudio's command completion such as `spread_` for `spread`. Ignore them (and any resource on the internet that urges you to use them), they are superfluous (``?tidyr::`deprecated-se` ``).
 
-## A Typical Table in Biosciences
+The `tidyverse` also imports [the pipe `%>%`](part_01-basic_interactions.html#using-a-pipe) from the `magrittr` package.
+
+## Motivation: A Typical Table in Biosciences
 
 The plate is the experimental default table in the Biosciences. 
 
-In the worst case, the data acquired from each position (well, spot, etc.) on the plate is saved like this:
+In the worst case, the data acquired from each position (well, spot, etc.) on the plate was saved like this:
 
 ```{r echo=FALSE, message=FALSE}
 
@@ -80,7 +82,7 @@ plate_1 %>%
                col.names = c(" ", LETTERS[1:ncol(.) - 1]))
 ```
 
-Of course, the sample assignments have been documented (somewhere). So, we know that _the actual data_ should be annotated like this.
+Of course, the sample assignments had been documented (somewhere). So, we know that _the actual data_ should have been annotated like this.
 
 ```{r echo=FALSE}
 plate_1 %>% 
@@ -144,7 +146,7 @@ Which class and data type do these objects belong to?
 
 Data can be tabulated in one of two ways: A tidy and a messy one.
 
-> If each variable forms a column and each row represents a single observation, we refer to this as **tidy data**. 
+> If each variable forms a column, each row represents a single observation, and each cell represents a single value, we refer to this as **tidy data**. 
 
 Having your data tidied is crucial for facilitating data manipulation, modelling, and visualization!
 
@@ -155,9 +157,9 @@ Here are some guidelines:
 3. Don't store variables in both rows and columns.
 4. Avoid storing multiple types of observational units in the same table.
 
-Typically, if the table with your data is wider than long (if it is in the ‘wide’ format), it's easy to encounter messy data. For example, `plate_1` is in one (of many possible) wide and messy formats: The concentration parameter is stored along the header row, not in a separate column. 
+Typically, if the table with your data is wider than long (if it is in the ‘wide format’), it's easy to encounter messy data. For example, `plate_1` is in one (of many possible) wide and messy formats: The concentration parameter is stored along the header row, not in a separate column. 
 
-A tidyer wide format of the same data would look like that:
+A tidyer ‘wide format’ of the same data would look like that:
 
 ```{r echo=FALSE}
 plate_1 %>% 
@@ -169,9 +171,9 @@ plate_1 %>%
   knitr::kable(format = "markdown", align = "c")
 ```
 
-_(table abridged)_
+    _(table abridged)_
 
-The longer the table (‘long’ format), the tidyer the data:
+The longer the table, the tidyer the data. Here is the ‘long format’ of `plate_1`:
 
 ```{r echo=FALSE}
 plate_1 %>% 
@@ -183,16 +185,22 @@ plate_1 %>%
   knitr::kable(format = "markdown", align = "c")
 ```
 
-_(table abridged)_
+    _(table abridged)_
 
-The `tidyr` package (part of the `tidyverse`) provides functions to help you tidy your data. In this session, the package has already been attached to the namespace.
+The `tidyr` package (part of the `tidyverse`) provides functions to help you tidy messy data. In this R session, the package has already been attached to your namespace.
 
 ### Interconverting Wide and Long Table Formats
 
-The degree to which you want to make your table ‘longer than wide’ depends on the manipulation you want to perform. Typically, the ‘longest’ format serves as the linchpin to produce the ‘wider’ formats.
+The degree to which you want to make your table ‘longer’ than ‘wide’ depends on the manipulation you want to perform. Typically, the ‘longest format’ serves as the linchpin to produce the ‘wider formats’.
 
-* `tidyr::gather(...)` will gather information presented along the rows into a column. Sometimes this process is also called ‘melting’ because of the equivalent `data.table::melt(...)` function.
-* `tidyr::spread(...)` will do the reverse: It makes long tables wide. Another term is ‘casting’ because of the `data.table::dcast(...)` and `reshape2::acast(...)` functions.
+For your convenience, this is an overview of the different functions that have been developed in the past to interconvert wide and long table formats. (In case you encounter one of these or need help on related topics.)
+
+| action | `tidyr` ≥ v1.0.0 | `tidyr` < v1.0.0 | `data.table` | `reshape`/`reshape2` |
+|--------|------------------|------------------|--------------|----------------------|
+| make wide table long (‘melting’) | `pivot_longer()` | `gather()` | `melt()`  | `melt()` |
+| make long table wide (‘casting’) | `pivot_wider()`  | `spread()` | `dcast()` | `acast()`, `dcast()` |
+
+As many people don't find the other function names intuitive, we will use `tidyr::pivot_longer(...)` and `tidyr::pivot_wider(...)`. 
 
 ```{r}
 plate_1 %>% 
@@ -205,7 +213,7 @@ plate_1 %>%
   head(3)
 ```
 
-Instead of selecting the columns `conc_1:conc_0`, we could have specified the columns which _not_ to gather; these are somtimes called the ‘identifying columns’. The following commands evaluate to the same result.
+Instead of selecting the columns `conc_1:conc_0`, we could have specified the columns which _not_ to gather; these are somtimes called the ‘identifying (id) columns’. The following commands evaluate to the same result.
 
 ```{r eval=FALSE}
 plate_1 %>% 
@@ -221,20 +229,42 @@ plate_1 %>%
   gather(key = "concentration", value = "intensity", -sample_id, -replicate_id) # explicit negative
 ```
 
-Let's next spread the gathered representation of `plate_1` into a wide table! Maybe, we would like to see the measured intensities for `control` and `treatment_A` side-by-side given each concentration and the replicate.
+Let's next spread the gathered representation of `plate_1` into a wide format! Maybe, we would like to see the measured intensities for `control` and `treatment_A` side-by-side given each concentration and the replicate.
 
 ```{r}
 plate_1 %>% 
   # make wide table long
   gather(key = "concentration", value = "intensity", conc_1:conc_0) %>% 
   # make long table wide
-  spread(key   = sample_id, # the (unquoted) names of columns to use as column headers
-         value = intensity, # the (unquoted) names of columns to populate the table body
+  spread(key   = sample_id, # names (unquoted) of columns to use as column headers
+         value = intensity, # names (unquoted) of columns to populate the table body
          ) %>% 
   # print only top rows
   head(3) 
 ```
 
 ### Uniting and Splitting Columns
+
+The `tidyr::unite(...)` function takes multiple column names and pastes the column contents together. 
+
+```{r}
+plate_1 %>% unite(col = "experiment",      # name of the new column
+                  sample_id, replicate_id, # names (unquoted) of the columns to paste
+                  sep = "/"                # separator, "_" is the default
+                  ) %>% 
+  # print only top rows
+  head(3)
+```
+
+The `tidyr::separate(...)` function does the reverse operation. By default, any non-alphanumeric character will be used to split the column. Note that missing pieces will be replaced with `NA`.
+
+```{r}
+plate_1 %>% separate(col  = sample_id,                 # name (can be unquoted)
+                     into = c("treatment", "specimen") # names of the new columns
+                     ) %>% 
+  # print only top rows
+  head(3)
+```
+
 
 sample_id + replicate_id. how can this be useful? spreading multiple parameters (not possible in tidyr)

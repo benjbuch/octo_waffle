@@ -38,6 +38,8 @@ A cheat sheet for the introduction in [RMD](part_00-cheat_sheet.Rmd) or [DOCX](p
 
 ## Syllabus
 
+We will focus on using packages from the [`tidyverse`](https://www.tidyverse.org).
+
 1. Working with Tables
     * Grouping data by category and creating categories from continuous variables
     * Simple statistics
