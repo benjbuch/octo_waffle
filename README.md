@@ -1,14 +1,14 @@
 ## Prerequisites
 
-Before we can get started, please work through the next sections to install R and to familiarize with some concepts in R.
+Before we can get started, please install R and work through the next sections to familiarize with some concepts.
 
 ### Installing R 
 
-Install the latest version of **R** from [https://cran.rstudio.com/](https://cran.rstudio.com). Most of the code will probably run also with older versions of R. Beware that once you installed R, you will need to re-install packages after updating R to a newer version.
+Install the latest version of R from [https://cran.rstudio.com/](https://cran.rstudio.com). Most of the code will probably run also with older versions of R. However, beware that once you installed R, you will need to re-install packages after updating R to a newer version.
 
-* Some hints for installation under [macOS](misc_notes#installation-under-macos).
+* Some hints for installing R under [macOS](misc_notes#installation-under-macos).
 
-We will be using an Integrated Development Environment (IDE) called **RStudio** to interact with R. However, there is nothing to prohibit using R at the command line or in some other interface. You can download RStudio for free from [https://rstudio.com/products/rstudio/download/](https://rstudio.com/products/rstudio/download/#download).
+We will be using an Integrated Development Environment (IDE) called **RStudio** to interact with R. However, there is nothing to prohibit using R at the command line or in some other interface. You can download RStudio for free from [https://rstudio.com/](https://rstudio.com/products/rstudio/download/#download).
 
 > The RStudio GUI has multiple ‘panes’. Except for the ‘Console’ pane (by default in the lower left corner), the other panes (‘Environment’, ‘History’, ‘Files’, ‘Plots’, ‘Packages’, ‘Help’ etc.) are simply for convenience. If you choose to run R outside RStudio, the interaction will be _identical_ to working in the ‘Console’ pane.
 
