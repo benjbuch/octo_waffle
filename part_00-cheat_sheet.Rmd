@@ -119,7 +119,7 @@ One can apply even complicated functions using `lapply(obj, function(i) ...)`.
 
 ```{r eval=FALSE}
 # number of characters
-nchar(chr)
+nchar(chr); stringr::str_count(chr)
 
 # glue together chr_a and chr_b by pairs of elements
 paste(chr_a, chr_b)  # with sep=...
@@ -127,6 +127,8 @@ paste0(chr_a, chr_b) # with no separator
 # glue together chr_a and chr_b by pairs of elements, then combine in a single string
 paste(chr_a, chr_b, collapse = ...)  # with sep=... between elements
 paste0(chr_a, chr_b, collapse = ...) # with no separator
+# same functionality in stringr
+stringr::str_c(chr_a, chr_b, sep = ..., collapse = ...)
 # split chr_a at each occurence of chr_b
 stringr::str_split(chr_a, pattern = chr_b)
 

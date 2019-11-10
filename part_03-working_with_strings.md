@@ -8,7 +8,8 @@ executed by R. In informatics, such text objects are called ‘strings’.
 Base R has a set of functions to combine and split strings, to find and
 replace text within strings etc. For the sake of consistency and its
 more powerful language, we will limit our discussion to the equivalent
-functions of the `stringr` package for more complex string operations.
+functions of the `stringr` package when the string operations become
+more challenging.
 
 `stringr` is part of the `tidyverse`.
 
