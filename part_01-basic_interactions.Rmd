@@ -203,7 +203,7 @@ Note that neither `N_abs` nor `N_Avogrado` have been added to the ‘Global Envi
 ls()
 ```
 
-Note that even if we had_assigned the same symbol `N_Avogrado = 1` in the ‘Global Environment’, our function _would still prioritize_ the ‘locally’ defined symbol `N_Avogrado`, which is `6.022e23`. Only if we had _not_ defined this variable _inside_ the function, R would start looking for it outside the function. This is called ‘scoping’. 
+Note that even if we had assigned the same symbol `N_Avogrado = 1` in the ‘Global Environment’, our function _would still prioritize_ the ‘locally’ defined symbol `N_Avogrado`, which is `6.022e23`. Only if we had _not_ defined this variable _inside_ the function, R would start looking for it outside the function. This is called ‘scoping’. 
 
 If the last statement in a function is an expression (instead of an assignment), it is implicitly returned. So, we can simplify.
 
@@ -219,7 +219,7 @@ fmol_to_abs <- function(x_in_fmol) {
 fmol_to_abs(N_fmol)
 ```
 
-It is possible to make the the return value of the function dependend on additional parameters, so that the function can be applied to different, yet similar problems. If a function takes a number of parameters, it can be convenient to assign default values to some arguments.
+It is possible to make the return value of the function dependend on additional parameters, so that the function can be applied to different, yet similar problems. If a function takes a number of parameters, it can be convenient to assign default values to some arguments.
 
 ```{r}
 mol_to_abs <- function(x, prefix = "f") {
