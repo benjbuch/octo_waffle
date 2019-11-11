@@ -255,6 +255,26 @@ plate_1 %>%
   head(3) 
 ```
 
+You can check out more examples in the [`tidyr` vignette on pivoting](https://tidyr.tidyverse.org/dev/articles/pivot.html).
+
+The format of `plate_1` from above can be useful if we wanted to subtract the intensities measured in the control from the ones in the treated samples. Here, `dplyr::mutate(...)` creates a new column or modifies an exisiting column using the specified operations.
+
+```{r}
+plate_1 %>% 
+  # make wide table long
+  pivot_longer(conc_1:conc_0, names_to = "concentration", values_to = "intensity") %>% 
+  # make long table wide
+  pivot_wider(names_from = "sample_id", values_from = "intensity") -> plate_1.wide
+
+plate_1.wide %>% 
+  # make new column with corrected treatment_A values
+  mutate(tratment_A.corrected = treatment_A - control) %>% head(3)
+
+plate_1.wide %>% 
+  # operate in place; not always advisable
+  mutate(treatment_A = treatment_A - control) %>% head(3)
+```
+
 ### Uniting and Splitting Columns
 
 The `tidyr::unite(...)` function takes multiple column names and pastes the column contents together. 
@@ -285,4 +305,6 @@ plate_1 %>%
   # print only top rows
   head(3)
 ```
+
+## Combining Tables
 
