@@ -12,7 +12,7 @@ Most of the code will probably run also with older versions of R. However, if yo
 
 ### Install or Update R Packages
 
-Once you installed R, please run the following lines of code.
+Once you installed R, please run the following code _line by line_.
 
 ``` r
 update.packages()

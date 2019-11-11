@@ -1,8 +1,16 @@
 ## Installing R under macOS
 
-Some packages will need compilation from source code. To do so, you need to install Xcode command-line tools. 
+### Without Xcode
 
-It is imperative that you re-run the following command _everytime_ Xcode updates.
+If you have no Xcode installed and you do not want to install Xcode, you solely rely on the binary versions of the packages built by CRAN. (This might go well on your machine or not.)
+
+In this case, _always deny_ building packages from source when asked during installation or updating.
+
+### With Xcode
+
+To work properly on your machine, some packages will need compilation from the source code. To do so, you need to install Xcode command-line tools. 
+
+It is imperative that you re-run the following command _everytime_ Xcode updates in Terminal (not in the R console).
 
 ``` sh
 xcode-select --install
