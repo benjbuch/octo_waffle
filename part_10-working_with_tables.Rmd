@@ -64,7 +64,7 @@ plate_2 <- all_plates %>%
   as.data.frame()
 
 plate_3 <- all_plates %>% 
-  filter(table_id == "table_2") %>% select(-table_id) %>% 
+  filter(table_id == "table_3") %>% select(-table_id) %>% 
   select(sample_id, replicate_id, conc_1, conc_3, conc_2, conc_4, conc_0) %>% 
   as.data.frame()
 
@@ -308,3 +308,48 @@ plate_1 %>%
 
 ## Combining Tables
 
+In the current environment, you should have additional plates, `plate_2` and `plate_3`, which we would like to combine with `plate_1`. Let's check their organization first.
+
+```{r}
+plate_2
+plate_3
+```
+
+Apparently, `plate2` has the same organization as `plate1`, so we could combine them effortless. For `plate_3`, two columns have been swapped, which could cause problems if we don't pay attention. Luckily, R pays attention for you.
+
+The command to combine rows is `rbind(...)` in base R and `dpylr::bind_rows(...)` in the `tidyverse`. Let's save this as `all_plates`.
+
+```{r}
+plate_1 %>% bind_rows(plate_2, plate_3) -> all_plates
+```
+
+To combine columns, you may use `cbind(...)` or `dplyr::bind_cols(...)` respectively. However, you must be absolutely sure that the rows align!
+
+```{r eval=FALSE}
+bind_cols(
+  all_plates[c("sample_id", "replicate_id",  "conc_1")], # half the data.frame, selected with list-operators
+  all_plates[c("conc_4", "conc_2", "conc_0", "conc_3")]  # half the data.frame, selected with list-operators
+)
+```
+
+A more represenative case would look like this.
+
+```{r}
+all_plates[c("sample_id", "replicate_id", "conc_1", "conc_2")]
+```
+
+
+
+
+
+Subtracting `control` from all treatments would work the very same as above. (We look into this later.)
+
+```{r eval=FALSE}
+all_plates %>% 
+  # make wide table long
+  pivot_longer(conc_1:conc_0, names_to = "concentration", values_to = "intensity") %>% 
+  # make long table wide
+  pivot_wider(names_from = "sample_id", values_from = "intensity") %>% 
+  # subtract control in place
+  mutate_at(vars(starts_with("treatment")), funs(. - control))
+```
