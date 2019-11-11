@@ -76,19 +76,19 @@ summary(r)
     ## lm(formula = y ~ x, data = d)
     ## 
     ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -2.35138 -0.08822  0.24190  0.61132  1.57256 
+    ##     Min      1Q  Median      3Q     Max 
+    ## -1.5647 -0.5897 -0.1592  0.4185  2.2271 
     ## 
     ## Coefficients:
     ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)  0.07681    0.45867   0.167    0.869    
-    ## x            0.97944    0.03829  25.580 1.33e-15 ***
+    ## (Intercept)  0.26281    0.48005   0.547    0.591    
+    ## x            0.97384    0.04007  24.301 3.26e-15 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 0.9874 on 18 degrees of freedom
-    ## Multiple R-squared:  0.9732, Adjusted R-squared:  0.9717 
-    ## F-statistic: 654.4 on 1 and 18 DF,  p-value: 1.326e-15
+    ## Residual standard error: 1.033 on 18 degrees of freedom
+    ## Multiple R-squared:  0.9704, Adjusted R-squared:  0.9688 
+    ## F-statistic: 590.5 on 1 and 18 DF,  p-value: 3.259e-15
 
 ``` r
 # clean up
@@ -304,7 +304,7 @@ ls()
 
     ## [1] "fmol_to_abs" "N_fmol"
 
-Note that even if we had\_assigned the same symbol `N_Avogrado = 1` in
+Note that even if we had assigned the same symbol `N_Avogrado = 1` in
 the ‘Global Environment’, our function *would still prioritize* the
 ‘locally’ defined symbol `N_Avogrado`, which is `6.022e23`. Only if we
 had *not* defined this variable *inside* the function, R would start
@@ -327,7 +327,7 @@ fmol_to_abs(N_fmol)
 
     ## [1] 1204400000
 
-It is possible to make the the return value of the function dependend on
+It is possible to make the return value of the function dependend on
 additional parameters, so that the function can be applied to different,
 yet similar problems. If a function takes a number of parameters, it can
 be convenient to assign default values to some arguments.
@@ -415,8 +415,8 @@ packages.
 If you intend to use only a single function from a package (and do not
 want to attach the entire namespace), or if there are functions with the
 same name from different packages loaded, you must be more explicit and
-prefix the function call with the package name separated by `::`, e.g.
-`magrittr::divide_by(...)`.
+prefix the function call with the package name separated by `::`,
+e.g. `magrittr::divide_by(...)`.
 
 > When you load a package with conflicting names, R will print a warning
 > message.
