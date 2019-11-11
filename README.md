@@ -2,23 +2,35 @@
 
 Before we can get started, please install R and work through the next sections to familiarize with some concepts.
 
-### Installing R 
+### Install or Update R 
 
-Install the latest version of R from [https://cran.rstudio.com/](https://cran.rstudio.com). Most of the code will probably run also with older versions of R. However, beware that once you installed R, you will need to re-install packages after updating R to a newer version.
+If you have no installation of R, install the latest version from [https://cran.rstudio.com/](https://cran.rstudio.com/). 
 
 * Some hints for installing R under [macOS](misc_notes#installation-under-macos).
 
-We will be using an Integrated Development Environment (IDE) called **RStudio** to interact with R. However, there is nothing to prohibit using R at the command line or in some other interface. You can download RStudio for free from [https://rstudio.com/](https://rstudio.com/products/rstudio/download/#download).
+Most of the code will probably run also with older versions of R. However, if you decide to update R, beware that  you will need to re-install all packages.
 
-> The RStudio GUI has multiple ‘panes’. Except for the ‘Console’ pane (by default in the lower left corner), the other panes (‘Environment’, ‘History’, ‘Files’, ‘Plots’, ‘Packages’, ‘Help’ etc.) are simply for convenience. If you choose to run R outside RStudio, the interaction will be _identical_ to working in the ‘Console’ pane.
+### Install or Update R Packages
 
 Once you installed R, please run the following lines of code.
 
 ``` r
+update.packages()
+
 install.packages("tidyverse")
 install.packages("magrittr")
 install.packages("data.table")
+
+packageVersion("tidyr")
 ```
+
+Make sure that you have `tidyr` version ‘1.0.0’ installed. 
+
+### Installing RStudio
+
+We will be using an Integrated Development Environment (IDE) called **RStudio** to interact with R. However, there is nothing to prohibit using R at the command line or in some other interface. You can download RStudio for free from [https://rstudio.com/](https://rstudio.com/products/rstudio/download/#download).
+
+> The RStudio GUI has multiple ‘panes’. Except for the ‘Console’ pane (by default in the lower left corner), the other panes (‘Environment’, ‘History’, ‘Files’, ‘Plots’, ‘Packages’, ‘Help’ etc.) are simply for convenience. If you choose to run R outside RStudio, the interaction will be _identical_ to working in the ‘Console’ pane.
 
 ### Getting Started
 
