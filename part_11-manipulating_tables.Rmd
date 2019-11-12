@@ -1,0 +1,308 @@
+---
+title: "Importing and Tidying Data"
+output: 
+  github_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Importing Data
+
+### Importing Data from a Single Delimited File
+
+The data for the plate shown above has been saved in a comma-delimited file called ‘plate_1.csv’. In the sub-folder ‘part_10-working_with_tables_files’. Let's import this file using `readr::read_csv()`; it will try to guess the data type stored in each column.
+
+In the file path, `.` refers to the current working directory (`getwd()`), so that we can use relative paths.
+
+```{r}
+plate_1 <- read_csv(file = "./part_10-working_with_tables_files/plate_1.csv")
+plate_1
+```
+
+The column names have been assigned from the first line of the file (since they were text). However, as we know the column names, we should use them. We can either set them using `colnames(plate_1)<-`, or provide them during import, skipping the first line of the file.
+
+```{r}
+plate_1 <- read_csv(file = "./part_10-working_with_tables_files/plate_1.csv",
+                    col_names = str_c("conc_", c(1:4, 0)), skip = 1)
+```
+
+It is disencouraged to use row names to work with data, since only one variable or parameter can be stored. So, let's add one column specifying the sample type and one column specifying the replicate number.
+
+```{r}
+plate_1 <- plate_1 %>% 
+  add_column(sample_id = rep(c("control", "treatment_A"), each = 2),
+             replicate_id = rep(str_c("replicate_", c(1, 2)), times = 2),
+             # insert before first column; default after last column
+             .before = 1)
+plate_1
+```
+
+If you had rownames assigned to your table that you want to keep, use `dplyr::rownames_to_column()`. 
+
+### Combining Data from Multiple Files with `row_bind`
+
+A nice feature of using a programmatic approach for data analysis is that it will enable you to retrieve (systematically) many files from multiple locations (e.g. reflecting multiple experiments) on your harddrive and to either analyze them in identical ways one by one, or to combine them for analysis. 
+
+Certainly, we could import each file individually.
+
+```{r eval=FALSE}
+plate_2 <- read_csv(file = "./part_10-working_with_tables_files/plate_2.csv")
+plate_3 <- read_csv(file = "./part_10-working_with_tables_files/plate_3.csv")
+```
+
+However, if we have many files to analyse, this approach can become cumbersome. We can use `list.files` to create a list of all files, we would like to include (using regular expressions), import them into a list and (optionally) combine them.
+
+```{r}
+plate_files.paths <- list.files(path = "./part_10-working_with_tables_files",
+                                pattern = "plate_[2-9]+", full.names = TRUE)
+
+plate_files <- sapply(plate_files.paths, read_csv, simplify = FALSE, USE.NAMES = TRUE)
+plate_files
+```
+
+The `plate_files` object is a list with two `tibble` (`data.frame`) objects. Apparently, two columns have been swapped in `plate_3`, which could cause problems if we just pasted them. Luckily, R pays attention for us.
+
+```{r}
+plate_files %>% bind_rows(.id = "file")
+```
+
+We also (could) keep track of the files we imported the data from by specifying a new column, called `file`. If need be, we can make use of some metadata stored in the file name or file path.
+
+Let's combine the data with `plate_1` and call the object `plate_data`.
+
+```{r}
+plate_data <- bind_rows(plate_1, plate_files)
+
+# remove objects no longer needed
+rm(plate_files, plate_files.paths)
+```
+
+### Combining Data with `join`
+
+We have seen that the command to combine rows is `dpylr::bind_rows(...)` in the `tidyverse` and `rbind(...)` in base R. To combine columns, you may use `dplyr::bind_cols(...)` or `cbind(...)` respectively. However, you must be absolutely sure that the rows align!
+
+```{r eval=FALSE}
+cbind(
+  # half plate with conc_1 measurments
+  plate_data %>% select(sample_id, replicate_id, conc_1),
+  # half plate with conc_2 measurements
+  plate_data %>% select(sample_id, replicate_id, conc_2)
+)
+```
+
+A more represenative case would look like this. (Don't care too much about how to create the randomized halfs.)
+
+```{r}
+# half plate with conc_1 measurments
+half_1 <- plate_data %>%
+            select(sample_id, replicate_id, conc_1)
+# half plate with conc_2 measurements
+half_2 <- plate_data %>% sample_n(nrow(.)) %>% 
+            select(sample_id, replicate_id, conc_2)
+
+# this will be wrong
+bind_cols(half_1, half_2)
+```
+
+To properly merge `half_1` and `half_2`, we need to use the colums named `sample_id` and `replicate_id` as indices. This is what `dplyr::inner_join(...)` does.
+
+```{r}
+# this will be correct
+inner_join(half_1, half_2, by = c("sample_id", "replicate_id"))
+```
+
+If you want to keep rows that are only in one table, but not in another, there are also the functions `dpylr::left_join()` and `dplyr::right_join()`. (Having both options is useful when you think of piping.)
+
+```{r}
+# remove objects no longer needed
+rm(half_1, half_2)
+```
+
+
+### Importing Data from Excel
+
+To read data from Excel, you can use `readxl::read_excel(...)` or `XLConnect::readWorksheetFromFile(...)`. (Neither is part of the `tidyverse` and probably not installed on your machine.)
+
+However, I would disencourage to do so routinely, since `.xls` and `.xlsx` are neither open (i.e. disclosed), nor standardized file formats. This means they can be changed by Microsoft anytime and may consequently not be (immediately) supported by these packages.
+
+Another problem you might be facing is, that within Excel, it is tempting to put multiple tables with different data side-by-side in a single worksheet. To import such worksheets  will require a lot of polishing from your side after.
+
+> **Advice:** Keep one set of data per sheet and export a CSV file from Excel.
+
+## Tidying Data
+
+Data can be tabulated in one of two ways: A tidy and a messy one.
+
+> If each variable forms a column, and each row represents a single observation, and each cell a single value, we refer to this as **tidy data**. 
+
+Having your data tidied is crucial for facilitating data manipulation, modelling, and visualization!
+
+Here are some guidelines:
+
+1. Don't use values as column headers, all column headers should be variable names.
+2. Don't put multiple variables in a single column.
+3. Don't store variables in both rows and columns.
+4. Avoid storing multiple types of observational units in the same table.
+
+Typically, if the table with your data is wider than long (if it is in the ‘wide format’), it's likely to encounter messy data. For example, `plate_1` is in one (of many possible) messy formats: The concentration is spread along the header row, not in a separate column. 
+
+A tidyer ‘wide format’ of the same data would look like that:
+
+```{r echo=FALSE}
+plate_1 %>% 
+  pivot_longer(cols = -one_of("replicate_id", "sample_id"), 
+               names_to  = "concentration", values_to = "intensity") %>% 
+  pivot_wider(names_from = sample_id, values_from = intensity) %>% 
+  mutate(replicate_id  = str_c("<b>", replicate_id, "</b>"),
+         concentration = str_c("<b>", concentration, "</b>"),) %>% 
+  head(7) %>% 
+  knitr::kable(format = "markdown", align = "c")
+```
+
+_(table abridged)_
+
+The longer the table, the tidyer the data. Here is the ‘long format’ of `plate_1`:
+
+```{r echo=FALSE}
+plate_1 %>% 
+  pivot_longer(cols = -one_of("replicate_id", "sample_id"), 
+               names_to= "concentration", values_to = "intensity") %>% 
+  mutate(sample_id     = str_c("<b>", sample_id, "</b>"),
+         replicate_id  = str_c("<b>", replicate_id, "</b>"),
+         concentration = str_c("<b>", concentration, "</b>"),) %>% 
+  head(9) %>% 
+  knitr::kable(format = "markdown", align = "c")
+```
+
+_(table abridged)_
+
+The `tidyr` package (part of the `tidyverse`) provides functions to help you tidy messy data. In this R session, the package has already been attached to your namespace.
+
+### Interconverting Wide and Long Table Formats
+
+The degree to which you want to make your table ‘longer’ than ‘wide’ depends on the manipulation you want to perform. Typically, the ‘longest format’ serves as the linchpin to produce the ‘wider formats’.
+
+For your convenience, this is an overview of the different functions that are around to interconvert wide and long table formats. (In case you encounter one of these or need help on related topics.)
+
+| action | `tidyr` ≥ v1.0 | `tidyr` < v1.0 | `data.table` | `reshape`/`reshape2` |
+|--------|------------------|------------------|--------------|----------------------|
+| make wide table long (‘melting’) | `pivot_longer()` | `gather()` | `melt()`  | `melt()` |
+| make long table wide (‘casting’) | `pivot_wider()`  | `spread()` | `dcast()` | `acast()`, `dcast()` |
+
+As many people don't find the other function names intuitive, we will use `tidyr::pivot_longer(...)` and `tidyr::pivot_wider(...)`. 
+
+```{r}
+plate_1 %>% 
+  # make wide table long
+  pivot_longer(cols = conc_1:conc_0,        # selection of columns
+               names_to  = "concentration", # name that describes the parameter in the selected headers
+               values_to = "intensity"      # name that describes the value in the selected cells
+  ) %>% 
+  # print only top rows
+  head(3)
+```
+
+Instead of selecting the columns `conc_1:conc_0`, we could have specified the columns which _not_ to gather; these are somtimes called the ‘identifying (id) columns’. The following commands evaluate to the same result.
+
+```{r eval=FALSE}
+plate_1 %>% 
+  # select by column index
+  pivot_longer(cols = 3:7)
+
+plate_1 %>% 
+  # select by name range
+  pivot_longer(cols = conc_1:conc_0)
+
+plate_1 %>% 
+  # select explicitly positive
+  pivot_longer(cols = c("conc_1", "conc_2", "conc_3", "conc_4", "conc_0"))
+
+plate_1 %>% 
+  # select explicitly negative
+  pivot_longer(cols = -c("sample_id", "replicate_id"))
+
+plate_1 %>% 
+  # select using pattern
+  pivot_longer(cols = starts_with("conc"))
+```
+
+We will see more ways to select column names later.
+
+For now, let's next spread the gathered representation of `plate_1` into a wide format! Maybe, we would like to see the measured intensities for `control` and `treatment_A` side-by-side given each concentration and the replicate.
+
+```{r}
+plate_1 %>% 
+  # make wide table long
+  pivot_longer(conc_1:conc_0, names_to = "concentration", values_to = "intensity") %>% 
+  # make long table wide
+  pivot_wider(names_from  = "sample_id", # column to use content as new column headers
+              values_from = "intensity"  # column to use content to populate the new cells with
+             ) %>% 
+  # print only top rows
+  head(3) 
+```
+
+You can check out more examples in the [`tidyr` vignette on pivoting](https://tidyr.tidyverse.org/dev/articles/pivot.html).
+
+The format of `plate_1` from above can be useful if we wanted to subtract the intensities measured in the control from the ones in the treated samples. Here, `dplyr::mutate(...)` creates a new column or modifies an exisiting column using the specified operations.
+
+```{r}
+plate_1 %>% 
+  # make wide table long
+  pivot_longer(conc_1:conc_0, names_to = "concentration", values_to = "intensity") %>% 
+  # make long table wide
+  pivot_wider(names_from = "sample_id", values_from = "intensity") -> plate_1.wide
+
+plate_1.wide %>% 
+  # make new column with corrected treatment_A values
+  mutate(tratment_A.corrected = treatment_A - control) %>% head(3)
+
+plate_1.wide %>% 
+  # operate in place; not always advisable
+  mutate(treatment_A = treatment_A - control) %>% head(3)
+```
+
+### Uniting and Splitting Columns
+
+The `tidyr::unite(...)` function takes multiple column names and pastes the column contents together. 
+
+```{r}
+plate_1 %>% 
+  unite(col = "experiment",      # column to create
+        sample_id, replicate_id, # columns to paste, can be unquoted
+        sep = "/"                # separator, "_" is the default
+  ) %>% 
+  # print only top rows
+  head(3)
+```
+
+The `tidyr::separate(...)` function does the reverse. By default, any non-alphanumeric character will be used to split the column. Note that missing pieces will be replaced with `NA`.
+
+```{r}
+plate_1 %>% 
+  separate(col  = sample_id,                 # column to split, can be unquoted
+           into = c("treatment", "specimen") # names of the new columns
+  ) %>% 
+  # print only top rows
+  head(3)
+
+plate_1 %>% 
+  unite("experiment", sample_id, replicate_id, sep = "/") %>% 
+  separate(experiment, into = str_c("piece_", 1:5)) %>% 
+  # print only top rows
+  head(3)
+```
+
+## Hands-On Excercise
+
+The data for another plate has been saved in a file called ‘plates.RData’. When you open this file, there should be one additional object called `plate_4` and a named vector called `dose` in the ‘Global Environment’.
+
+```{r}
+load(file = "./part_10-working_with_tables_files/plates.RData")
+```
+
+Combine `plate_4` into `plate_data`, but be careful, the replicates (`.1` and `.2`) are actually `replicate_3` and `replicate_4`. You will probably want to change this.
+

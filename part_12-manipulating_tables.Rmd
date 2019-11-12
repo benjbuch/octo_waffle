@@ -1,0 +1,76 @@
+---
+title: "Manipulating and Summarizing Data"
+output: 
+  github_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+> Note that the `tidyverse` makes extensive use of ‘quasiquotation’. This means that you can refer e.g. to column names (which are usually of type `character`) without using quotation marks (`""` or `''`). But beware, some arguments accept `character` vectors only. These must be quoted.
+
+> Related to this, you might see underscore versions of some `tidyverse` commands popping up in RStudio's command completion such as `spread_` for `spread`. Ignore them (and any resource on the internet that urges you to use them), they are superfluous (``?tidyr::`deprecated-se` ``).
+
+## Manipulating Columns (“Table Variables”)
+
+### Selecting Columns
+
+To select a column, you can always type its name between quotation marks. Most functions will also accept unquoted column names (mostly, when `...` is allowed).
+
+In addition, there are helper functions to select multiple columns at once.
+
+They are documented in `?select_helpers`.
+
+| operator/function | selection |
+|-------------------|--------|
+| `everything` | all columns |
+| `last_col` | last column |
+| `one_of` | these column names as character vector |
+| `starts_with` | column names starting with this prefix literally |
+| `ends_with` | column names ending with this suffix literally |
+| `contains` | column names containing this string literally |
+| `matches` | column names matching the regular expression |
+| `:` | all columns between |
+| `-` | all columns except |
+
+
+For ‘scoped’ summarizing (`summarize_at`) and mutating verbs (`mutate_at`), you will need to wrap your statement in `vars(...)` to use any of the above.
+
+For ‘scoped’ filtering verbs (`filter_all` or `filter_if`), there are additional variants called `all_vars(...)` and `any_vars(...)`.
+
+### Extracting Columns
+
+You will need basically
+
+* `select` to (optionally rename and) extract columns as table, or
+* `pull` to extract column values of _one_ column as a vector; which defaults to the last column is none is specified.
+
+There are the ‘scoped’ variants, 
+
+* `select_all` to rename all columns (e.g. make uppercase),
+* `select_at` to (optionally rename and) extract columns select with `vars(...)`, and
+* `select_if` to (optionally rename and) extract columns that meet a certain property, (e.g. contain integer values).
+
+### Making New Columns
+
+The following will apply _vectorized_ functions to columns
+
+
+Subtracting `control` from all treatments would work the very same as above. (We look into this later.)
+
+```{r eval=FALSE}
+all_plates %>% 
+  # make wide table long
+  pivot_longer(conc_1:conc_0, names_to = "concentration", values_to = "intensity") %>% 
+  # make long table wide
+  pivot_wider(names_from = "sample_id", values_from = "intensity") %>% 
+  # subtract control in place
+  mutate_at(vars(starts_with("treatment")), funs(. - control))
+```
+
+
+Each column of a `data.frame` can hold a _single_ [data type](part_02-data_structures.md#data-types-in-r), but columns can have _different_ data types. `data.frame` objects are created _by column_. 
+
+Technically speaking, a [`data.frame` is a `list`](part_02-data_structures.html#advanced-data-structures-classes) in which each element of the list is an atomic vector of the same length.

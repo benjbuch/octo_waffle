@@ -1,0 +1,185 @@
+---
+title: "Working with Tables"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+A ‘table’---in R called a `data.frame`---is organized in columns and rows. 
+
+There are (at least) three different flavours to work with a `data.frame` objects in R:
+
+1. Base R uses `list`-like syntax, which can quickly get cumbersome to work with.
+2. The `data.table` package uses SQL-like syntax; here, `data.frame` is called `data.table`, which is but built for maximum efficiency. 
+3. The `dplyr` package uses language-like syntax to describe the actions applied to `tibble` objects, another class similar to `data.frame`.
+
+Each of these flavours comes with its own advantages and disadvantages. Some people may prefer to work with one or the other and you may even see mixed syntax being used. 
+
+For this workshop, we will focus on using `dplyr`, which is part of the `tidyverse`. And we try to be rather puristic …
+
+```{r}
+library(tidyverse)
+```
+
+Note that the `tidyverse` imports [the pipe `%>%`](part_01-basic_interactions.html#using-a-pipe) from the `magrittr` package.
+
+## Motivation: A Typical Table in Biosciences
+
+_“The plate is the experimental default table in the Biosciences.”_
+
+In worst case, the data acquired from each position on the plate was saved like this:
+
+```{r echo=FALSE, message=FALSE}
+
+# === simulate some linear dose ~ response data with noise ===
+
+# --- number of concentrations measured ---
+
+dose <- c(10**(3:0), 0)
+names(dose) <- paste("conc", c(1:(length(dose) - 1), 0), sep = "_")
+
+# --- number of conditions measured ---
+
+# effect sizes
+cond <- rep(c(0, 2, 40, 10, 0), each = 2)
+names(cond) <- paste(rep(c("control", paste("treatment", LETTERS[1:4], sep = "_")), 
+                         each = 2), c(1, 2), sep = ".")
+
+# generate random table (set 1)
+
+set.seed(1757)
+
+sapply(cond, function(i) rnorm(dose, mean = i * log10(dose + 1), sd = .4) )%>% 
+  round(digits = 3) %>% 
+  data.frame(row.names = names(dose)) %>% t %>% 
+  data.frame() %>% 
+  cbind(table_id = paste("table", rep(c(1, 1, 2, 2, 3), each = 2), sep = "_")) %>% 
+  as_tibble(rownames = "sample_id") %>% 
+  separate("sample_id", sep = "\\.", into = c("sample_id", "replicate_id")) %>% 
+  mutate(replicate_id = str_c("replicate_", replicate_id)) -> all_plates.1
+
+# generate random table (set 2)
+
+set.seed(8041)
+
+sapply(cond, function(i) rnorm(dose, mean = i * log10(dose + 1), sd = .4) )%>% 
+  round(digits = 3) %>% 
+  data.frame(row.names = names(dose)) %>% t %>% 
+  as_tibble(rownames = "exp_id") %>%
+  select(exp_id, conc_2, conc_0) -> all_plates.2
+
+# plate_1 is wide without assignments
+
+plate_1 <- all_plates.1 %>% 
+  filter(table_id == "table_1") %>% select(-table_id) %>% 
+  as.data.frame()
+
+# plate_2 is wide with assignments
+
+plate_2 <- all_plates.1 %>% 
+  filter(table_id == "table_2") %>% select(-table_id) %>% 
+  as.data.frame()
+
+# plate_3 is wide with assignments, but mixed
+
+plate_3 <- all_plates.1 %>% 
+  filter(table_id == "table_3") %>% select(-table_id) %>% 
+  select(sample_id, replicate_id, conc_1, conc_3, conc_2, conc_4, conc_0) %>% 
+  as.data.frame()
+
+# plate_4 is randomized order different style without treatment_D.2 and
+# replicate .1 is systematically higher (for treatments) than the others
+
+set.seed(120853)
+
+plate_4 <- all_plates.2 %>% 
+  filter(exp_id != "treatment_D.2") %>% 
+  group_split(str_detect(exp_id, "^t.+1$"), keep = FALSE) %>% 
+  modify_at(2, ~mutate_at(., vars(one_of("conc_2")), list(~ . + 10))) %>% 
+  bind_rows() %>%
+  sample_n(nrow(.)) %>% 
+  as.data.frame()
+
+rm(cond, list = ls(pattern = "all_plates"))
+
+# print the unlabelled table (works also with plate_2 etc.)
+
+plate_1 %>% 
+  mutate(anonymous = str_c("<b>", 1:nrow(.), "</b>")) %>% 
+  select(-ends_with("id")) %>% 
+  select("anonymous", everything()) %>% 
+  knitr::kable(format = "markdown", align = "c",
+               col.names = c(" ", LETTERS[1:ncol(.) - 1]))
+```
+
+Certainly, the sample assignments were documented (somewhere), so that we know _the actual data_ should be annotated like this.
+
+```{r echo=FALSE}
+plate_1 %>% 
+  mutate_at(vars(ends_with("id")), ~str_c("<b>", ., "</b>")) %>% 
+  knitr::kable(format = "markdown", align = "c",
+               col.names = c(" ", " ", colnames(.)[3:ncol(.)]))
+```
+
+Imagine this data appearing in some spreadsheet software. 
+
+1. Would you be able to calculate the mean and standard deviation over the replicates for all samples?
+2. How easily could you incorporate the concentrations used in the experiment, which were `r paste(names(dose), paste(dose, "µM"), sep = " = ", collapse = ", ")`? Also for plotting?
+3. Could you quickly exclude a set of replicates and check for bias? How about adding another set of observations and answer all the same questions?
+
+The following answer takes just four lines of code in R …
+
+```{r echo=FALSE}
+plate_1 %>% 
+  # -- start counting --
+  gather(key = "concentration", value = "intensity", -sample_id, -replicate_id) %>% 
+  mutate(concentration = str_c(dose[concentration], " µM")) %>% 
+  group_by(sample_id, concentration) %>% 
+  summarize(mean = round(mean(intensity), 3), sd = round(sd(intensity), 3)) %>% 
+  # -- stop counting --
+  knitr::kable(format = "markdown", align = "r")
+```
+
+… and six more lines for a plot.
+
+```{r echo=FALSE, fig.height=4, fig.width=5}
+plate_1 %>% 
+  gather(key = "concentration", value = "intensity", -sample_id, -replicate_id) %>% 
+  mutate(concentration = dose[concentration]) %>% 
+  # -- start counting --
+  ggplot(aes(x = concentration + 1, y = intensity, color = sample_id)) +
+  geom_smooth(method = lm, se = FALSE, size = .5) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  stat_summary(fun.data = mean_sdl, geom = "linerange") +
+  stat_summary(fun.data = mean_sdl, geom = "point") +
+  scale_x_log10() + 
+  # -- stop counting --
+  theme_classic(base_size = 12) + theme(
+    axis.ticks  = element_line(colour = "black"),
+    axis.text   = element_text(size = 12, colour = "black"),
+    legend.text = element_text(size = 12)
+  )
+```
+
+So, let's start!
+
+```{r include=FALSE}
+plate_1 <- plate_1 %>% 
+  select_at(vars(starts_with("conc"))) %>% 
+  as.data.frame()
+
+colnames(plate_1) <- LETTERS[1:ncol(plate_1)]
+
+# save some plates as csv
+
+lapply(ls(pattern = "plate_[1-3]"), function(x) write_csv(
+  eval(as.name(x)), path = str_c("./part_10-working_with_tables_files/", x, ".csv")))
+
+# save assignments as RData
+
+save(plate_4, dose, file = "./part_10-working_with_tables_files/plates.RData")
+
+rm("dose", list = ls(pattern = "plate_"))
+```
