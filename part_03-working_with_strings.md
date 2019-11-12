@@ -1,6 +1,19 @@
 Working with Strings
 ================
 
+  - [Properties of Strings](#properties-of-strings)
+  - [Combining Strings](#combining-strings)
+  - [Splitting Strings](#splitting-strings)
+  - [Subsetting Strings](#subsetting-strings)
+  - [Finding and Replacing Strings in
+    Strings](#finding-and-replacing-strings-in-strings)
+  - [Regular Expressions](#regular-expressions)
+      - [Placeholders](#placeholders)
+      - [Quantifiers](#quantifiers)
+      - [Special Characters](#special-characters)
+      - [Anchors](#anchors)
+  - [Quick Questions](#quick-questions)
+
 This introduction will be on objects of type `character`. This is all
 text which appears between quotation marks (`""` or `''`) and is not
 executed by R. In informatics, such text objects are called ‘strings’.
@@ -12,6 +25,14 @@ functions of the `stringr` package when the string operations become
 more challenging.
 
 `stringr` is part of the `tidyverse`.
+
+In this introduction you will learn
+
+  - how to combine and split strings,
+  - how to subset strings based on indices,
+  - how to replace words in strings, and
+  - that you can use regular expressions to formulate advanced string
+    queries.
 
 ## Properties of Strings
 
@@ -124,8 +145,7 @@ strsplit(x = "one,2;three,4", split = ",")
     ## [1] "one"     "2;three" "4"
 
 In the `stringr` package, `stringr::str_split` is vectorized over either
-arguments, `string` or
-`pattern`.
+arguments, `string` or `pattern`.
 
 ``` r
 stringr::str_split(string = c("one,2;three,4", "five,six,7"), pattern = ",")
@@ -196,8 +216,7 @@ str_trim("   chitchat  ")
 ## Finding and Replacing Strings in Strings
 
 In its easiest implementation, finding and replacing strings works as
-follows with
-`stringr::str_replace`.
+follows with `stringr::str_replace`.
 
 ``` r
 str_replace(string  = "One small step for a man, one giant leap for mankind!",
@@ -233,8 +252,7 @@ by far not limited to R, but applicable to many programming languages.
 expressions](https://stringr.tidyverse.org/articles/regular-expressions.html).)*
 
 In almost all `stringr` functions, you can use regular expressions as
-`pattern =
-...`.
+`pattern = ...`.
 
 ``` r
 str_replace_all(string  = "One small step for a man, one giant leap for mankind!",
@@ -248,8 +266,7 @@ str_replace_all(string  = "One small step for a man, one giant leap for mankind!
 > function to return the substrings matching the regular expression.
 > Since we provide a `character` vector with only a single element as
 > `string = ...`, we immediatly index the returned list with `[[1]]` to
-> save space while
-printing.
+> save space while printing.
 
 ``` r
 str_extract_all(string  = "One small step for a man, one giant leap for mankind!", # one element only
@@ -272,8 +289,7 @@ str_extract_all(string  = c("One small step", "one giant leap"), # character vec
 ### Placeholders
 
 Regular expressions can have placeholders: `.` will match any character
-(except a
-newline).
+(except a newline).
 
 ``` r
 str_extract_all(string  = "I keep pressing the space bar, but I'm still on planet Earth.",
@@ -297,8 +313,7 @@ str_extract_all(string  = "I keep pressing the space bar, but I'm still on plane
 > expression, you need to escape the escape sign as well. (Sounds
 > confusing.)
 
-You need `\\.` to match a fullstop
-literally.
+You need `\\.` to match a fullstop literally.
 
 ``` r
 str_extract_all(string  = "If you obey all the rules, you miss all the fun.",
@@ -392,8 +407,7 @@ Escapes allow to specify chracters that are otherwise hard to type.
 Escapes can also define entire classes of characters.
 
   - `\d` matches any digit (0, 1, 2, …, 9). The complement, `\D`,
-    matches any character that is not a decimal
-    digit.
+    matches any character that is not a decimal digit.
     
     ``` r
     str_extract_all("There are 214 moons in the solar system.", "\\d+")[[1]]
@@ -453,8 +467,7 @@ In some cases, you want to match a pattern only if it occurs at the
 start or the end of a line. There are
 
   - `^` to match the start of a line, and
-  - `$` to match the end of the
-line.
+  - `$` to match the end of the line.
 
 <!-- end list -->
 
@@ -480,17 +493,7 @@ To remember which one is which, [this
 mnemonic](https://twitter.com/emisshula/status/323863393167613953) might
 help you: ‘If you begin with power (`^`), you end up with money (`$`).’
 
-## Learning Objectives
-
-In this introduction you should have learned
-
-  - how to combine and split strings,
-  - how to subset strings based on character indices,
-  - how to replace words in strings, and
-  - that you can use regular expressions to formulate advanced string
-    queries.
-
-Quick questions.
+## Quick Questions
 
 1.  What is the result of `strsplit(paste0("AG", "CGT", "A", "TGCT"),
     "GC")`?

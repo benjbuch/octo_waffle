@@ -1,6 +1,41 @@
 Basic Interactions
 ================
 
+  - [The Prompt](#the-prompt)
+  - [Code and Comments](#code-and-comments)
+  - [A Sample Session](#a-sample-session)
+  - [Expressions and Assignments](#expressions-and-assignments)
+      - [Expressions](#expressions)
+      - [Using a Pipe](#using-a-pipe)
+      - [Assignments](#assignments)
+      - [Functions](#functions)
+  - [Packages](#packages)
+      - [Installing a New Package](#installing-a-new-package)
+      - [Loading a Package](#loading-a-package)
+      - [Referring to Functions from a Specific
+        Package](#referring-to-functions-from-a-specific-package)
+  - [Getting Help](#getting-help)
+      - [Checking the Source Code](#checking-the-source-code)
+      - [Checking the Documentation](#checking-the-documentation)
+  - [Errors and Warnings](#errors-and-warnings)
+  - [Quick Questions](#quick-questions)
+
+After you installed R (and RStudio), it’s time to get to know each
+other.
+
+In this introduction you will learn
+
+  - how to say hello and goodbye,
+  - how to create an object, consisting of a value and a name,
+  - how to check which objects are currently in R’s memory, and
+  - how to remove them,
+  - what a ‘function’ does,
+  - what a ‘package’ is,
+  - how to find help, and
+  - which information is in the documentation.
+
+## The Prompt
+
 The only meaningful way of interacting with R is by typing code into the
 R console. R’s command prompt is a ‘\>’ sign. (You don’t type the ‘\>’.)
 When present, R is waiting for the next line of code. (You do hit the
@@ -33,7 +68,7 @@ execute them by yourself. Beware that R is a case-sensitive language; so
 
 For the sake of reproducibility, some chunks are directly followed by
 the output that you should obtain on your machine. In this case, the
-lines are prefixed with a ‘\#\#’ mark.
+lines of codes are prefixed with a ‘\#\#’ mark.
 
 > In R, the ‘\#’ sign serves as comment character and can appear nearly
 > anywhere in the code. Anything typed behind this sign will be
@@ -76,19 +111,19 @@ summary(r)
     ## lm(formula = y ~ x, data = d)
     ## 
     ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -1.5647 -0.5897 -0.1592  0.4185  2.2271 
+    ##      Min       1Q   Median       3Q      Max 
+    ## -1.96855 -0.88132  0.09008  0.71959  2.22820 
     ## 
     ## Coefficients:
     ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)  0.26281    0.48005   0.547    0.591    
-    ## x            0.97384    0.04007  24.301 3.26e-15 ***
+    ## (Intercept)  0.07525    0.55577   0.135    0.894    
+    ## x            1.00561    0.04639  21.675 2.39e-14 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 1.033 on 18 degrees of freedom
-    ## Multiple R-squared:  0.9704, Adjusted R-squared:  0.9688 
-    ## F-statistic: 590.5 on 1 and 18 DF,  p-value: 3.259e-15
+    ## Residual standard error: 1.196 on 18 degrees of freedom
+    ## Multiple R-squared:  0.9631, Adjusted R-squared:  0.9611 
+    ## F-statistic: 469.8 on 1 and 18 DF,  p-value: 2.392e-14
 
 ``` r
 # clean up
@@ -541,19 +576,7 @@ be very serious if it is suggesting that the answer you got was bogus.
 > Always (always\!) *read* the warning messages to check if they
 > indicate a real problem or not.
 
-## Learning Objectives
-
-In this introduction you should have learned
-
-  - how to create an object, consisting of a value and a name,
-  - how to check which objects are currently in R’s memory, and
-  - how to remove them,
-  - what a ‘function’ does conceptually,
-  - what a ‘package’ is conceptually,
-  - how to find help, and
-  - which information is in the documentation.
-
-Quick questions.
+## Quick Questions
 
 1.  What do `#`, `%>%`, and `->` mean?
 2.  How do you type `{`, `}`, `[`, and `]` on your keyboard?

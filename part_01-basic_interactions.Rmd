@@ -1,7 +1,24 @@
 ---
 title: "Basic Interactions"
-output: github_document
+output: 
+  github_document:
+      toc: true
 ---
+
+After you installed R (and RStudio), it's time to get to know each other.
+
+In this introduction you will learn
+
+* how to say hello and goodbye,
+* how to create an object, consisting of a value and a name,
+* how to check which objects are currently in R's memory, and
+* how to remove them,
+* what a ‘function’ does,
+* what a ‘package’ is,
+* how to find help, and
+* which information is in the documentation.
+
+## The Prompt
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -27,7 +44,7 @@ You quit the R session with the command `q()` or `quit()`.
 
 In the following, pieces of R code (‘chunks’) are presented in grey boxes. You can copy the commands from these chunks to your R console and execute them by yourself. Beware that R is a case-sensitive language; so `A` and `a` are different symbols.
 
-For the sake of reproducibility, some chunks are directly followed by the output that you should obtain on your machine. In this case, the lines are prefixed with a ‘##’ mark.
+For the sake of reproducibility, some chunks are directly followed by the output that you should obtain on your machine. In this case, the lines of codes are prefixed with a ‘##’ mark.
 
 > In R, the ‘#’ sign serves as comment character and can appear nearly anywhere in the code. Anything typed behind this sign will be invisible to R.
 
@@ -355,19 +372,7 @@ Warnings are not as serious as an error. However, ignoring a warning can be very
 
 > Always (always!) _read_ the warning messages to check if they indicate a real problem or not. 
 
-## Learning Objectives
-
-In this introduction you should have learned
-
-* how to create an object, consisting of a value and a name,
-* how to check which objects are currently in R's memory, and
-* how to remove them,
-* what a ‘function’ does conceptually,
-* what a ‘package’ is conceptually,
-* how to find help, and
-* which information is in the documentation.
-
-Quick questions.
+## Quick Questions
 
 1. What do `#`, `%>%`, and `->` mean?
 2. How do you type `{`, `}`, `[`, and `]` on your keyboard?

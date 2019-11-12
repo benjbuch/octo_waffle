@@ -1,15 +1,24 @@
 ---
 title: "Data Types and Data Structures"
-output: github_document
+output: 
+  github_document:
+    toc: true
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 As in many programming languages, understanding how data are stored and manipulated is important. In this regard, the terms ‘data structure’ and ‘data type’ refer to how R treats your data rather than how you organize your data.
 
 This introduction might become rather technical, but don't get upset. It is less important to remember everything since we will recapitulate the contents on a needs basis during the workshop.
+
+In this introduction you will learn
+
+* that there are different data types,
+* that object classes are built from these ‘atomic’ data types,
+* the basic unit in R is a vector (of one single data type), and
+* vectorization of tasks is preferred over writing loops.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 
 ## Data Types in R
 
@@ -374,16 +383,7 @@ y
 
 So, using `lapply` saves you a lot of work!
 
-## Learning Objectives
-
-In this introduction you should have learned
-
-* that there are different data types,
-* that object classes are built from these datat types,
-* the basic unit in R is a vector (of one single data type), and
-* vectorization of tasks is preffered over writing loops.
-
-Quick questions.
+## Quick Questions
 
 1. Which data type is the vector `c("Tagesgericht" = 1.60, "Menü 1" = 2.00, "Menü 2" = 2.50, "Aktionsteller" = 3.50)`?
 2. Can you assign this vector to the variable `prizes_students`? How could you access the costs for “Menü 2”?

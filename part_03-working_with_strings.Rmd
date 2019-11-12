@@ -1,17 +1,26 @@
 ---
 title: "Working with Strings"
-output: github_document
+output: 
+    github_document:
+        toc: true
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 This introduction will be on objects of type `character`. This is all text which appears between quotation marks (`""` or `''`) and is not executed by R. In informatics, such text objects are called ‘strings’.
 
 Base R has a set of functions to combine and split strings, to find and replace text within strings etc. For the sake of consistency and its more powerful language, we will limit our discussion to the equivalent functions of the `stringr` package when the string operations become more challenging.
 
 `stringr` is part of the `tidyverse`.
+
+In this introduction you will learn
+
+* how to combine and split strings,
+* how to subset strings based on indices,
+* how to replace words in strings, and
+* that you can use regular expressions to formulate advanced string queries.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 
 ## Properties of Strings
 
@@ -282,16 +291,7 @@ str_extract_all("papaya or banana", "[yn]a\\b")[[1]] # matches at word boundarie
 
 To remember which one is which, [this mnemonic](https://twitter.com/emisshula/status/323863393167613953) might help you: ‘If you begin with power (`^`), you end up with money (`$`).’
 
-## Learning Objectives
-
-In this introduction you should have learned
-
-* how to combine and split strings,
-* how to subset strings based on character indices,
-* how to replace words in strings, and
-* that you can use regular expressions to formulate advanced string queries.
-
-Quick questions.
+## Quick Questions
 
 1. What is the result of `strsplit(paste0("AG", "CGT", "A", "TGCT"), "GC")`?
 2. Suppose you have the vector `c("ÁlM", "AnJ", "DaS", "DmS", "JaW", "ShP", "SuB")`. Using regular expressions, how do you identify all elements that contain

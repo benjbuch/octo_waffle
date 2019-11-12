@@ -1,6 +1,20 @@
 Data Types and Data Structures
 ================
 
+  - [Data Types in R](#data-types-in-r)
+  - [Atomic Data Structures: Vectors](#atomic-data-structures-vectors)
+  - [Advanced Data Structures:
+    Classes](#advanced-data-structures-classes)
+  - [Vectorization in R](#vectorization-in-r)
+      - [Numerical Vectors and
+        Operations](#numerical-vectors-and-operations)
+      - [Logical Vectors and
+        Operations](#logical-vectors-and-operations)
+      - [Indexing Vectors](#indexing-vectors)
+      - [Indexing Lists](#indexing-lists)
+      - [Applying Functions to Vectors](#applying-functions-to-vectors)
+  - [Quick Questions](#quick-questions)
+
 As in many programming languages, understanding how data are stored and
 manipulated is important. In this regard, the terms ‘data structure’ and
 ‘data type’ refer to how R treats your data rather than how you organize
@@ -10,11 +24,17 @@ This introduction might become rather technical, but don’t get upset. It
 is less important to remember everything since we will recapitulate the
 contents on a needs basis during the workshop.
 
+In this introduction you will learn
+
+  - that there are different data types,
+  - that object classes are built from these ‘atomic’ data types,
+  - the basic unit in R is a vector (of one single data type), and
+  - vectorization of tasks is preferred over writing loops.
+
 ## Data Types in R
 
 Any object in R can be of *one single* data type only. The most commonly
-encountered data types are shown
-below.
+encountered data types are shown below.
 
 | data type   | stores                         | example                       |
 | ----------- | ------------------------------ | ----------------------------- |
@@ -316,8 +336,7 @@ the other, R resuses the shorter vector as needed.
 
     ##  [1]  2  4  4  6  6  8  8 10 10 12
 
-If the lengths are not a multiple of eachother, you will get a
-    warning.
+If the lengths are not a multiple of eachother, you will get a warning.
 
 ``` r
 1:10 + 1:3
@@ -404,8 +423,7 @@ x[4] # fourth element in the vector
 
     ## [1] 14
 
-Numeric vectors can be used as index
-vectors.
+Numeric vectors can be used as index vectors.
 
 ``` r
 x[c(1, 3, 5)]
@@ -650,16 +668,7 @@ y
 
 So, using `lapply` saves you a lot of work\!
 
-## Learning Objectives
-
-In this introduction you should have learned
-
-  - that there are different data types,
-  - that object classes are built from these datat types,
-  - the basic unit in R is a vector (of one single data type), and
-  - vectorization of tasks is preffered over writing loops.
-
-Quick questions.
+## Quick Questions
 
 1.  Which data type is the vector `c("Tagesgericht" = 1.60, "Menü 1"
     = 2.00, "Menü 2" = 2.50, "Aktionsteller" = 3.50)`?
