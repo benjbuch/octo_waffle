@@ -1,0 +1,5 @@
+sample_id,replicate_id,conc_1,conc_2,conc_3,conc_4,conc_0
+treatment_B,replicate_1,119.261,79.897,42.117,11.39,0.618
+treatment_B,replicate_2,120.355,79.543,41.825,12.365,-0.204
+treatment_C,replicate_1,30.341,19.888,10.42,2.678,-0.341
+treatment_C,replicate_2,30.058,19.601,9.759,2.696,1.051

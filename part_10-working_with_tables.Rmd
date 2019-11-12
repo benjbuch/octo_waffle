@@ -35,16 +35,23 @@ In the worst case, the data acquired from each position (well, spot, etc.) on th
 
 ```{r echo=FALSE, message=FALSE}
 
-# simulate some linear dose ~ response data with noise
+# === simulate some linear dose ~ response data with noise ===
 
-set.seed(1757)
+# --- number of concentrations measured ---
 
 dose <- c(10**(3:0), 0)
-names(dose) <- paste("conc", c(1:4, 0), sep = "_")
+names(dose) <- paste("conc", c(1:(length(dose) - 1), 0), sep = "_")
 
+# --- number of conditions measured ---
+
+# effect sizes
 cond <- rep(c(0, 2, 40, 10, 0), each = 2)
 names(cond) <- paste(rep(c("control", paste("treatment", LETTERS[1:4], sep = "_")), 
                          each = 2), c(1, 2), sep = ".")
+
+# generate random table (set 1)
+
+set.seed(1757)
 
 sapply(cond, function(i) rnorm(dose, mean = i * log10(dose + 1), sd = .4) )%>% 
   round(digits = 3) %>% 
@@ -53,26 +60,49 @@ sapply(cond, function(i) rnorm(dose, mean = i * log10(dose + 1), sd = .4) )%>%
   cbind(table_id = paste("table", rep(c(1, 1, 2, 2, 3), each = 2), sep = "_")) %>% 
   as_tibble(rownames = "sample_id") %>% 
   separate("sample_id", sep = "\\.", into = c("sample_id", "replicate_id")) %>% 
-  mutate(replicate_id = str_c("replicate_", replicate_id)) -> all_plates
+  mutate(replicate_id = str_c("replicate_", replicate_id)) -> all_plates.1
 
-plate_1 <- all_plates %>% 
+# generate random table (set 2)
+
+set.seed(8041)
+
+sapply(cond, function(i) rnorm(dose, mean = i * log10(dose + 1), sd = .4) )%>% 
+  round(digits = 3) %>% 
+  data.frame(row.names = names(dose)) %>% t %>% 
+  as_tibble(rownames = "exp_id") %>%
+  select(exp_id, conc_2, conc_0) -> all_plates.2
+
+# plate_1 is wide without assignments
+
+plate_1 <- all_plates.1 %>% 
   filter(table_id == "table_1") %>% select(-table_id) %>% 
   as.data.frame()
 
-plate_2 <- all_plates %>% 
+# plate_2 is wide with assignments
+
+plate_2 <- all_plates.1 %>% 
   filter(table_id == "table_2") %>% select(-table_id) %>% 
   as.data.frame()
 
-plate_3 <- all_plates %>% 
+# plate_3 is wide with assignments, but mixed
+
+plate_3 <- all_plates.1 %>% 
   filter(table_id == "table_3") %>% select(-table_id) %>% 
   select(sample_id, replicate_id, conc_1, conc_3, conc_2, conc_4, conc_0) %>% 
   as.data.frame()
 
-rm(cond, all_plates)
+# plate_4 is randomized order different style without treatment_D.2
 
-save(plate_1, plate_2, plate_3, dose, file = "./part_10-working_with_tables_files/plates.RData")
+set.seed(120853)
 
-# print the unlabelled table
+plate_4 <- all_plates.2 %>% 
+  filter(exp_id != "treatment_D.2") %>% 
+  sample_n(nrow(.)) %>% 
+  as.data.frame()
+
+rm(cond, list = ls(pattern = "all_plates"))
+
+# print the unlabelled table (works also with plate_2 etc.)
 
 plate_1 %>% 
   mutate(anonymous = str_c("<b>", 1:nrow(.), "</b>")) %>% 
@@ -133,6 +163,76 @@ plate_1 %>%
 ```
 
 So, let's start!
+
+```{r include=FALSE}
+plate_1 <- plate_1 %>% 
+  select_at(vars(starts_with("conc"))) %>% 
+  as.data.frame()
+
+colnames(plate_1) <- LETTERS[1:ncol(plate_1)]
+
+# save some plates as csv
+
+lapply(ls(pattern = "plate_[1-3]"), function(x) write_csv(
+  eval(as.name(x)), path = str_c("./part_10-working_with_tables_files/", x, ".csv")))
+
+# save assignments as RData
+
+save(plate_4, dose, file = "./part_10-working_with_tables_files/plates.RData")
+
+rm("dose", list = ls(pattern = "plate_"))
+```
+
+## Importing Data from Delimited Files
+
+### Importing Data from a Single File
+
+The data for the plate shown above has been saved in a comma-delimited file called ‘plate_1.csv’. In the sub-folder ‘part_10-working_with_tables_files’. Let's import this file using `readr::read_csv()`; it will try to guess the data type stored in each column.
+
+In the file path, `.` refers to the current working directory (`getwd()`), so that we can use relative paths.
+
+```{r}
+plate_1 <- read_csv(file = "./part_10-working_with_tables_files/plate_1.csv")
+plate_1
+```
+
+The column names have been assigned from the first line of the file (since they were text). However, as we know the column names, we should use them. We can either set them using `colnames(plate_1)<-`, or provide them during import, skipping the first line of the file.
+
+```{r}
+plate_1 <- read_csv(file = "./part_10-working_with_tables_files/plate_1.csv",
+                    col_names = str_c("conc_", c(1:4, 0)), skip = 1)
+```
+
+It is disencouraged to use row names to work with data, since only one variable or parameter can be stored. So, let's add one column specifying the sample type and one column specifying the replicate number.
+
+```{r}
+plate_1 %>% 
+  add_column(sample_id = rep(c("control", "treatment_A"), each = 2),
+             replicate_id = rep(str_c("replicate_", c(1, 2)), times = 2),
+             # insert before first column; default after last column
+             .before = 1)
+```
+
+If you had rownames assigned to your table that you want to keep, use `dplyr::rownames_to_column()`. 
+
+### Importing Data from Multiple File
+
+A nice feature of using a programmatic approach for data analysis is that it will enable you to retrieve (systematically) many files from multiple locations (e.g. reflecting multiple experiments) on your harddrive and to either analyze them in identical ways one by one, or to combine them for analysis. 
+
+
+
+
+### Importing Data from Excel
+
+To read data from Excel, you can use `readxl::read_excel(...)` or `XLConnect::readWorksheetFromFile(...)`. 
+
+However, I would disencourage to do so routinely, since `.xls` and `.xlsx` are neither open (i.e. disclosed), nor standardized. This means they can be changed by Microsoft anytime and may consequently not be (immediately) supported by these packages.
+
+Another problem, you might be facing is that within Excel it is tempting to put multiple  tables with different data side-by-side in a single worksheet. To import such worksheets  will require a lot of polishing work from your side after.
+
+> **Advice:** Keep one set of data per sheet and export a CSV file from Excel.
+
+# ---------------------------
 
 The data for this plate has been saved in a file called ‘plates.RData’. When you open this file, there should be (at least) one object called `plate_1` and a named vector called `dose` in the ‘Global Environment’.
 
@@ -327,19 +427,77 @@ To combine columns, you may use `cbind(...)` or `dplyr::bind_cols(...)` respecti
 
 ```{r eval=FALSE}
 bind_cols(
-  all_plates[c("sample_id", "replicate_id",  "conc_1")], # half the data.frame, selected with list-operators
-  all_plates[c("conc_4", "conc_2", "conc_0", "conc_3")]  # half the data.frame, selected with list-operators
+  all_plates %>% select(sample_id, replicate_id, conc_1),
+  all_plates %>% select(conc_4, conc_2, conc_2, conc_0, conc_3)
 )
 ```
 
-A more represenative case would look like this.
+A more represenative case would look like this. (Don't care too much about how to create the randomized halfs.)
 
 ```{r}
-all_plates[c("sample_id", "replicate_id", "conc_1", "conc_2")]
+# half plate with conc_0 and conc_4 measurments
+half_1 <- all_plates %>% sample_n(nrow(.)) %>% 
+            select(sample_id, replicate_id, conc_0, conc_4)
+# half plate with conc_3, conc_4 and conc_0 measurments
+half_2 <- all_plates %>% sample_n(nrow(.)) %>% 
+            select(sample_id, replicate_id, conc_3, conc_1, conc_2)
+
+# this will be wrong
+cbind(half_1, half_2)
 ```
 
+To properly merge `half_1` and `half_2`, we would like to use the colums named `sample_id` and `replicate_id` as indices. This is what `dplyr::inner_join(...)` does.
+
+```{r}
+# this will be correct
+inner_join(half_1, half_2, by = c("sample_id", "replicate_id"))
+```
+
+If you want to keep rows that are only in one table, but not in another, there are also the functions `dpylr::left_join()` and `dplyr::right_join()`. (Having both options is useful when you pipe the commands.)
+
+## Manipulating Columns (“Table Variables”)
+
+### Selecting Columns
+
+To select a column, you can always type its name between quotation marks. Most functions will also accept unquoted column names (mostly, when `...` is allowed).
+
+In addition, there are helper functions to select multiple columns at once.
+
+They are documented in `?select_helpers`.
+
+| operator/function | selection |
+|-------------------|--------|
+| `everything` | all columns |
+| `last_col` | last column |
+| `one_of` | these column names as character vector |
+| `starts_with` | column names starting with this prefix literally |
+| `ends_with` | column names ending with this suffix literally |
+| `contains` | column names containing this string literally |
+| `matches` | column names matching the regular expression |
+| `:` | all columns between |
+| `-` | all columns except |
 
 
+For ‘scoped’ summarizing (`summarize_at`) and mutating verbs (`mutate_at`), you will need to wrap your statement in `vars(...)` to use any of the above.
+
+For ‘scoped’ filtering verbs (`filter_all` or `filter_if`), there are additional variants called `all_vars(...)` and `any_vars(...)`.
+
+### Extracting Columns
+
+You will need basically
+
+* `select` to (optionally rename and) extract columns as table, or
+* `pull` to extract column values of _one_ column as a vector; which defaults to the last column is none is specified.
+
+There are the ‘scoped’ variants, 
+
+* `select_all` to rename all columns (e.g. make uppercase),
+* `select_at` to (optionally rename and) extract columns select with `vars(...)`, and
+* `select_if` to (optionally rename and) extract columns that meet a certain property, (e.g. contain integer values).
+
+### Making New Columns
+
+The following will apply _vectorized_ functions to columns
 
 
 Subtracting `control` from all treatments would work the very same as above. (We look into this later.)
