@@ -38,23 +38,12 @@ A cheat sheet for the introduction in [RMD](part_00-cheat_sheet.Rmd) or [DOCX](p
 
 ## Syllabus
 
-We will focus on using packages from the [`tidyverse`](https://www.tidyverse.org).
+We focus on using packages from the [`tidyverse`](https://www.tidyverse.org).
 
-1. Working with Tables
-    * Grouping data by category and creating categories from continuous variables
-    * Simple statistics
+1. [Working with Tables](part_10-working_with_tables.md)
 2. Making Figures
-    * Producing multiple (split) figures
-3. Import, Export, Save
-    * Navigating the file directory
-    * Using RStudio's `*.Rproj`
-    * Saving and restoring an R session _vs_ Saving selected R objects
-    * Importing data from `*.txt`, `*.csv` etc.
-    * Importing data from Microsoft Excel
-    * Importing data from multiple files, multiple folders, specific folders
-    * Exporting data as `*.txt`, `*.csv` etc.
-1. Good Practices
-    * Parameterization
+3. Good Practices
+4. Import, Export, Save
 
 ## Acknowledgements
 
