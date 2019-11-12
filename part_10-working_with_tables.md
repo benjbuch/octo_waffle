@@ -1,25 +1,24 @@
 Working with Tables
 ================
 
-A ‘table’—in R called a `data.frame`—is organized in columns and rows.
+A ‘table’—in R called a `data.frame`—is data organized in columns and
+rows.
 
 There are (at least) three different flavours to work with a
-`data.frame` objects in R:
+`data.frame` object in R:
 
 1.  Base R uses `list`-like syntax, which can quickly get cumbersome to
     work with.
-2.  The `data.table` package uses SQL-like syntax; here, `data.frame` is
-    called `data.table`, which is but built for maximum efficiency.
-3.  The `dplyr` package uses language-like syntax to describe the
-    actions applied to `tibble` objects, another class similar to
-    `data.frame`.
+2.  The `data.table` package uses SQL-like syntax, which is built for
+    maximum efficiency.
+3.  The `dplyr` package uses language-like syntax to describe each
+    action.
 
 Each of these flavours comes with its own advantages and disadvantages.
 Some people may prefer to work with one or the other and you may even
-see mixed syntax being used.
-
-For this workshop, we will focus on using `dplyr`, which is part of the
-`tidyverse`. And we try to be rather puristic …
+see mixed syntax being used. For this workshop, we will focus on using
+`dplyr`, which is part of the `tidyverse`. And we try to be rather
+puristic …
 
 ``` r
 library(tidyverse)
@@ -36,7 +35,7 @@ library(tidyverse)
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
 
-Note that the `tidyverse` imports [the pipe
+Note that the `tidyverse` imports the [pipe
 `%>%`](part_01-basic_interactions.html#using-a-pipe) from the `magrittr`
 package.
 
@@ -54,8 +53,8 @@ saved like this:
 | <b>3</b> | 6.477 |  3.839  |  3.064  |  0.479  |  0.182  |
 | <b>4</b> | 5.755 |  3.728  |  2.153  | \-0.080 |  0.204  |
 
-Certainly, the sample assignments were documented (somewhere), so that
-we know *the actual data* should be annotated like this.
+Certainly, the sample assignment was documented (somewhere), so that we
+know *the actual data* should be annotated like this.
 
 |                     |                     | conc\_1 | conc\_2 | conc\_3 | conc\_4 | conc\_0 |
 | :-----------------: | :-----------------: | :-----: | :-----: | :-----: | :-----: | :-----: |

@@ -7,23 +7,22 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-A ‘table’---in R called a `data.frame`---is organized in columns and rows. 
+A ‘table’---in R called a `data.frame`---is data organized in columns and rows. 
 
-There are (at least) three different flavours to work with a `data.frame` objects in R:
+There are (at least) three different flavours to work with a `data.frame` object in R:
 
 1. Base R uses `list`-like syntax, which can quickly get cumbersome to work with.
-2. The `data.table` package uses SQL-like syntax; here, `data.frame` is called `data.table`, which is but built for maximum efficiency. 
-3. The `dplyr` package uses language-like syntax to describe the actions applied to `tibble` objects, another class similar to `data.frame`.
+2. The `data.table` package uses SQL-like syntax, which is built for maximum efficiency. 
+3. The `dplyr` package uses language-like syntax to describe each action.
 
 Each of these flavours comes with its own advantages and disadvantages. Some people may prefer to work with one or the other and you may even see mixed syntax being used. 
-
 For this workshop, we will focus on using `dplyr`, which is part of the `tidyverse`. And we try to be rather puristic …
 
 ```{r}
 library(tidyverse)
 ```
 
-Note that the `tidyverse` imports [the pipe `%>%`](part_01-basic_interactions.html#using-a-pipe) from the `magrittr` package.
+Note that the `tidyverse` imports the [pipe `%>%`](part_01-basic_interactions.html#using-a-pipe) from the `magrittr` package.
 
 ## Motivation: A Typical Table in Biosciences
 
@@ -114,7 +113,7 @@ plate_1 %>%
                col.names = c(" ", LETTERS[1:ncol(.) - 1]))
 ```
 
-Certainly, the sample assignments were documented (somewhere), so that we know _the actual data_ should be annotated like this.
+Certainly, the sample assignment was documented (somewhere), so that we know _the actual data_ should be annotated like this.
 
 ```{r echo=FALSE}
 plate_1 %>% 
