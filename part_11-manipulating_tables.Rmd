@@ -6,7 +6,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(include = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
@@ -18,7 +18,7 @@ A common standard to represent tabulated data as the comma-separated values, typ
 
 The data of the plate mentioned in this session's introduction was saved in a comma-delimited file called ‘plate_1.csv’. You can find it in the sub-folder ‘part_10-working_with_tables_files’. We will import this file using `readr::read_csv()`, which will try to guess the data type stored in each column.
 
-> In the file path, `.` refers to the current working directory (`getwd()`), so that we can use relative paths.
+> In the file path, `.` refers to the current working directory, `getwd()`, so that we can use relative paths.
 
 ```{r}
 plate_1 <- read_csv(file = "./part_10-working_with_tables_files/plate_1.csv")
