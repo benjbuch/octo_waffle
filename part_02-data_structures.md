@@ -162,8 +162,19 @@ x <- c(1L, TRUE, FALSE)
 typeof(x)
 ```
 
-To preserve the original data type of each element, we need to use
+Thus, to preserve the original data type of each element, we need to use
 lists\!
+
+We can also ‘force’ R to try this backwards.
+
+``` r
+library(magrittr)
+
+as.double("1") %>% typeof # double
+as.double("a") %>% typeof # NA of type double
+
+as.logical("TRUE") %>% typeof # logical
+```
 
 ## Advanced Data Structures: Classes
 
