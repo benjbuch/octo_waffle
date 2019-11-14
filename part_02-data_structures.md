@@ -206,7 +206,7 @@ Here are two examples to illustrate the concept.
     In statistics, many experiments involve the recording of categorical
     data, e.g. male and female, or the different cell lines, treatments
     etc. used in an experiment. As they would be stored as `character`,
-    this can take a lot of memory to store.
+    this would consume a lot of memory.
     
       - Each category (‘level’) is assigned a number. Instead of the
         `character` vector, a much smaller `integer` vector is stored.
@@ -251,12 +251,6 @@ Here are two examples to illustrate the concept.
     
     ``` r
     # get the assignments of the levels
-    attributes(x)$levels
-    ```
-    
-        ## [1] "d" "f" "m"
-    
-    ``` r
     levels(x) # short-hand for objects of class ‘factor’
     ```
     
@@ -497,7 +491,7 @@ noble_gases[["Krypton"]]
 
 ### Indexing Lists
 
-*(This section is included for sake of completeness. You may skip it.)*
+*(This section is included for the sake of completeness. You may skip it.)*
 
 In contrast to atomic vectors, lists can be recursively indexed with
 `[[`. Compare.
