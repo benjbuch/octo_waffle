@@ -329,7 +329,7 @@ plate_4 %>%
 
 ```{r include=FALSE}
 plate_data %>% 
-  pivot_longer(starts_with("conc"), names_to = "concentration") %>% 
+  pivot_longer(starts_with("conc"), names_to = "concentration", values_to = "intensity") %>% 
   mutate(concentration = dose[concentration]) %>% 
   # re-order and save
   arrange(sample_id, replicate_id, concentration) -> plate_data
