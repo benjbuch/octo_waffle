@@ -300,35 +300,42 @@ plate_1 %>%
 
 ## Hands-On Excercise
 
-The data for another plate has been saved in a file called ‘plates.RData’. When you open this file, there should be one additional object called `plate_4` and a named vector called `dose` in the ‘Global Environment’.
+The data for another plate has been saved in a file called ‘plates.RData’. When you open this file, you should see an data set called `plate_4` and a named vector called `dose` in the ‘Global Environment’.
 
 ```{r}
 load(file = "./part_10-working_with_tables_files/plates.RData")
 ```
 
-1. For illustrative purposes merge `plate_4` with `plate_1` by `sample_id` only. Use `inner_join`, `left_join`, and `right_join`. Don't save the results.
+1. Combine with `plate_data`, but be careful, the replicates (`.A` and `.B`) are actually `replicate_3` and `replicate_4`. You will probably want to change this. Hint: You can use `if_else()` to mutate values on a case-by-case basis.
 
 ```{r include=FALSE}
 plate_4 %>% 
-  separate(exp_id, into = c("sample_id", "replicate_id"), sep = "\\.") %>% 
-  inner_join(plate_1, by = c("sample_id"))
-
-plate_4 %>% 
-  separate(exp_id, into = c("sample_id", "replicate_id"), sep = "\\.") %>% 
-  left_join(plate_1, by = c("sample_id"))
-
-plate_4 %>% 
-  separate(exp_id, into = c("sample_id", "replicate_id"), sep = "\\.") %>% 
-  right_join(plate_1, by = c("sample_id"))
-```
-
-
-2. Combine `plate_4` into `plate_data`, but be careful, the replicates (`.1` and `.2`) are actually `replicate_3` and `replicate_4`. You will probably want to change this.
-
-```{r include=FALSE}
-plate_4 %>% 
-  separate(exp_id, into = c("sample_id", "replicate_id"), sep = "\\.") %>% 
-  mutate(replicate_id = str_c("replicate_", as.numeric(replicate_id) + 2)) %>% 
+  # make "sample_id" and "concentration" from "exp_id"
+  separate(exp_id, into = c("sample_id", "concentration"), sep = "\\.") %>% 
+  # make long table in order to be able to make wide table with concentrations 
+  # spread along columns
+  pivot_longer(starts_with("rep"), names_to = "replicate_id") %>% 
+  # make corresponding "replicate_id" 
+  mutate(replicate_id = if_else(replicate_id == "rep.A", "replicate_3", "replicate_4")) %>% 
+  # make finally wide
+  pivot_wider(id_cols = ends_with("id"), names_from = "concentration", values_from = "value") %>% 
+  # combine
   bind_rows(plate_data) %>% 
+  # re-order and save
   arrange(sample_id, replicate_id) -> plate_data
 ```
+
+2.  Tidy `plate_data` and replace concentration with actual values.
+
+```{r include=FALSE}
+plate_data %>% 
+  pivot_longer(starts_with("conc"), names_to = "concentration") %>% 
+  mutate(concentration = dose[concentration]) %>% 
+  # re-order and save
+  arrange(sample_id, replicate_id, concentration) -> plate_data
+```
+
+```{r include=FALSE}
+saveRDS(plate_data, file = "part_11-plate_data.rds")
+ ```
+
