@@ -112,18 +112,18 @@ summary(r)
     ## 
     ## Residuals:
     ##      Min       1Q   Median       3Q      Max 
-    ## -1.96855 -0.88132  0.09008  0.71959  2.22820 
+    ## -1.25950 -0.62228 -0.06054  0.61878  1.88939 
     ## 
     ## Coefficients:
     ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)  0.07525    0.55577   0.135    0.894    
-    ## x            1.00561    0.04639  21.675 2.39e-14 ***
+    ## (Intercept) -0.20508    0.44293  -0.463    0.649    
+    ## x            1.04344    0.03698  28.220 2.36e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 1.196 on 18 degrees of freedom
-    ## Multiple R-squared:  0.9631, Adjusted R-squared:  0.9611 
-    ## F-statistic: 469.8 on 1 and 18 DF,  p-value: 2.392e-14
+    ## Residual standard error: 0.9535 on 18 degrees of freedom
+    ## Multiple R-squared:  0.9779, Adjusted R-squared:  0.9767 
+    ## F-statistic: 796.4 on 1 and 18 DF,  p-value: 2.359e-16
 
 ``` r
 # clean up
@@ -236,7 +236,7 @@ asin(sqrt(divide_by(sum(1, 2, 3, 4), 10)))
 sum(1, 2, 3, 4) %>% 
   # comments may be interspresed to give rationales
   divide_by(10) %>% 
-  # functions with a single argument, may omit brackets ...
+  # functions with a single argument may omit brackets ...
   sqrt %>% 
   asin
 ```

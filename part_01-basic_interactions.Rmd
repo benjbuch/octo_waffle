@@ -155,7 +155,7 @@ asin(sqrt(divide_by(sum(1, 2, 3, 4), 10)))
 sum(1, 2, 3, 4) %>% 
   # comments may be interspresed to give rationales
   divide_by(10) %>% 
-  # functions with a single argument, may omit brackets ...
+  # functions with a single argument may omit brackets ...
   sqrt %>% 
   asin
 ```
