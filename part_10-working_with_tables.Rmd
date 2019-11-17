@@ -89,15 +89,20 @@ plate_3 <- all_plates.1 %>%
   as.data.frame()
 
 # plate_4 is randomized order different style without treatment_D.2 and
-# replicate .1 is systematically higher (for treatments) than the others
+# replicate .A is systematically higher (for treatments) than the others
 
-set.seed(120853)
+set.seed(53108)
 
 plate_4 <- all_plates.2 %>% 
   filter(exp_id != "treatment_D.2") %>% 
   group_split(str_detect(exp_id, "^t.+1$"), keep = FALSE) %>% 
   modify_at(2, ~mutate_at(., vars(one_of("conc_2")), list(~ . + 10))) %>% 
   bind_rows() %>%
+  separate(exp_id, into = c("sample_id", "replicate_id"), sep = "\\.") %>% 
+  mutate(replicate_id = str_c("rep.", LETTERS[as.numeric(replicate_id)])) %>% 
+  pivot_longer(starts_with("conc"), names_to = "concentration") %>% 
+  pivot_wider(id_cols = c("sample_id", "concentration"), names_from = replicate_id) %>% 
+  unite("exp_id", sample_id, concentration, sep = ".") %>% 
   sample_n(nrow(.)) %>% 
   as.data.frame()
 
