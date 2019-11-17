@@ -44,7 +44,7 @@ Any object in R can be of _one single_ data type only. The most commonly encount
 
 > By convention, if you type any number (including integers without an `L` suffix), R will store it as `double`. This allows to do accurate maths with it. `double` stands for ‘double-precision floating-point format’.
 
-The data type can be queried using the `typeof(...)` function.
+The data type can be queried using the `typeof(...)` function. 
 
 ```{r}
 x <- pi
@@ -137,6 +137,8 @@ as.logical("TRUE") %>% typeof # logical
 
 R allows to create more sophisticated data structures from the simpler atomic data types. The structure of such objectes is called a ‘class’. Besides its usefulness for an object-oriented programming style, having a class associated to an object will cause functions such as `print(...)`, `plot(...)` and `summary(...)` to respond in an appropriate manner. Some functions operate only on objects of specific classes.
 
+In RStudio, the class of an object is indicated in the ‘Environment’ pane. Note that `integer`, `double` and `complex` are of class `numeric`.
+
 > All objects in R can have additional “metadata” associated with them, so-called ‘attributes’. Classes define which ‘attributes’ an object must (at least) implement to belong to a class.
 
 Here are two examples to illustrate the concept.
@@ -191,10 +193,10 @@ x <- 10:1
 
 typeof(x)
 
-# create a vector of type double from 1 to 5 ...
+# create a vector from 1 to 5 (integer) ...
 y <- seq(1, 5)
-# ... spaced by 0.5 ...
-y <- seq(1, 5, 0.5)
+# ... spaced by 0.5 (double) ...
+y <- seq(1, 5, by = 0.5)
 
 typeof(y)
 
@@ -203,6 +205,8 @@ c(x, y)
 ```
 
 Note that the order of the elements in each vector is preserved upon concatenation.
+
+> The numbers in squared brackets in the console output, `## [1]` and `## [15]` are the indices of the following element, i.e. the second row of output starts with element number 15.
 
 ***
 
@@ -252,7 +256,7 @@ The `!` sign is used to _negate_ logical vectors or boolean operations.
 !y
 ```
 
-The boolean operators include `&` (and), `|` (or) and `xor(...)`. They operate element-wise.
+The boolean operators include `&` (and), `|` (or) and `xor(...)` (either or, but not both). They operate element-wise.
 
 ```{r}
 y; z

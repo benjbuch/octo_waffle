@@ -186,6 +186,10 @@ a class associated to an object will cause functions such as
 appropriate manner. Some functions operate only on objects of specific
 classes.
 
+In RStudio, the class of an object is indicated in the ‘Environment’
+pane. Note that `integer`, `double` and `complex` are of class
+`numeric`.
+
 > All objects in R can have additional “metadata” associated with them,
 > so-called ‘attributes’. Classes define which ‘attributes’ an object
 > must (at least) implement to belong to a class.
@@ -206,7 +210,7 @@ Here are two examples to illustrate the concept.
     In statistics, many experiments involve the recording of categorical
     data, e.g. male and female, or the different cell lines, treatments
     etc. used in an experiment. As they would be stored as `character`,
-    this would consume a lot of memory.
+    this can take a lot of memory to store.
     
       - Each category (‘level’) is assigned a number. Instead of the
         `character` vector, a much smaller `integer` vector is stored.
@@ -251,6 +255,12 @@ Here are two examples to illustrate the concept.
     
     ``` r
     # get the assignments of the levels
+    attributes(x)$levels
+    ```
+    
+        ## [1] "d" "f" "m"
+    
+    ``` r
     levels(x) # short-hand for objects of class ‘factor’
     ```
     
@@ -291,10 +301,10 @@ typeof(x)
     ## [1] "integer"
 
 ``` r
-# create a vector of type double from 1 to 5 ...
+# create a vector from 1 to 5 (integer) ...
 y <- seq(1, 5)
-# ... spaced by 0.5 ...
-y <- seq(1, 5, 0.5)
+# ... spaced by 0.5 (double) ...
+y <- seq(1, 5, by = 0.5)
 
 typeof(y)
 ```
@@ -311,6 +321,10 @@ c(x, y)
 
 Note that the order of the elements in each vector is preserved upon
 concatenation.
+
+> The numbers in squared brackets in the console output, `## [1]` and
+> `## [15]` are the indices of the following element, i.e. the second
+> row of output starts with element number 15.
 
 -----
 
@@ -380,8 +394,8 @@ The `!` sign is used to *negate* logical vectors or boolean operations.
 
     ## [1]  TRUE  TRUE FALSE FALSE
 
-The boolean operators include `&` (and), `|` (or) and `xor(...)`. They
-operate element-wise.
+The boolean operators include `&` (and), `|` (or) and `xor(...)` (either
+or, but not both). They operate element-wise.
 
 ``` r
 y; z
@@ -491,7 +505,7 @@ noble_gases[["Krypton"]]
 
 ### Indexing Lists
 
-*(This section is included for the sake of completeness. You may skip it.)*
+*(This section is included for sake of completeness. You may skip it.)*
 
 In contrast to atomic vectors, lists can be recursively indexed with
 `[[`. Compare.
