@@ -7,7 +7,7 @@ Grouping and Summarizing Data
       - [Student’s *t* Test](#students-t-test)
       - [Student’s *t* Test with Multiple
         Comparisons](#students-t-test-with-multiple-comparisons)
-      - [Linear Regression](#linear-regression)
+      - [Linear Regression and Beyond](#linear-regression-and-beyond)
 
 The important object you will learn in this section is how to summarize
 (large) data sets. Typically, the data is first split into several
@@ -163,9 +163,8 @@ reshape2::tips %>% as_tibble()
     ## 10      14.8   3.23 Male   No     Sun   Dinner     2
     ## # … with 234 more rows
 
-For example, we might be curious if the sex of the bill payer had an
-impact on the average tip granted. In base R, we could go simply with
-the following line.
+For example, we might be curious whether male or female guests give
+higher tips. In base R, we could go with this one-liner.
 
 ``` r
 t.test(tip ~ sex, data = reshape2::tips)
@@ -183,9 +182,9 @@ t.test(tip ~ sex, data = reshape2::tips)
     ## mean in group Female   mean in group Male 
     ##             2.833448             3.089618
 
-However, if we were interested to perform this test for each of the
-weekdays, we are left with subsetting the data by day and apply the
-following on each subset.
+However, if we want to perform this test by weekday, we are left with
+subsetting the data (manually) by day and apply the following on each
+subset.
 
 ``` r
 reshape2::tips[which(reshape2::tips$day == "Fri"), ] -> tips.Fri
@@ -204,27 +203,27 @@ t.test(tip ~ sex, data = tips.Fri)
     ## mean in group Female   mean in group Male 
     ##             2.781111             2.693000
 
-We would however prefer a nice table with one column specifying the
-weekday and all parameters of the fit neatly organized as variables.
+We would certainly prefer a neat table with the parameters of the fit
+organized as columns and the rows specifying the grouping variables such
+as the weekday. In this sense, a vectorized approach.
 
-Let’s have a look how to perform a Student’s *t* test within the
-`tidyverse`.
+Let’s look how to perform a Student’s *t* test within the `tidyverse`.
 
-We will use `group_modify(...)`, the summary function for cases when
-`summarize(...)` is too limited. It takes a function as argument that
-operates on and returns back a `data.frame` (or similar). In this case,
-the function will be given the (four) different `data.frame` objects,
-one for each group (day). In this sense, a vectorized approach.
+We will use `group_modify(...)`, a summary function for cases when
+`summarize(...)` is too limited. It takes a function as argument, which
+operates on and returns back a `data.frame`. In this case, the function
+will be given the (four) different `data.frame` objects, one for each
+group (day).
 
 > Since R’s `t.test` does not return a `data.frame` by default, we wrap
 > it with `~ broom::tidy(...)`. This function makes a `data.frame`
 > containing the parameters (e.g. coefficients and slopes) of the model.
 
-> The `~` in front of `broom::tidy(...)` is mandatory at this point for
-> reasons beyond the scope of this tutorial.
+> Note: The `~` in front of `broom::tidy(...)` is mandatory for reasons
+> beyond the scope of this tutorial at this point.
 
-Within `group_modify`, we can refer to the current `data.frame` subset
-with `.` (or `.x`) and the value of the grouping variable with `.y`.
+Within `group_modify`, we can refer to the current subset with `.` (or
+`.x`) and the value of the grouping variable with `.y`.
 
 ``` r
 reshape2::tips %>% 
@@ -245,10 +244,11 @@ reshape2::tips %>%
 
 A little down-side of this nicely general approach is that column names
 may become rather enigmatic. This is because they need to apply to very
-different cases in which `broom::tidy(...)` is used. Here, the columns
-named `estimate`, `estimate1` and `estimate2` refer to the mean
-difference between both groups, the mean of the first group (here:
-‘Female’) and the mean of the second group (here: ‘Male’)
+different cases in which `broom::tidy(...)` is used.
+
+Here, the columns named `estimate`, `estimate1` and `estimate2` refer to
+the mean difference between both groups, the mean of the first group
+(here: ‘Female’) and the mean of the second group (here: ‘Male’)
 respectively.
 
 ### Student’s *t* Test with Multiple Comparisons
@@ -315,16 +315,15 @@ reshape2::tips %>%
     x = .$tip, g = .$day, p.adjust.method = "hochberg", pool.sd = FALSE)))
 ```
 
-This approach can also be applied to the ouput of many other hypothesis
-testing functions such as `cor.test`, `wilcox.test`, `chisq.test` etc.
+This approach can also be applied to other hypothesis testing functions
+such as `cor.test`, `wilcox.test`, `chisq.test` etc.
 
-### Linear Regression
+### Linear Regression and Beyond
 
-Another example on the same lines is performing a linear regression for
-each group of observations. Here, we will try to describe the
-`intensity` observed in `plate_data` as a function of the
-`concentration` used. This is done in R with the linear model `lm(...)`
-call.
+Another example on the same lines is a linear regression by group. Let’s
+try to describe the `intensity` observed in `plate_data` as a function
+of the `concentration`. Such a model is fit in R with the linear model
+`lm(...)` call.
 
 ``` r
 plate_data %>% 
@@ -349,7 +348,7 @@ plate_data %>%
 
 So far, we have used `broom::tidy` to get the parameters of the model.
 If we are interested in the statistical summary of the overall model, we
-would use `broom::glance` instead.
+use `broom::glance`.
 
 ``` r
 plate_data %>% 
