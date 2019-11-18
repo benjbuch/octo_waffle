@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
 
-plate_data <- readRDS("part_11-plate_data.rds")
+plate_data <- readRDS("part_12-plate_data.rds")
 ```
 
 The important object you will learn in this section is how to summarize (large) data sets. Typically, the data is first split into several groups defined by a categorical variable (‘factor’) and then some sort of summary statistics are applied to each group.
