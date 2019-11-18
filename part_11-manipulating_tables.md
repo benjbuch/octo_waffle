@@ -17,16 +17,16 @@ Importing and Tidying Data
 
 ## Importing Data from Delimited Files
 
-A common standard to represent tabulated data as the comma-separated
-values, typically indicated by the extension `.csv`. However, the
-delimiters to represent the begin of a new column can be anything such
-as semicolons, white spaces (e.g. tab, blank).
+A common standard to store tabulated data is as comma-separated values.
+Typically such files end with the extension `.csv`. However, the
+delimiters to represent the start of a new column can be anything such
+as semicolons or white spaces (e.g. tab, blank).
 
 ### Importing Data from a Single File
 
 The data of the plate mentioned in this session’s introduction was saved
-in a comma-delimited file called ‘plate\_1.csv’. You can find it in the
-sub-folder ‘part\_10-working\_with\_tables\_files’. We will import this
+as a comma-delimited file called ‘plate\_1.csv’ in the sub-folder
+‘part\_10-working\_with\_tables\_files’. We are going to import this
 file using `readr::read_csv()`, which will try to guess the data type
 stored in each column.
 
@@ -60,9 +60,9 @@ plate_1
 
 The column names have been taken from the first line of the file (since
 they were text). However, as we know the actual names, we should use
-them. They can be set either using `colnames(plate_1)<-` or during
+them. They can be set either using `colnames(plate_1)<-`, or during
 import. In the latter case, we can (and should) skip the first line of
-the file.
+the file since it’s obsolete.
 
 ``` r
 plate_1 <- read_csv(file = "./part_10-working_with_tables_files/plate_1.csv",
@@ -78,11 +78,10 @@ plate_1 <- read_csv(file = "./part_10-working_with_tables_files/plate_1.csv",
     ##   conc_0 = col_double()
     ## )
 
-Generally, it is disencouraged to rely on row names to work with complex
-data sets since only one variable or parameter can be referenced. To be
-useful, each parameter or variable should be stored in a separate
-column. So, let’s add one column specifying the sample type and one
-column specifying the replicate number.
+The data we are typically dealing with is much too complex to rely on a
+single row name only. To be useful, each parameter or variable should be
+stored in a separate column. So, let’s add one column specifying the
+sample type and one column specifying the replicate number.
 
 ``` r
 plate_1 <- plate_1 %>% 
@@ -101,8 +100,8 @@ plate_1
     ## 3 treatment_A replicate_1   6.48   3.84   3.06   0.479  0.182
     ## 4 treatment_A replicate_2   5.76   3.73   2.15  -0.08   0.204
 
-If you had (for some reason) rownames in your table that you want to
-keep, use `dplyr::rownames_to_column()`.
+If you had (for some reason) rownames in a `data.frame` that you want to
+keep in the `tidyverse`, use `dplyr::rownames_to_column()`.
 
 ### Combining Data from Multiple Files with `row_bind`
 
@@ -120,9 +119,9 @@ plate_3 <- read_csv(file = "./part_10-working_with_tables_files/plate_3.csv")
 ```
 
 However, if we have many files to analyse, this approach can become
-tedious. So, we use `list.files(...)` to create a list of all files that
-we would like to include. These can even use regular expressions for
-pattern matching.
+tedious. So, we use `list.files(...)` to create a list of all files in a
+directory. We can even use regular expressions to specify the ones we
+would like to include.
 
 ``` r
 plate_files.paths <- list.files(path = "./part_10-working_with_tables_files",
@@ -173,10 +172,10 @@ plate_files
     ## 1 treatment_D replicate_1   0.203 -0.025  0.444 -0.129  0.535
     ## 2 treatment_D replicate_2   0.434 -0.269 -0.481  0.391  0.114
 
-The `plate_files` object is a `list` with two `tibble` (`dplyr`’s way of
-`data.frame`) objects. Apparently, two columns have been swapped in
-`plate_3`, which could cause problems if we just pasted them. Luckily, R
-pays attention for us.
+The `plate_files` object is a `list` with two `tibble` objects
+(`dplyr`’s way of `data.frame`). Apparently, two columns have been
+swapped in `plate_3`, which could cause problems if we just pasted them
+mindlessly below each other. Luckily, R pays attention for us.
 
 ``` r
 plate_files %>% bind_rows(.id = "file")
@@ -192,10 +191,11 @@ plate_files %>% bind_rows(.id = "file")
     ## 5 ./part_10-wor… treatmen… replicate_1    0.203  0.444 -0.025 -0.129  0.535
     ## 6 ./part_10-wor… treatmen… replicate_2    0.434 -0.481 -0.269  0.391  0.114
 
-To be mentioned here, we also (could) keep track of the file names (or
-paths) by specifying an `.id` column called `file`, which will take the
-names of the `list`. If need be, we can then make use of metadata stored
-in the file name or file path.
+To be mentioned here, we have kept track of the file names (or even file
+paths) by specifying an `.id` column called `"file"` from the names of
+the `tibble` `list`. If need be, we can then make use of metadata stored
+in the file name or file path by creating new columns. (See next
+session.)
 
 For the moment, let’s combine the data with `plate_1` and call the
 object `plate_data`.
@@ -241,19 +241,19 @@ bind_cols(half_1, half_2)
     ## # A tibble: 10 x 6
     ##    sample_id   replicate_id  conc_1 sample_id1  replicate_id1 conc_2
     ##    <chr>       <chr>          <dbl> <chr>       <chr>          <dbl>
-    ##  1 control     replicate_1    0.016 treatment_A replicate_1    3.84 
-    ##  2 control     replicate_2    0.049 treatment_B replicate_1   79.9  
-    ##  3 treatment_A replicate_1    6.48  treatment_A replicate_2    3.73 
-    ##  4 treatment_A replicate_2    5.76  treatment_D replicate_2   -0.481
+    ##  1 control     replicate_1    0.016 treatment_A replicate_2    3.73 
+    ##  2 control     replicate_2    0.049 treatment_C replicate_2   19.6  
+    ##  3 treatment_A replicate_1    6.48  treatment_D replicate_1    0.444
+    ##  4 treatment_A replicate_2    5.76  control     replicate_1    0.941
     ##  5 treatment_B replicate_1  119.    treatment_C replicate_1   19.9  
     ##  6 treatment_B replicate_2  120.    control     replicate_2   -0.063
-    ##  7 treatment_C replicate_1   30.3   treatment_C replicate_2   19.6  
-    ##  8 treatment_C replicate_2   30.1   control     replicate_1    0.941
-    ##  9 treatment_D replicate_1    0.203 treatment_B replicate_2   79.5  
-    ## 10 treatment_D replicate_2    0.434 treatment_D replicate_1    0.444
+    ##  7 treatment_C replicate_1   30.3   treatment_B replicate_2   79.5  
+    ##  8 treatment_C replicate_2   30.1   treatment_A replicate_1    3.84 
+    ##  9 treatment_D replicate_1    0.203 treatment_D replicate_2   -0.481
+    ## 10 treatment_D replicate_2    0.434 treatment_B replicate_1   79.9
 
-To properly merge `half_1` and `half_2`, we need to use the colums named
-`sample_id` and `replicate_id` as indices. This is what
+To properly merge `half_1` and `half_2`, we need to merge the tables
+based on the colums `sample_id` and `replicate_id`. This is what
 `dplyr::inner_join(...)` does.
 
 ``` r
@@ -288,21 +288,34 @@ rm(half_1, half_2)
 ### Importing Data from Excel
 
 To read data from Excel, you can use `readxl::read_excel(...)` or
-`XLConnect::readWorksheetFromFile(...)`. (Neither is part of the
-`tidyverse` and probably not installed on your machine.)
+alternatively, `XLConnect::readWorksheetFromFile(...)`. The `readxl` is
+a package of the `tidyverse` and thus installed on your machine.
 
-However, I would disencourage to do so routinely, since `.xls` and
-`.xlsx` are neither open (i.e. disclosed), nor standardized file
-formats. This means they can be changed by Microsoft anytime and may
-consequently not be (immediately) supported by these packages.
+Here is an example with `plate_1.xlsx`, which contains the same data put
+somewhere on the sheet. By default, `readxl::read_excel(...)` uses the
+smallest rectangle that contains the non-empty cells.
 
-Another problem you might be facing is, that within Excel, it is
-tempting to put multiple tables with different data side-by-side in a
-single worksheet. To import such worksheets will require a lot of
-polishing from your side after.
+``` r
+readxl::read_excel("./part_10-working_with_tables_files/plate_1.xlsx")
+```
 
-> If you plan to import from Excel, keep one set of data per sheet and
-> export as `.csv`.
+Note that blank column headers will get a new, unique name (e.g. `...1`,
+`...2` etc.) and the content of merged cells will be assigned to the
+top-most left cell of the area.
+
+However, I would disencourage to rely on routinely importing data from
+Excel workbooks since `.xls` and `.xlsx` are neither open
+(i.e. disclosed), nor standardized file formats. This means they can be
+changed by Microsoft anytime and may consequently not be (immediately)
+supported by other software.
+
+Another problem you might be facing is that within Excel, it is tempting
+to put multiple tables with different data side-by-side in a single
+worksheet. To import such worksheets will require a lot of polishing
+from your side after.
+
+> If you plan to import from Excel, keep it simple and put one set of
+> data per sheet. Ideally, export as `.csv`.
 
 ## Tidying Data
 
@@ -559,7 +572,7 @@ plate_1 %>%
 ## Hands-On Excercise
 
 The data for another plate has been saved in a file called
-‘plates.RData’. When you open this file, you should see an data set
+‘plates.RData’. When you load this file, you should see a data set
 called `plate_4` and a named vector called `dose` in the ‘Global
 Environment’.
 
@@ -567,9 +580,8 @@ Environment’.
 load(file = "./part_10-working_with_tables_files/plates.RData")
 ```
 
-1.  Combine with `plate_data`, but be careful, the replicates (`.A` and
-    `.B`) are actually `replicate_3` and `replicate_4`. You will
-    probably want to change this. Hint: You can use `if_else()` to
-    mutate values on a case-by-case basis.
+1.  Combine `plate_4` with `plate_data`, but be careful, the replicates
+    (`.A` and `.B`) are actually `replicate_3` and `replicate_4`. We
+    will see how to change this in the next session.
 
 2.  Tidy `plate_data` and replace concentration with actual values.
