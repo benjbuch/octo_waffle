@@ -31,7 +31,7 @@ To check how many entries there are per group, there is `group_data()`.
 plate_data %>% group_by(sample_id, replicate_id) %>% group_data()
 ```
 
-We could also use some ‘scoped’ variants such as `group_by_at(...)`, `group_by_if(...)` or `group_by_all(...)` to select the columns on which to group.
+We could also use ‘scoped’ variants such as `group_by_at(...)`, `group_by_if(...)` or `group_by_all(...)` to select the columns on which to group.
 
 ```{r eval=FALSE}
 plate_data %>% group_by_at(vars(ends_with("id"))) # group by "sample_id" and "replicate_id"
@@ -43,7 +43,7 @@ To remove the grouping, use `ungroup()`.
 
 ## Summarizing Groups
 
-A common summary of continuous data is to give their average value and the spread. Given `plate_data`, let's calculate the average intensity for each `sample_id` and `concentration`.
+A common summary of continuous data is to give averages and measure the spread e.g. using the standard deviation `sd(...)`, the median absolute deviation `mad(...)`, or the inter-quartile range `IQR(...)`. Given `plate_data`, let's calculate the average intensity for each `sample_id` and `concentration`.
 
 ```{r}
 plate_data %>% 
@@ -55,31 +55,31 @@ plate_data %>%
             N  = sum(!is.na(intensity)))
 ```
 
-Suspiciously, the standard deviation of the samples with four replicates (`replicate_1`, `replicate_2`, `replicate_3` and `replicate_4`) are higher than the others. We shall keep this in mind as there might be something ‘wrong’ with one of the replicates.
+Suspiciously, the standard deviation of some samples with four replicates (`replicate_1`, `replicate_2`, `replicate_3` and `replicate_4`) are higher than the others. We shall keep this in mind as there might be something ‘wrong’ with one of the replicates.
 
-For categorical data, we are more likely to be interested in the number of observations, `n()`, or the number of unique values a variable takes within a group, `n_distinct()`. 
+For categorical data, we are more likely to be interested in the number of observations, `n()`, or the number of unique values a variable takes within a group, `n_distinct(...)`. 
 
 There are many more summary functions. Have a look on this [cheat sheet](https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf).
 
 ## Comparing Groups
 
-Statistics is a powerful way to quantify how different supposedly different groups are from each other. To make uni- and multivariate comparisons or to fit models through data based on groups needs just some more tweaks in the `tidyverse`.
+Statistics is a powerful way to quantify how different supposedly different groups are from each other. Let's see how to make uni- and multivariate comparisons or to fit models through data based on grouped `data.frame` objects in the `tidyverse`.
 
 ### Student's _t_ Test
 
-Here, we will use a built-in data set in R, `reshape2::tips`, which contains a record on the tips a waiter received over several months in restaurant.
+In this section, we will use a built-in data set in R, `reshape2::tips`, which contains a record on the tips a waiter received over several months in restaurant.
 
 ```{r}
 reshape2::tips %>% as_tibble()
 ```
 
-For example, we might be curious whether male or female guests give higher tips. In base R, we could go with this one-liner.
+For example, we could be curious whether male or female guests give higher tips. In base R, we would go with this one-liner.
 
 ```{r}
 t.test(tip ~ sex, data = reshape2::tips)
 ```
 
-However, if we want to perform this test by weekday, we are left with subsetting the data (manually) by day and apply the following on each subset.
+However, if we wanted to perform this test by weekday, we were left with subsetting the data (manually) by day and analyze each subset.
 
 ```{r}
 reshape2::tips[which(reshape2::tips$day == "Fri"), ] -> tips.Fri
@@ -89,15 +89,15 @@ t.test(tip ~ sex, data = tips.Fri)
 rm(tips.Fri)
 ```
 
-We would certainly prefer a neat table with the parameters of the fit organized as columns and the rows specifying the grouping variables such as the weekday. In this sense, a vectorized approach.
+We would certainly prefer a neat table with all the results organized by the grouping variable. In a sense, a vectorized approach.
 
 Let's look how to perform a Student's _t_ test within the `tidyverse`. 
 
-We will use `group_modify(...)`, a summary function for cases when `summarize(...)` is too limited. It takes a function as argument, which operates on and returns back a `data.frame`. In this case, the function will be given the (four) different `data.frame` objects, one for each group (day). 
+We will use `group_modify(...)` to create a summary for cases when `summarize(...)` is too limited. `group_modify(...)` takes a function as argument, which operates on and returns back a `data.frame`. In this case, the function will be given the different `data.frame` objects, one for each group (here: Thu, Fri, Sat, Sun). 
 
 > Since R's `t.test` does not return a `data.frame` by default, we wrap it with `~ broom::tidy(...)`. This function makes a `data.frame` containing the parameters (e.g. coefficients and slopes) of the model. 
 
-> Note: The `~` in front of `broom::tidy(...)` is mandatory for reasons beyond the scope of this tutorial at this point.
+> The `~` in front of `broom::tidy(...)` is mandatory for reasons beyond the scope of this tutorial at this point.
 
 Within `group_modify`, we can refer to the current subset with `.` (or `.x`) and the value of the grouping variable with `.y`.
 
@@ -113,7 +113,7 @@ Here, the columns named `estimate`, `estimate1` and `estimate2` refer to the mea
 
 ### Student's _t_ Test with Multiple Comparisons
 
-If more than two groups are compared, we should adjust the p-values for the additional comparisons. The function is a little bit misleadingly named `pairwise.t.test` and can be used for paired and unpaired comparisons between multiple groups.
+If more than two groups are compared, we should adjust the p-values for the additional comparisons. In R, the function is a little bit misleadingly named `pairwise.t.test`, but can be used for paired and unpaired comparisons between multiple groups.
 
 First, the same as above.
 
@@ -164,4 +164,44 @@ plate_data %>%
   group_modify(~ broom::glance(lm(intensity ~ log10(concentration + 1), data = .)))
 ```
 
-All `broom` functions apply equally well to the output of generalized linear and non-linear models. 
+All `broom` functions apply equally well to the output of generalized linear and non-linear models.
+
+## Hands-On Exercise
+
+Unfortunately, some of the fits on `plate_data` are not of satisfactory quality. Let's try to figure out if there is a bad replicate in our data.
+
+1. We will group `plate_data` by `sample_id` and `replicate_id`. One of the groups has no values recorded at all, which will cause troubles in later steps. Figure out which one it is and exlude it by filtering the rows accordingly.
+
+```{r include=FALSE}
+# solution 1: remove all NA cases from the begin
+plate_data %>% 
+  filter(!is.na(intensity))
+
+# solution 2: remove groups in which all values are NA
+plate_data %>% 
+  group_by(sample_id, replicate_id) %>% 
+  filter(!all(is.na(intensity)))
+```
+
+2. Now, perform the fit with `lm` and have a look only at the intercept terms. How much do they differ between replicates?
+
+```{r include=FALSE}
+# solution 1: manually compare differences
+plate_data %>% 
+  group_by(sample_id, replicate_id) %>% 
+  filter(!all(is.na(intensity))) %>% 
+  group_modify(~ broom::tidy(lm(intensity ~ log10(concentration + 1), data = .))) %>% 
+  filter(term != "(Intercept)")
+
+# solution 2: let's use R
+plate_data %>% 
+  group_by(sample_id, replicate_id) %>% 
+  filter(!all(is.na(intensity))) %>% 
+  group_modify(~ broom::tidy(lm(intensity ~ log10(concentration + 1), data = .))) %>% 
+  filter(term != "(Intercept)") %>% 
+  # within each sample, one of the replicates must have the highest deviance from the
+  # mean estimate ...
+  group_by(sample_id) %>% 
+  mutate(estimate_diff = abs(estimate - mean(estimate))) %>% 
+  top_n(1, estimate_diff) %>% select(sample_id, replicate_id, estimate, estimate_diff)
+```

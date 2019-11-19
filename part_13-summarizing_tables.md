@@ -8,6 +8,7 @@ Grouping and Summarizing Data
       - [Student’s *t* Test with Multiple
         Comparisons](#students-t-test-with-multiple-comparisons)
       - [Linear Regression and Beyond](#linear-regression-and-beyond)
+  - [Hands-On Exercise](#hands-on-exercise)
 
 The important object you will learn in this section is how to summarize
 (large) data sets. Typically, the data is first split into several
@@ -32,16 +33,16 @@ plate_data %>% group_by(sample_id)
     ## # Groups:   sample_id [5]
     ##    sample_id replicate_id concentration intensity
     ##    <chr>     <chr>                <dbl>     <dbl>
-    ##  1 control   replicate_1              0     0.007
-    ##  2 control   replicate_1              1    -0.002
-    ##  3 control   replicate_1             10    -0.307
-    ##  4 control   replicate_1            100     0.941
-    ##  5 control   replicate_1           1000     0.016
-    ##  6 control   replicate_2              0    -0.704
-    ##  7 control   replicate_2              1     0.15 
-    ##  8 control   replicate_2             10     0.301
-    ##  9 control   replicate_2            100    -0.063
-    ## 10 control   replicate_2           1000     0.049
+    ##  1 control   replicate_4              0     0.232
+    ##  2 control   replicate_4              1    NA    
+    ##  3 control   replicate_4             10    NA    
+    ##  4 control   replicate_4            100    -0.365
+    ##  5 control   replicate_4           1000    NA    
+    ##  6 control   replicate_3              0    -0.121
+    ##  7 control   replicate_3              1    NA    
+    ##  8 control   replicate_3             10    NA    
+    ##  9 control   replicate_3            100    -0.34 
+    ## 10 control   replicate_3           1000    NA    
     ## # … with 90 more rows
 
 To check how many entries there are per group, there is `group_data()`.
@@ -74,7 +75,7 @@ plate_data %>% group_by(sample_id, replicate_id) %>% group_data()
     ## 19 treatment_D replicate_3  <int [5]>
     ## 20 treatment_D replicate_4  <int [5]>
 
-We could also use some ‘scoped’ variants such as `group_by_at(...)`,
+We could also use ‘scoped’ variants such as `group_by_at(...)`,
 `group_by_if(...)` or `group_by_all(...)` to select the columns on which
 to group.
 
@@ -89,9 +90,11 @@ To remove the grouping, use `ungroup()`.
 
 ## Summarizing Groups
 
-A common summary of continuous data is to give their average value and
-the spread. Given `plate_data`, let’s calculate the average intensity
-for each `sample_id` and `concentration`.
+A common summary of continuous data is to give averages and measure the
+spread e.g. using the standard deviation `sd(...)`, the median absolute
+deviation `mad(...)`, or the inter-quartile range `IQR(...)`. Given
+`plate_data`, let’s calculate the average intensity for each `sample_id`
+and `concentration`.
 
 ``` r
 plate_data %>% 
@@ -112,21 +115,21 @@ plate_data %>%
     ##  3 control                10 -0.003  0.430      2
     ##  4 control               100  0.0432 0.614      4
     ##  5 control              1000  0.0325 0.0233     2
-    ##  6 treatment_A             0  0.0945 0.293      4
+    ##  6 treatment_A             0  0.244  0.517      4
     ##  7 treatment_A             1  0.199  0.395      2
     ##  8 treatment_A            10  2.61   0.644      2
-    ##  9 treatment_A           100  6.26   5.57       4
+    ##  9 treatment_A           100  3.14   0.816      4
     ## 10 treatment_A          1000  6.12   0.511      2
     ## # … with 15 more rows
 
-Suspiciously, the standard deviation of the samples with four replicates
-(`replicate_1`, `replicate_2`, `replicate_3` and `replicate_4`) are
-higher than the others. We shall keep this in mind as there might be
-something ‘wrong’ with one of the replicates.
+Suspiciously, the standard deviation of some samples with four
+replicates (`replicate_1`, `replicate_2`, `replicate_3` and
+`replicate_4`) are higher than the others. We shall keep this in mind as
+there might be something ‘wrong’ with one of the replicates.
 
 For categorical data, we are more likely to be interested in the number
 of observations, `n()`, or the number of unique values a variable takes
-within a group, `n_distinct()`.
+within a group, `n_distinct(...)`.
 
 There are many more summary functions. Have a look on this [cheat
 sheet](https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf).
@@ -134,15 +137,15 @@ sheet](https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf
 ## Comparing Groups
 
 Statistics is a powerful way to quantify how different supposedly
-different groups are from each other. To make uni- and multivariate
-comparisons or to fit models through data based on groups needs just
-some more tweaks in the `tidyverse`.
+different groups are from each other. Let’s see how to make uni- and
+multivariate comparisons or to fit models through data based on grouped
+`data.frame` objects in the `tidyverse`.
 
 ### Student’s *t* Test
 
-Here, we will use a built-in data set in R, `reshape2::tips`, which
-contains a record on the tips a waiter received over several months in
-restaurant.
+In this section, we will use a built-in data set in R, `reshape2::tips`,
+which contains a record on the tips a waiter received over several
+months in restaurant.
 
 ``` r
 reshape2::tips %>% as_tibble()
@@ -163,8 +166,8 @@ reshape2::tips %>% as_tibble()
     ## 10      14.8   3.23 Male   No     Sun   Dinner     2
     ## # … with 234 more rows
 
-For example, we might be curious whether male or female guests give
-higher tips. In base R, we could go with this one-liner.
+For example, we could be curious whether male or female guests give
+higher tips. In base R, we would go with this one-liner.
 
 ``` r
 t.test(tip ~ sex, data = reshape2::tips)
@@ -182,9 +185,8 @@ t.test(tip ~ sex, data = reshape2::tips)
     ## mean in group Female   mean in group Male 
     ##             2.833448             3.089618
 
-However, if we want to perform this test by weekday, we are left with
-subsetting the data (manually) by day and apply the following on each
-subset.
+However, if we wanted to perform this test by weekday, we were left with
+subsetting the data (manually) by day and analyze each subset.
 
 ``` r
 reshape2::tips[which(reshape2::tips$day == "Fri"), ] -> tips.Fri
@@ -203,24 +205,23 @@ t.test(tip ~ sex, data = tips.Fri)
     ## mean in group Female   mean in group Male 
     ##             2.781111             2.693000
 
-We would certainly prefer a neat table with the parameters of the fit
-organized as columns and the rows specifying the grouping variables such
-as the weekday. In this sense, a vectorized approach.
+We would certainly prefer a neat table with all the results organized by
+the grouping variable. In a sense, a vectorized approach.
 
 Let’s look how to perform a Student’s *t* test within the `tidyverse`.
 
-We will use `group_modify(...)`, a summary function for cases when
-`summarize(...)` is too limited. It takes a function as argument, which
-operates on and returns back a `data.frame`. In this case, the function
-will be given the (four) different `data.frame` objects, one for each
-group (day).
+We will use `group_modify(...)` to create a summary for cases when
+`summarize(...)` is too limited. `group_modify(...)` takes a function as
+argument, which operates on and returns back a `data.frame`. In this
+case, the function will be given the different `data.frame` objects, one
+for each group (here: Thu, Fri, Sat, Sun).
 
 > Since R’s `t.test` does not return a `data.frame` by default, we wrap
 > it with `~ broom::tidy(...)`. This function makes a `data.frame`
 > containing the parameters (e.g. coefficients and slopes) of the model.
 
-> Note: The `~` in front of `broom::tidy(...)` is mandatory for reasons
-> beyond the scope of this tutorial at this point.
+> The `~` in front of `broom::tidy(...)` is mandatory for reasons beyond
+> the scope of this tutorial at this point.
 
 Within `group_modify`, we can refer to the current subset with `.` (or
 `.x`) and the value of the grouping variable with `.y`.
@@ -254,9 +255,9 @@ respectively.
 ### Student’s *t* Test with Multiple Comparisons
 
 If more than two groups are compared, we should adjust the p-values for
-the additional comparisons. The function is a little bit misleadingly
-named `pairwise.t.test` and can be used for paired and unpaired
-comparisons between multiple groups.
+the additional comparisons. In R, the function is a little bit
+misleadingly named `pairwise.t.test`, but can be used for paired and
+unpaired comparisons between multiple groups.
 
 First, the same as above.
 
@@ -333,18 +334,18 @@ plate_data %>%
 
     ## # A tibble: 10 x 6
     ## # Groups:   sample_id [5]
-    ##    sample_id   term                   estimate std.error statistic  p.value
-    ##    <chr>       <chr>                     <dbl>     <dbl>     <dbl>    <dbl>
-    ##  1 control     (Intercept)             -0.0744    0.157     -0.475 6.43e- 1
-    ##  2 control     log10(concentration +…   0.0501    0.0971     0.515 6.16e- 1
-    ##  3 treatment_A (Intercept)              0.138     1.17       0.118 9.08e- 1
-    ##  4 treatment_A log10(concentration +…   2.48      0.728      3.40  5.25e- 3
-    ##  5 treatment_B (Intercept)              0.234     1.11       0.211 8.37e- 1
-    ##  6 treatment_B log10(concentration +…  40.3       0.687     58.7   3.91e-16
-    ##  7 treatment_C (Intercept)              0.121     1.10       0.109 9.15e- 1
-    ##  8 treatment_C log10(concentration +…  10.5       0.684     15.3   3.10e- 9
-    ##  9 treatment_D (Intercept)              0.279     1.20       0.232 8.21e- 1
-    ## 10 treatment_D log10(concentration +…   0.507     0.731      0.694 5.04e- 1
+    ##    sample_id   term                 estimate std.error statistic    p.value
+    ##    <chr>       <chr>                   <dbl>     <dbl>     <dbl>      <dbl>
+    ##  1 control     (Intercept)           -0.0744    0.157     -0.475    6.43e-1
+    ##  2 control     log10(concentration…   0.0501    0.0971     0.515    6.16e-1
+    ##  3 treatment_A (Intercept)            0.0728    0.303      0.241    8.14e-1
+    ##  4 treatment_A log10(concentration…   1.82      0.188      9.69     5.05e-7
+    ##  5 treatment_B (Intercept)            2.25     17.8        0.127    9.01e-1
+    ##  6 treatment_B log10(concentration…  47.9      11.0        4.34     9.58e-4
+    ##  7 treatment_C (Intercept)            0.316     2.01       0.157    8.78e-1
+    ##  8 treatment_C log10(concentration…  10.8       1.25       8.69     1.60e-6
+    ##  9 treatment_D (Intercept)            0.147     0.259      0.568    5.83e-1
+    ## 10 treatment_D log10(concentration…  -0.112     0.158     -0.711    4.93e-1
 
 So far, we have used `broom::tidy` to get the parameters of the model.
 If we are interested in the statistical summary of the overall model, we
@@ -358,15 +359,29 @@ plate_data %>%
 
     ## # A tibble: 5 x 12
     ## # Groups:   sample_id [5]
-    ##   sample_id r.squared adj.r.squared sigma statistic  p.value    df logLik
-    ##   <chr>         <dbl>         <dbl> <dbl>     <dbl>    <dbl> <int>  <dbl>
-    ## 1 control      0.0217       -0.0599 0.395     0.266 6.16e- 1     2  -5.77
-    ## 2 treatmen…    0.491         0.448  2.96     11.6   5.25e- 3     2 -34.0 
-    ## 3 treatmen…    0.997         0.996  2.79   3451.    3.91e-16     2 -33.1 
-    ## 4 treatmen…    0.951         0.947  2.78    234.    3.10e- 9     2 -33.1 
-    ## 5 treatmen…    0.0459       -0.0495 2.78      0.481 5.04e- 1     2 -28.2 
+    ##   sample_id r.squared adj.r.squared  sigma statistic p.value    df logLik
+    ##   <chr>         <dbl>         <dbl>  <dbl>     <dbl>   <dbl> <int>  <dbl>
+    ## 1 control      0.0217       -0.0599  0.395     0.266 6.16e-1     2  -5.77
+    ## 2 treatmen…    0.887         0.877   0.762    93.8   5.05e-7     2 -15.0 
+    ## 3 treatmen…    0.611         0.579  44.8      18.9   9.58e-4     2 -72.0 
+    ## 4 treatmen…    0.863         0.851   5.06     75.5   1.60e-6     2 -41.5 
+    ## 5 treatmen…    0.0482       -0.0470  0.598     0.506 4.93e-1     2  -9.76
     ## # … with 4 more variables: AIC <dbl>, BIC <dbl>, deviance <dbl>,
     ## #   df.residual <int>
 
 All `broom` functions apply equally well to the output of generalized
 linear and non-linear models.
+
+## Hands-On Exercise
+
+Unfortunately, some of the fits on `plate_data` are not of satisfactory
+quality. Let’s try to figure out if there is a bad replicate in our
+data.
+
+1.  We will group `plate_data` by `sample_id` and `replicate_id`. One of
+    the groups has no values recorded at all, which will cause troubles
+    in later steps. Figure out which one it is and exlude it by
+    filtering the rows accordingly.
+
+2.  Now, perform the fit with `lm` and have a look only at the intercept
+    terms. How much do they differ between replicates?
