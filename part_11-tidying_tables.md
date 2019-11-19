@@ -244,13 +244,13 @@ bind_cols(half_1, half_2)
     ##  1 control     replicate_1    0.016 control     replicate_1    0.941
     ##  2 control     replicate_2    0.049 control     replicate_2   -0.063
     ##  3 treatment_A replicate_1    6.48  treatment_D replicate_2   -0.481
-    ##  4 treatment_A replicate_2    5.76  treatment_B replicate_1   79.9  
-    ##  5 treatment_B replicate_1  119.    treatment_A replicate_1    3.84 
-    ##  6 treatment_B replicate_2  120.    treatment_D replicate_1    0.444
-    ##  7 treatment_C replicate_1   30.3   treatment_C replicate_1   19.9  
-    ##  8 treatment_C replicate_2   30.1   treatment_A replicate_2    3.73 
-    ##  9 treatment_D replicate_1    0.203 treatment_C replicate_2   19.6  
-    ## 10 treatment_D replicate_2    0.434 treatment_B replicate_2   79.5
+    ##  4 treatment_A replicate_2    5.76  treatment_A replicate_2    3.73 
+    ##  5 treatment_B replicate_1  119.    treatment_D replicate_1    0.444
+    ##  6 treatment_B replicate_2  120.    treatment_A replicate_1    3.84 
+    ##  7 treatment_C replicate_1   30.3   treatment_C replicate_2   19.6  
+    ##  8 treatment_C replicate_2   30.1   treatment_B replicate_2   79.5  
+    ##  9 treatment_D replicate_1    0.203 treatment_B replicate_1   79.9  
+    ## 10 treatment_D replicate_2    0.434 treatment_C replicate_1   19.9
 
 To properly merge `half_1` and `half_2`, we need to merge the tables
 based on the colums `sample_id` and `replicate_id`. This is what

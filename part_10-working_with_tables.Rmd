@@ -96,7 +96,7 @@ set.seed(53108)
 plate_4 <- all_plates.2 %>% 
   filter(exp_id != "treatment_D.2") %>% 
   group_split(str_detect(exp_id, "^t.+1$"), keep = FALSE) %>% 
-  modify_at(2, ~mutate_at(., vars(one_of("conc_2")), list(~ . + 10))) %>% 
+  modify_at(2, ~mutate_at(., vars(starts_with("conc")), list(~ . * rnorm(., mean = 2)))) %>% 
   bind_rows() %>%
   separate(exp_id, into = c("sample_id", "replicate_id"), sep = "\\.") %>% 
   mutate(replicate_id = str_c("rep.", LETTERS[as.numeric(replicate_id)])) %>% 
