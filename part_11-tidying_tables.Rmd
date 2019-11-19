@@ -306,7 +306,7 @@ plate_1 %>%
   head(3)
 ```
 
-## Hands-On Excercise
+## Hands-On Exercise
 
 The data for another plate has been saved in a file called ‘plates.RData’. When you load this file, you should see a data set called `plate_4` and a named vector called `dose` in the ‘Global Environment’.
 
