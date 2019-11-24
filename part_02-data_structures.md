@@ -10,10 +10,14 @@ Data Types and Data Structures
         Operations](#numerical-vectors-and-operations)
       - [Logical Vectors and
         Operations](#logical-vectors-and-operations)
+      - [Boolean Set Operations](#boolean-set-operations)
       - [Indexing Vectors](#indexing-vectors)
       - [Indexing Lists](#indexing-lists)
       - [Applying Functions to Vectors](#applying-functions-to-vectors)
+  - [Summary](#summary)
   - [Quick Questions](#quick-questions)
+
+-----
 
 As in many programming languages, understanding how data are stored and
 manipulated is important. In this regard, the terms ‘data structure’ and
@@ -23,13 +27,6 @@ your data.
 This introduction might become rather technical, but don’t get upset. It
 is less important to remember everything since we will recapitulate the
 contents on a needs basis during the workshop.
-
-In this introduction you will learn
-
-  - that there are different data types,
-  - that object classes are built from these ‘atomic’ data types,
-  - the basic unit in R is a vector (of one single data type), and
-  - vectorization of tasks is preferred over writing loops.
 
 ## Data Types in R
 
@@ -60,8 +57,9 @@ encountered data types are shown below.
 
 > By convention, if you type any number (including integers without an
 > `L` suffix), R will store it as `double`. This allows to do accurate
-> maths with it. `double` stands for ‘double-precision floating-point
-> format’.
+> maths with it. (In computer science, ‘accurate’ means within the
+> limits of the machine.) `double` stands for ‘double-precision
+> floating-point format’.
 
 The data type can be queried using the `typeof(...)` function.
 
@@ -144,8 +142,8 @@ noble_gases <- c(noble_gases, "Radon" = 86)
 ```
 
 When we try to concatenate *objects of different data types*, the
-objects with the ‘least compatible’ data type will be *coerced* to an
-object of the ‘most compatible’ data type. The ordering is roughly
+objects with the ‘least compatible’ data type will be **coerced** to an
+object of the ‘most compatible’ data type. The order being roughly
 `logical` \< `integer` \< `double` \< `complex` \< `character` \<
 `list`.
 
@@ -165,15 +163,18 @@ typeof(x)
 Thus, to preserve the original data type of each element, we need to use
 lists\!
 
-We can also ‘force’ R to try this backwards.
+We can also enforce R to coerce an appropriate value. If this is not
+possible, `NA` is returned.
 
 ``` r
-library(magrittr)
+as.double("1")
+typeof(as.double("1"))  # double
 
-as.double("1") %>% typeof # double
-as.double("a") %>% typeof # NA of type double
+as.double("a")
+typeof(as.double("a"))  # NA of type double
 
-as.logical("TRUE") %>% typeof # logical
+as.logical("T")
+typeof(as.logical("T")) # logical
 ```
 
 ## Advanced Data Structures: Classes
@@ -183,12 +184,12 @@ atomic data types. The structure of such objectes is called a ‘class’.
 Besides its usefulness for an object-oriented programming style, having
 a class associated to an object will cause functions such as
 `print(...)`, `plot(...)` and `summary(...)` to respond in an
-appropriate manner. Some functions operate only on objects of specific
+appropriate manner. Some functions accept only objects of specific
 classes.
 
-In RStudio, the class of an object is indicated in the ‘Environment’
-pane. Note that `integer`, `double` and `complex` are of class
-`numeric`.
+In RStudio, roughly speaking, the class of an object is shown next to
+its name in the ‘Environment’ pane. Note that `integer`, `double` and
+`complex` are of class `numeric`.
 
 > All objects in R can have additional “metadata” associated with them,
 > so-called ‘attributes’. Classes define which ‘attributes’ an object
@@ -196,8 +197,8 @@ pane. Note that `integer`, `double` and `complex` are of class
 
 Here are two examples to illustrate the concept.
 
-1.  *‘Tables’* (class `data.frame` or `data.table`) are objects of type
-    `list`.
+1.  *‘Tables’* (class `data.frame` or `data.table` or `tibble`) are
+    objects of type `list`.
     
       - They combine columns (each a vector with a single data type), so
         that different data types can be stored side-by-side.
@@ -233,6 +234,7 @@ Here are two examples to illustrate the concept.
         ## [1] "character"
     
     ``` r
+    # create an object of class ‘factor’
     x <- factor(x)
     x
     ```
@@ -266,14 +268,12 @@ Here are two examples to illustrate the concept.
     
         ## [1] "d" "f" "m"
 
-You can get (and modify) the object’s class with the `class(...)`
-function and the attributes associated with it using the
-`attributes(...)` function.
+You can get the object’s class with `class(...)` and the attributes
+associated with it with `attributes(...)`.
 
-> Having said that `print(...)` is aware of an object’s class, you
-> should note: The *good thing* is that when you print the object to the
-> console (e.g. implicitly by typing the object’s name), you will see
-> the important aspects of the object. The *bad thing* is that you can
+> Having said that `print(...)` is aware of an object’s class, be
+> reminded: The *good thing* is that `print(...)` will show you only the
+> ‘important’ aspects of the object. The *bad thing* is that you can
 > easily think that you are seeing the real object. In reality, you are
 > just seeing the self-portrait of the object that it wants you to see.
 
@@ -319,12 +319,12 @@ c(x, y)
     ##  [1] 10.0  9.0  8.0  7.0  6.0  5.0  4.0  3.0  2.0  1.0  1.0  1.5  2.0  2.5
     ## [15]  3.0  3.5  4.0  4.5  5.0
 
+> The numbers in squared brackets in the console output, `## [1]` and
+> `## [15]`, are the indices of the following element, i.e. the second
+> row of output starts with element number 15.
+
 Note that the order of the elements in each vector is preserved upon
 concatenation.
-
-> The numbers in squared brackets in the console output, `## [1]` and
-> `## [15]` are the indices of the following element, i.e. the second
-> row of output starts with element number 15.
 
 -----
 
@@ -368,9 +368,9 @@ If the lengths are not a multiple of eachother, you will get a warning.
 
 ### Logical Vectors and Operations
 
-The operators `<` (less than), `>` (greater than), `<=`, `>=`, `==`
-(equal to), and `!=` (not equal to) can be used to create logical
-vectors.
+The operators `<` (less than), `>` (greater than), `<=` (less than or
+equal to), `>=` (greater than or equal to), `==` (equal to), and `!=`
+(not equal to) can be used to create logical vectors.
 
 ``` r
 x = 1:4
@@ -425,6 +425,44 @@ xor(y, z)
 
 To test if there is at least one logical `TRUE` in a vector, there is
 the `any(...)` function. Its complement is the `all(...)` function.
+
+### Boolean Set Operations
+
+Sometimes, you might need to know whether a value, e.g. `"c"`, is part
+of the following vectors or not.
+
+``` r
+vect_1 <- c("a", "b", "c")
+vect_2 <- c("a", "b", "d")
+
+# using basic logcial operators ...
+any(vect_1 == "c")
+any(vect_2 == "c")
+
+# using set operation ...
+"c" %in% vect_1
+"c" %in% vect_2
+```
+
+Also, several fundamental operations to construct new sets from given
+sets are implemented in R.
+
+``` r
+# unions: elements of either set (without duplicates)
+union(vect_1, vect_2)
+
+# intersections: elements shared in both sets
+intersect(vect_1, vect_2)
+
+# complements: elements in one set, but not the other
+setdiff(vect_1, vect_2)
+setdiff(vect_2, vect_1)
+
+# equality in membership
+vect_3 <- c("b", "c", "a")
+vect_3 == vect_1 # no
+setequal(vect_3, vect_1) # yes
+```
 
 ### Indexing Vectors
 
@@ -637,6 +675,8 @@ lapply(x, mean)
     ## $c
     ## [1] 150
 
+We can also apply anonymous functions to the vector.
+
 ``` r
 # calculate the mean for each element i in x squared
 lapply(x, function(i) mean(i**2))
@@ -661,8 +701,8 @@ for (i in x) {
 }
 ```
 
-This becomes even more tedious if we wanted to save the results as well
-in a vector.
+This would become even more tedious if we wanted to save the results as
+well in a vector.
 
 ``` r
 y <- x[] # copy attributes of x if any; in this case x has names
@@ -686,6 +726,18 @@ y
     ## [1] 23350
 
 So, using `lapply` saves you a lot of work\!
+
+## Summary
+
+In this introduction you have learned
+
+  - that there are different data types,
+  - that object classes are built from these ‘atomic’ data types,
+  - the basic unit in R is a vector (of one single data type),
+  - vectors can be indexed based on their value, their name or by
+    position,
+  - vectorization of tasks applied to the elements of a vector is
+    preferred over writing loops.
 
 ## Quick Questions
 
