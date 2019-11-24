@@ -12,7 +12,10 @@ Working with Strings
       - [Quantifiers](#quantifiers)
       - [Special Characters](#special-characters)
       - [Anchors](#anchors)
+  - [Summary](#summary)
   - [Quick Questions](#quick-questions)
+
+-----
 
 This introduction will be on objects of type `character`. This is all
 text which appears between quotation marks (`""` or `''`) and is not
@@ -25,14 +28,6 @@ functions of the `stringr` package when the string operations become
 more challenging.
 
 `stringr` is part of the `tidyverse`.
-
-In this introduction you will learn
-
-  - how to combine and split strings,
-  - how to subset strings based on indices,
-  - how to replace words in strings, and
-  - that you can use regular expressions to formulate advanced string
-    queries.
 
 ## Properties of Strings
 
@@ -54,7 +49,7 @@ length("apple")
     ## [1] 1
 
 ``` r
-fruits <- c("apple", "banana", "lemon")
+fruits <- c("apple", "lemon",  "banana")
 # number of elements in the character vector
 length(fruits)
 ```
@@ -66,10 +61,10 @@ length(fruits)
 sapply(fruits, nchar); sapply(fruits, length)
 ```
 
-    ##  apple banana  lemon 
-    ##      5      6      5
+    ##  apple  lemon banana 
+    ##      5      5      6
 
-    ##  apple banana  lemon 
+    ##  apple  lemon banana 
     ##      1      1      1
 
 The `stringr` equivalent of `nchar("apple")` is
@@ -180,20 +175,20 @@ are provided.
 ``` r
 library(stringr)
 
-fruits <- c("apple", "banana", "lemon")
+fruits <- c("apple", "lemon",  "banana")
 
 # the second letter
 str_sub(fruits, start = 2, end = 2)
 ```
 
-    ## [1] "p" "a" "e"
+    ## [1] "p" "e" "a"
 
 ``` r
 # the third to second to last letters
 str_sub(fruits, start = 3, end = -2)
 ```
 
-    ## [1] "pl"  "nan" "mo"
+    ## [1] "pl"  "mo"  "nan"
 
 You can use `stringr::str_sub` to modify strings too.
 
@@ -202,7 +197,7 @@ str_sub(fruits, start = 3, end = -2) <- "x"
 fruits
 ```
 
-    ## [1] "apxe" "baxa" "lexn"
+    ## [1] "apxe" "lexn" "baxa"
 
 To remove whitespace from the ends of a string, there is
 `stringr::str_trim`.
@@ -269,15 +264,15 @@ str_replace_all(string  = "One small step for a man, one giant leap for mankind!
 > save space while printing.
 
 ``` r
-str_extract_all(string  = "One small step for a man, one giant leap for mankind!", # one element only
-                pattern = "step|leap")[[1]] # print it immediatly
+str_extract_all(string  = "One small step for a man, one giant leap for mankind!", # one element only ...
+                pattern = "step|leap")[[1]] # ... print the first and only vector with the matches
 ```
 
     ## [1] "step" "leap"
 
 ``` r
-str_extract_all(string  = c("One small step", "one giant leap"), # character vector with two elements
-                pattern = "step|leap") # prints the entire list containing character vectors
+str_extract_all(string  = c("One small step", "one giant leap"), # two elements ...
+                pattern = "step|leap") # ... print the entire list of vectors with the matches
 ```
 
     ## [[1]]
@@ -420,6 +415,18 @@ Escapes can also define entire classes of characters.
     ```
     
         ## [1] "1899" "1890"
+    
+    This is true even for some non-arabic numerals.
+    
+    ``` r
+    str_extract_all(c("१४ (चौदह)","(٣٩ (تِسْعَة و ثَلَاثُونَ"), "\\d+")
+    ```
+    
+        ## [[1]]
+        ## [1] "१४"
+        ## 
+        ## [[2]]
+        ## [1] "٣٩"
 
   - `\w` matches any ‘word’ character. Words consist of alphabetic
     characters (including diacritics etc.) and decimal numbers.
@@ -492,6 +499,16 @@ str_extract_all("papaya or banana", "[yn]a\\b")[[1]] # matches at word boundarie
 To remember which one is which, [this
 mnemonic](https://twitter.com/emisshula/status/323863393167613953) might
 help you: ‘If you begin with power (`^`), you end up with money (`$`).’
+
+## Summary
+
+In this introduction you have learned
+
+  - how to combine and split strings,
+  - how to subset strings based on indices,
+  - how to replace words in strings, and
+  - that you can use regular expressions to formulate advanced string
+    queries.
 
 ## Quick Questions
 

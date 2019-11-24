@@ -5,18 +5,13 @@ output:
         toc: true
 ---
 
+***
+
 This introduction will be on objects of type `character`. This is all text which appears between quotation marks (`""` or `''`) and is not executed by R. In informatics, such text objects are called ‘strings’.
 
 Base R has a set of functions to combine and split strings, to find and replace text within strings etc. For the sake of consistency and its more powerful language, we will limit our discussion to the equivalent functions of the `stringr` package when the string operations become more challenging.
 
 `stringr` is part of the `tidyverse`.
-
-In this introduction you will learn
-
-* how to combine and split strings,
-* how to subset strings based on indices,
-* how to replace words in strings, and
-* that you can use regular expressions to formulate advanced string queries.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -32,7 +27,7 @@ nchar("apple")
 # number of elements in the character vector
 length("apple")
 
-fruits <- c("apple", "banana", "lemon")
+fruits <- c("apple", "lemon",  "banana")
 # number of elements in the character vector
 length(fruits)
 # number of characters in each element of the vector vs length of each element in the vector
@@ -95,7 +90,7 @@ To extract a substring from a string, base R has `substr`. We will not discuss i
 ```{r}
 library(stringr)
 
-fruits <- c("apple", "banana", "lemon")
+fruits <- c("apple", "lemon",  "banana")
 
 # the second letter
 str_sub(fruits, start = 2, end = 2)
@@ -151,10 +146,10 @@ str_replace_all(string  = "One small step for a man, one giant leap for mankind!
 > In the next examples, we will use the `stringr::str_extract_all` function to return the substrings matching the regular expression. Since we provide a `character` vector with only a single element as `string = ...`, we immediatly index the returned list with `[[1]]` to save space while printing.
 
 ```{r}
-str_extract_all(string  = "One small step for a man, one giant leap for mankind!", # one element only
-                pattern = "step|leap")[[1]] # print it immediatly
-str_extract_all(string  = c("One small step", "one giant leap"), # character vector with two elements
-                pattern = "step|leap") # prints the entire list containing character vectors
+str_extract_all(string  = "One small step for a man, one giant leap for mankind!", # one element only ...
+                pattern = "step|leap")[[1]] # ... print the first and only vector with the matches
+str_extract_all(string  = c("One small step", "one giant leap"), # two elements ...
+                pattern = "step|leap") # ... print the entire list of vectors with the matches
 ```
 
 ### Placeholders
@@ -245,6 +240,12 @@ str_extract_all("There are 214 moons in the solar system.", "\\d+")[[1]]
 str_extract_all(x, "\\d+")[[1]]
     ```
 
+    This is true even for some non-arabic numerals.
+    
+    ```{r}
+str_extract_all(c("१४ (चौदह)","(٣٩ (تِسْعَة و ثَلَاثُونَ"), "\\d+")
+    ```    
+
 * `\w` matches any ‘word’ character. Words consist of alphabetic characters (including diacritics etc.) and decimal numbers. 
 
     The complement `\W` matches any non-word character.
@@ -290,6 +291,15 @@ str_extract_all("papaya or banana", "[yn]a\\b")[[1]] # matches at word boundarie
 ```
 
 To remember which one is which, [this mnemonic](https://twitter.com/emisshula/status/323863393167613953) might help you: ‘If you begin with power (`^`), you end up with money (`$`).’
+
+## Summary
+
+In this introduction you have learned
+
+* how to combine and split strings,
+* how to subset strings based on indices,
+* how to replace words in strings, and
+* that you can use regular expressions to formulate advanced string queries.
 
 ## Quick Questions
 
