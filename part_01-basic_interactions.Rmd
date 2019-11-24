@@ -5,15 +5,15 @@ output:
       toc: true
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
 ***
 
 After you installed R (and RStudio), it's time to get to know each other.
 
 ## The Prompt
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 The only meaningful way of interacting with R is by typing code into the R console. R's command prompt is a ‘>’ sign. (You don't type the ‘>’, R does.) When present, R is waiting for the next line of code. (You do hit the return key at the end of the line.)
 

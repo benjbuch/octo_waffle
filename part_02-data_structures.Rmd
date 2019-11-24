@@ -5,15 +5,15 @@ output:
     toc: true
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
 ***
 
 As in many programming languages, understanding how data are stored and manipulated is important. In this regard, the terms ‘data structure’ and ‘data type’ refer to how R treats your data rather than how you organize your data.
 
 This introduction might become rather technical, but don't get upset. It is less important to remember everything since we will recapitulate the contents on a needs basis during the workshop.
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 ## Data Types in R
 

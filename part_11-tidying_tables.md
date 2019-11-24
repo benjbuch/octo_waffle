@@ -15,20 +15,29 @@ Importing and Tidying Data
       - [Uniting and Splitting Columns](#uniting-and-splitting-columns)
   - [Hands-On Exercise](#hands-on-exercise)
 
+-----
+
+If you have not done so yet, please attach the `tidyverse`.
+
+``` r
+library(tidyverse)
+```
+
 ## Importing Data from Delimited Files
 
 A common standard to store tabulated data is as comma-separated values.
 Typically such files end with the extension `.csv`. However, the
-delimiters to represent the start of a new column can be anything such
-as semicolons or white spaces (e.g. tab, blank).
+delimiters to represent the start of a new column could be any character
+such as a semicolon or a white space (e.g. tab, blank).
 
 ### Importing Data from a Single File
 
-The data of the plate mentioned in this session’s introduction was saved
-as a comma-delimited file called ‘plate\_1.csv’ in the sub-folder
-‘part\_10-working\_with\_tables\_files’. We are going to import this
-file using `readr::read_csv()`, which will try to guess the data type
-stored in each column.
+The data of the plate mentioned in [this session’s
+introduction](part_10-working_with_tables.md) was saved as a
+comma-delimited file called ‘plate\_1.csv’. You can find it in the
+sub-folder ‘part\_10-working\_with\_tables\_files’. We are going to
+import this file using `readr::read_csv(...)`. This function will try to
+guess the data type stored in each column.
 
 > In the file path, `.` refers to the current working directory,
 > `getwd()`, so that we can use relative paths.
@@ -59,8 +68,8 @@ plate_1
     ## 4 5.76   3.73   2.15  -0.08   0.204
 
 The column names have been taken from the first line of the file (since
-they were text). However, as we know the actual names, we should use
-them. They can be set either using `colnames(plate_1)<-`, or during
+they were text). However, as we do know the actual names, so we should
+use them. They can be set either using `colnames(plate_1)<-`, or during
 import. In the latter case, we can (and should) skip the first line of
 the file since it’s obsolete.
 
@@ -80,8 +89,10 @@ plate_1 <- read_csv(file = "./part_10-working_with_tables_files/plate_1.csv",
 
 The data we are typically dealing with is much too complex to rely on a
 single row name only. To be useful, each parameter or variable should be
-stored in a separate column. So, let’s add one column specifying the
-sample type and one column specifying the replicate number.
+stored in a separate column.
+
+So, let’s add one column specifying the sample type and one column
+specifying the replicate number.
 
 ``` r
 plate_1 <- plate_1 %>% 
@@ -107,21 +118,21 @@ keep in the `tidyverse`, use `dplyr::rownames_to_column()`.
 
 A nice feature of using a programmatic approach for data analysis is
 that it allows retrieving (systematically) many files from multiple
-locations on your harddrive (e.g. reflecting multiple experiments) and
-to either analyze them in identical ways one by one, or to combine them
-for analysis.
+locations on the harddrive (e.g. reflecting multiple experiments) and to
+analyze them either in identical ways one by one, or to combine them for
+analysis.
 
-Certainly, we could import each file individually.
+Certainly, we could import each file individually …
 
 ``` r
 plate_2 <- read_csv(file = "./part_10-working_with_tables_files/plate_2.csv")
 plate_3 <- read_csv(file = "./part_10-working_with_tables_files/plate_3.csv")
 ```
 
-However, if we have many files to analyse, this approach can become
-tedious. So, we use `list.files(...)` to create a list of all files in a
-directory. We can even use regular expressions to specify the ones we
-would like to include.
+However, if we have many files to analyse, we get easily lost. A more
+amenable approach is using `list.files(...)` to create a list
+(`character` vector) of all files in a directory and apply regular
+expressions to specify the files we would like to include.
 
 ``` r
 plate_files.paths <- list.files(path = "./part_10-working_with_tables_files",
@@ -175,7 +186,9 @@ plate_files
 The `plate_files` object is a `list` with two `tibble` objects
 (`dplyr`’s way of `data.frame`). Apparently, two columns have been
 swapped in `plate_3`, which could cause problems if we just pasted them
-mindlessly below each other. Luckily, R pays attention for us.
+mindlessly below each other.
+
+Luckily, R pays attention for us.
 
 ``` r
 plate_files %>% bind_rows(.id = "file")
@@ -191,14 +204,13 @@ plate_files %>% bind_rows(.id = "file")
     ## 5 ./part_10-wor… treatmen… replicate_1    0.203  0.444 -0.025 -0.129  0.535
     ## 6 ./part_10-wor… treatmen… replicate_2    0.434 -0.481 -0.269  0.391  0.114
 
-To be mentioned here, we have kept track of the file names (or even file
-paths) by specifying an `.id` column called `"file"` from the names of
-the `tibble` `list`. If need be, we can then make use of metadata stored
-in the file name or file path by creating new columns. (See next
-session.)
+We have kept track of the file names (or even file paths) by specifying
+an `.id` column called `"file"` from the names of the `tibble` `list`.
+If need be, we could extract metadata stored in the file name or file
+path by creating new columns. (See next session.)
 
-For the moment, let’s combine the data with `plate_1` and call the
-object `plate_data`.
+For the moment, let’s combine the new data with `plate_1` without the
+file paths and call the object `plate_data`.
 
 ``` r
 plate_data <- bind_rows(plate_1, plate_files)
@@ -210,9 +222,9 @@ rm(plate_files, plate_files.paths)
 ### Combining Data with `join`
 
 We have seen that the command to combine rows is `dpylr::bind_rows(...)`
-in the `tidyverse` and `rbind(...)` in base R. To combine columns, we
-could use `dplyr::bind_cols(...)` or `cbind(...)` respectively. However,
-we must be absolutely sure that the rows align\!
+(and `rbind(...)` in base R). Likewise, there is `dplyr::bind_cols(...)`
+(or `cbind(...)` in base R) to combine columns. However, we must be
+absolutely sure that the rows align\!
 
 ``` r
 cbind(
@@ -241,16 +253,16 @@ bind_cols(half_1, half_2)
     ## # A tibble: 10 x 6
     ##    sample_id   replicate_id  conc_1 sample_id1  replicate_id1 conc_2
     ##    <chr>       <chr>          <dbl> <chr>       <chr>          <dbl>
-    ##  1 control     replicate_1    0.016 control     replicate_1    0.941
-    ##  2 control     replicate_2    0.049 control     replicate_2   -0.063
-    ##  3 treatment_A replicate_1    6.48  treatment_D replicate_2   -0.481
-    ##  4 treatment_A replicate_2    5.76  treatment_A replicate_2    3.73 
-    ##  5 treatment_B replicate_1  119.    treatment_D replicate_1    0.444
-    ##  6 treatment_B replicate_2  120.    treatment_A replicate_1    3.84 
-    ##  7 treatment_C replicate_1   30.3   treatment_C replicate_2   19.6  
-    ##  8 treatment_C replicate_2   30.1   treatment_B replicate_2   79.5  
-    ##  9 treatment_D replicate_1    0.203 treatment_B replicate_1   79.9  
-    ## 10 treatment_D replicate_2    0.434 treatment_C replicate_1   19.9
+    ##  1 control     replicate_1    0.016 treatment_B replicate_1   79.9  
+    ##  2 control     replicate_2    0.049 treatment_D replicate_2   -0.481
+    ##  3 treatment_A replicate_1    6.48  control     replicate_2   -0.063
+    ##  4 treatment_A replicate_2    5.76  treatment_A replicate_1    3.84 
+    ##  5 treatment_B replicate_1  119.    treatment_B replicate_2   79.5  
+    ##  6 treatment_B replicate_2  120.    treatment_D replicate_1    0.444
+    ##  7 treatment_C replicate_1   30.3   control     replicate_1    0.941
+    ##  8 treatment_C replicate_2   30.1   treatment_C replicate_1   19.9  
+    ##  9 treatment_D replicate_1    0.203 treatment_C replicate_2   19.6  
+    ## 10 treatment_D replicate_2    0.434 treatment_A replicate_2    3.73
 
 To properly merge `half_1` and `half_2`, we need to merge the tables
 based on the colums `sample_id` and `replicate_id`. This is what
@@ -277,8 +289,8 @@ inner_join(half_1, half_2, by = c("sample_id", "replicate_id"))
 
 If you want to keep rows that are in one table, but not in another,
 there are also the functions `dpylr::left_join()` and
-`dplyr::right_join()`. (Having both options is useful when you think of
-piping.)
+`dplyr::right_join()`. Having both options is useful when you think of
+piping.
 
 ``` r
 # remove objects no longer needed
@@ -287,23 +299,34 @@ rm(half_1, half_2)
 
 ### Importing Data from Excel
 
-To read data from Excel, you can use `readxl::read_excel(...)` or
-alternatively, `XLConnect::readWorksheetFromFile(...)`. The `readxl` is
-a package of the `tidyverse` and thus installed on your machine.
+To read data from Excel, you can use `readxl::read_excel(...)`. The
+`readxl` is a package of the `tidyverse`.
 
 Here is an example with `plate_1.xlsx`, which contains the same data put
-somewhere on the sheet. By default, `readxl::read_excel(...)` uses the
-smallest rectangle that contains the non-empty cells.
+somewhere on the worksheet. By default, `readxl::read_excel(...)` uses
+the smallest rectangle that contains the non-empty cells.
 
 ``` r
 readxl::read_excel("./part_10-working_with_tables_files/plate_1.xlsx")
 ```
 
-Note that blank column headers will get a new, unique name (e.g. `...1`,
+    ## New names:
+    ## * `` -> ...1
+    ## * `` -> ...2
+
+    ## # A tibble: 4 x 7
+    ##   ...1        ...2        conc_1 conc_2 conc_3 conc_4 conc_5
+    ##   <chr>       <chr>        <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+    ## 1 control     replicate_1  0.016  0.941 -0.307 -0.002  0.007
+    ## 2 control     replicate_2  0.049 -0.063  0.301  0.15  -0.704
+    ## 3 treatment_A replicate_1  6.48   3.84   3.06   0.479  0.182
+    ## 4 treatment_A replicate_2  5.76   3.73   2.15  -0.08   0.204
+
+The blank column headers will get a new, unique name (e.g. `...1`,
 `...2` etc.) and the content of merged cells will be assigned to the
 top-most left cell of the area.
 
-However, I would disencourage to rely on routinely importing data from
+However, I would disencourage to rely on routine importing data from
 Excel workbooks since `.xls` and `.xlsx` are neither open
 (i.e. disclosed), nor standardized file formats. This means they can be
 changed by Microsoft anytime and may consequently not be (immediately)
@@ -321,9 +344,8 @@ from your side after.
 
 Data can be tabulated in one of two ways: A tidy and a messy one.
 
-> If each variable forms a column, and each row represents a single
-> observation, and each cell a single value, we refer to this as **tidy
-> data**.
+> If each variable forms a column, each row represents an observation,
+> and each cell a single value, we have **‘tidy data’**.
 
 Having your data tidied is crucial for facilitating data manipulation,
 modelling, and visualization\!
@@ -342,7 +364,7 @@ the ‘wide format’), it’s likely to encounter messy data. For example,
 `plate_1` is in one (of many possible) messy formats: The concentration
 is spread along the header row, not in a separate column.
 
-A tidyer ‘wide format’ of the same data would look like that:
+A tidier ‘wide format’ of the same data would look like that:
 
 |    replicate\_id    | concentration  | control | treatment\_A |
 | :-----------------: | :------------: | :-----: | :----------: |
@@ -356,7 +378,7 @@ A tidyer ‘wide format’ of the same data would look like that:
 
 *(table abridged)*
 
-The longer the table, the tidyer the data. Here is the ‘long format’ of
+The longer the table, the tidier the data. Here is the ‘long format’ of
 `plate_1`:
 
 |   sample\_id   |    replicate\_id    | concentration  | intensity |
@@ -383,16 +405,17 @@ depends on the manipulation you want to perform. Typically, the ‘longest
 format’ serves as the linchpin to produce the ‘wider formats’.
 
 For your convenience, this is an overview of the different functions
-that are around to interconvert wide and long table formats. (In case
-you encounter one of these or need help on related topics.)
+that are around to interconvert wide and long table formats. (Including
+other packages, in case you encounter one of these or need help on
+related topics.)
 
 | action                           | `tidyr` ≥ v1.0   | `tidyr` \< v1.0 | `data.table` | `reshape`/`reshape2` |
 | -------------------------------- | ---------------- | --------------- | ------------ | -------------------- |
 | make wide table long (‘melting’) | `pivot_longer()` | `gather()`      | `melt()`     | `melt()`             |
 | make long table wide (‘casting’) | `pivot_wider()`  | `spread()`      | `dcast()`    | `acast()`, `dcast()` |
 
-As many people don’t find the other function names intuitive, we will
-use `tidyr::pivot_longer(...)` and `tidyr::pivot_wider(...)`.
+As many people don’t find the other functions intuitive, we will use
+`tidyr::pivot_longer(...)` and `tidyr::pivot_wider(...)`.
 
 ``` r
 plate_1 %>% 
@@ -441,18 +464,18 @@ plate_1 %>%
 
 We discuss selecting columns by name later.
 
-For now, let’s next widen/spread/cast the long/gathered/molten
-representation of `plate_1`\! Maybe, we would like to see the measured
-intensities for `control` and `treatment_A` side-by-side given each
-concentration and the replicate.
+For now, let’s continue with widening/spreading/casting the
+long/gathered/molten representation of `plate_1`\! Maybe, we would like
+to see the measured intensities for `control` and `treatment_A`
+side-by-side given each concentration and the replicate.
 
 ``` r
 plate_1 %>% 
   # make wide table long
   pivot_longer(conc_1:conc_0, names_to = "concentration", values_to = "intensity") %>% 
   # make long table wide
-  pivot_wider(names_from  = "sample_id", # column to use content as new column headers
-              values_from = "intensity"  # column to use content to populate the new cells with
+  pivot_wider(names_from  = sample_id, # column to use content as new column headers
+              values_from = intensity  # column to use content to populate the new cells with
              ) %>% 
   # print only top rows
   head(3) 
@@ -465,17 +488,17 @@ plate_1 %>%
     ## 2 replicate_1  conc_2          0.941        3.84
     ## 3 replicate_1  conc_3         -0.307        3.06
 
-The format of `plate_1` from above can be useful if we wanted to
-subtract the intensities measured in the control from the ones in the
-treated samples. Here, `dplyr::mutate(...)` creates a new column or
-modifies an exisiting column using the specified operations.
+This format of `plate_1` could be useful if we wanted to subtract the
+control measurements from the treated samples. Here,
+`dplyr::mutate(...)` creates a new column or modifies an exisiting
+column using the specified operations. (More on this later, too.)
 
 ``` r
 plate_1 %>% 
   # make wide table long
   pivot_longer(conc_1:conc_0, names_to = "concentration", values_to = "intensity") %>% 
   # make long table wide
-  pivot_wider(names_from = "sample_id", values_from = "intensity") -> plate_1.wide
+  pivot_wider(names_from = sample_id, values_from = intensity) -> plate_1.wide
 
 plate_1.wide %>% 
   # make new column with corrected treatment_A values
@@ -502,13 +525,13 @@ plate_1.wide %>%
     ## 2 replicate_1  conc_2          0.941        2.90
     ## 3 replicate_1  conc_3         -0.307        3.37
 
-You can check out more examples in the [`tidyr` vignette on
+You can check out more examples in the `tidyr` [vignette on
 pivoting](https://tidyr.tidyverse.org/dev/articles/pivot.html).
 
 ### Uniting and Splitting Columns
 
-The `tidyr::unite(...)` function takes multiple column names and pastes
-the column contents together.
+`tidyr::unite(...)` takes the values form multiple columns and pastes
+them together side-by-side.
 
 ``` r
 plate_1 %>% 
@@ -528,8 +551,8 @@ plate_1 %>%
     ## 3 treatment_A/replicate_1  6.48   3.84   3.06   0.479  0.182
 
 The `tidyr::separate(...)` function does the reverse. By default, any
-non-alphanumeric character will be used to split the column. Note that
-missing pieces will be replaced with `NA`.
+non-alphanumeric character will be used to split the column, which can
+result in missing pieces to be replaced with `NA`.
 
 ``` r
 plate_1 %>% 
@@ -580,8 +603,6 @@ Environment’.
 load(file = "./part_10-working_with_tables_files/plates.RData")
 ```
 
-1.  Combine `plate_4` with `plate_data`, but be careful, the replicates
-    (`.A` and `.B`) are actually `replicate_3` and `replicate_4`. We
-    will see how to change this in the next session.
+1.  Combine `plate_4` with `plate_data`.
 
-2.  Tidy `plate_data` and replace concentration with actual values.
+2.  Tidy `plate_data` and replace the concentration with actual values.
