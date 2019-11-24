@@ -53,6 +53,9 @@ A cheat sheet for the introduction in [RMD](part_00-cheat_sheet.Rmd) or [DOCX](p
 We focus on using packages from the [`tidyverse`](https://www.tidyverse.org).
 
 1. [Working with Tables](part_10-working_with_tables.md)
+    * Tidying Tables
+    * Manipulating Rows and Columns
+    * Summarizing Tabulated Data
 2. Making Figures
 3. Good Practices
 4. Import, Export, Save
