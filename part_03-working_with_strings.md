@@ -473,8 +473,8 @@ There are a number of pre-built character classes in `stringr`:
 In some cases, you want to match a pattern only if it occurs at the
 start or the end of a line. There are
 
-  - `^` to match the start of a line, and
-  - `$` to match the end of the line.
+  - `^...` to match the start of a line, and
+  - `...$` to match the end of the line.
 
 <!-- end list -->
 
@@ -516,7 +516,7 @@ In this introduction you have learned
     "GC")`?
 2.  Suppose you have the vector `c("ÁlM", "AnJ", "DaS", "DmS", "JaW",
     "ShP", "SuB")`. Using regular expressions, how do you identify all
-    elements that contain
+    elements (using `stringr::str_detect`) that contain
     1.  the lowercase ‘a’,
     2.  ‘a’ or ‘A’,
     3.  any non-Latin character,
