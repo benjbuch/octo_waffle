@@ -190,8 +190,8 @@ Some of the arithmetic operators implemented in R are shown below.
 ```
 
 Some of the built-in functions for other mathemtatical operations
-include `abs(...)`, `floor(...)`, `round(...)`, `sqrt(...)`, `exp(...)`,
-`log(...)`, `sin(...)`, `cos(...)`, etc. Try them out\!
+include `abs(x)`, `floor(x)`, `round(x)`, `sqrt(x)`, `exp(x)`, `log(x)`,
+`log10(x)`, `sin(x)`, `cos(x)`, etc. Try them out\!
 
 R follows the standard order of operations and groupings based on
 parentheses.
@@ -424,8 +424,8 @@ machine from CRAN, e.g. the `magrittr` package.
 install.packages("magrittr")
 ```
 
-To uninstall a package, use `remove.packages(...)`. (You will rarely
-need this.)
+To uninstall a package, use `remove.packages(package_name)`. (You will
+rarely need this.)
 
 ### Loading a Package
 
@@ -449,8 +449,8 @@ In RStudio, the object in the current ‘search path’ can be browsed by
 toggling the ‘Global Environment’ drop-down menu.
 
 To remove a namespace from the current session, type
-`unloadNamespace(...)` with the respective package name. (You will
-rarely do this.)
+`unloadNamespace(namespace_name)` with the respective package name. (You
+will rarely do this.)
 
 Note that some packages are automatically installed and silently
 loaded/attached when another package needs some of its functions. You
@@ -463,7 +463,7 @@ If you intend to use only a single function from a package (and do not
 want to attach the entire namespace), or if there are functions with the
 same name from different packages, you must be more explicit and prefix
 the function call with the package name separated by `::`,
-e.g. `magrittr::divide_by(...)`.
+e.g. `magrittr::divide_by(x, y)`.
 
 > When you load a package with conflicting names, R will print a warning
 > message.

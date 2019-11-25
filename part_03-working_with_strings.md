@@ -129,8 +129,8 @@ space `sep = ""`. It has an `collapse = ...` argument too.
 
 ## Splitting Strings
 
-Strings can be split after a specific character with base R’s `strsplit`
-function.
+Strings can be split after a specific character with base R’s
+`strsplit(x)` function.
 
 ``` r
 strsplit(x = "one,2;three,4", split = ",")
@@ -140,7 +140,7 @@ strsplit(x = "one,2;three,4", split = ",")
     ## [1] "one"     "2;three" "4"
 
 In the `stringr` package, `stringr::str_split` is vectorized over either
-arguments, `string` or `pattern`.
+argument, `string` or `pattern`.
 
 ``` r
 stringr::str_split(string = c("one,2;three,4", "five,six,7"), pattern = ",")

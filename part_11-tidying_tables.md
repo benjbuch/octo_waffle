@@ -36,8 +36,8 @@ The data of the plate mentioned in [this session’s
 introduction](part_10-working_with_tables.md) was saved as a
 comma-delimited file called ‘plate\_1.csv’. You can find it in the
 sub-folder ‘part\_10-working\_with\_tables\_files’. We are going to
-import this file using `readr::read_csv(...)`. This function will try to
-guess the data type stored in each column.
+import this file using `readr::read_csv(file)`. This function will try
+to guess the data type stored in each column.
 
 > In the file path, `.` refers to the current working directory,
 > `getwd()`, so that we can use relative paths.
@@ -266,7 +266,7 @@ bind_cols(half_1, half_2)
 
 To properly merge `half_1` and `half_2`, we need to merge the tables
 based on the colums `sample_id` and `replicate_id`. This is what
-`dplyr::inner_join(...)` does.
+`dplyr::inner_join(x, y)` does.
 
 ``` r
 # this will be correct
@@ -288,9 +288,9 @@ inner_join(half_1, half_2, by = c("sample_id", "replicate_id"))
     ## 10 treatment_D replicate_2    0.434 -0.481
 
 If you want to keep rows that are in one table, but not in another,
-there are also the functions `dpylr::left_join()` and
-`dplyr::right_join()`. Having both options is useful when you think of
-piping.
+there are also the functions `dpylr::left_join(x, y)` and
+`dplyr::right_join(x, y)`. Having both options is useful when you think
+of piping.
 
 ``` r
 # remove objects no longer needed
@@ -299,11 +299,11 @@ rm(half_1, half_2)
 
 ### Importing Data from Excel
 
-To read data from Excel, you can use `readxl::read_excel(...)`. The
+To read data from Excel, you can use `readxl::read_excel(file)`. The
 `readxl` is a package of the `tidyverse`.
 
 Here is an example with `plate_1.xlsx`, which contains the same data put
-somewhere on the worksheet. By default, `readxl::read_excel(...)` uses
+somewhere on the worksheet. By default, `readxl::read_excel(file)` uses
 the smallest rectangle that contains the non-empty cells.
 
 ``` r
@@ -409,13 +409,13 @@ that are around to interconvert wide and long table formats. (Including
 other packages, in case you encounter one of these or need help on
 related topics.)
 
-| action                           | `tidyr` ≥ v1.0   | `tidyr` \< v1.0 | `data.table` | `reshape`/`reshape2` |
-| -------------------------------- | ---------------- | --------------- | ------------ | -------------------- |
-| make wide table long (‘melting’) | `pivot_longer()` | `gather()`      | `melt()`     | `melt()`             |
-| make long table wide (‘casting’) | `pivot_wider()`  | `spread()`      | `dcast()`    | `acast()`, `dcast()` |
+| action                           | `tidyr` ≥ v1.0 | `tidyr` \< v1.0 | `data.table` | `reshape`/`reshape2` |
+| -------------------------------- | -------------- | --------------- | ------------ | -------------------- |
+| make wide table long (‘melting’) | `pivot_longer` | `gather`        | `melt`       | `melt`               |
+| make long table wide (‘casting’) | `pivot_wider`  | `spread`        | `dcast`      | `acast`, `dcast`     |
 
 As many people don’t find the other functions intuitive, we will use
-`tidyr::pivot_longer(...)` and `tidyr::pivot_wider(...)`.
+`tidyr::pivot_longer` and `tidyr::pivot_wider`.
 
 ``` r
 plate_1 %>% 
@@ -550,7 +550,7 @@ plate_1 %>%
     ## 2 control/replicate_2      0.049 -0.063  0.301  0.15  -0.704
     ## 3 treatment_A/replicate_1  6.48   3.84   3.06   0.479  0.182
 
-The `tidyr::separate(...)` function does the reverse. By default, any
+The `tidyr::separate(column)` function does the reverse. By default, any
 non-alphanumeric character will be used to split the column, which can
 result in missing pieces to be replaced with `NA`.
 

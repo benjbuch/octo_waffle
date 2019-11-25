@@ -117,7 +117,7 @@ Some of the arithmetic operators implemented in R are shown below.
 (-8)^(1/3)
 ```
 
-Some of the built-in functions for other mathemtatical operations include `abs(...)`, `floor(...)`, `round(...)`, `sqrt(...)`, `exp(...)`, `log(...)`, `sin(...)`, `cos(...)`, etc. Try them out!
+Some of the built-in functions for other mathemtatical operations include `abs(x)`, `floor(x)`, `round(x)`, `sqrt(x)`, `exp(x)`, `log(x)`, `log10(x)`, `sin(x)`, `cos(x)`, etc. Try them out!
 
 R follows the standard order of operations and groupings based on parentheses.
 
@@ -282,7 +282,7 @@ This is how to install a CRAN package that is presumably not on your machine fro
 install.packages("magrittr")
 ```
 
-To uninstall a package, use `remove.packages(...)`. (You will rarely need this.)
+To uninstall a package, use `remove.packages(package_name)`. (You will rarely need this.)
 
 ### Loading a Package
 
@@ -298,13 +298,13 @@ All of the package's function will now be known in the current R session. More s
 
 In RStudio, the object in the current ‘search path’ can be browsed by toggling the ‘Global Environment’ drop-down menu.
 
-To remove a namespace from the current session, type `unloadNamespace(...)` with the respective package name. (You will rarely do this.)
+To remove a namespace from the current session, type `unloadNamespace(namespace_name)` with the respective package name. (You will rarely do this.)
 
 Note that some packages are automatically installed and silently loaded/attached when another package needs some of its functions. You cannot unload such namespaces unless you unload all the dependend packages first. 
 
 ### Referring to Functions from a Specific Package
 
-If you intend to use only a single function from a package (and do not want to attach the entire namespace), or if there are functions with the same name from different packages, you must be more explicit and prefix the function call with the package name separated by `::`, e.g. `magrittr::divide_by(...)`. 
+If you intend to use only a single function from a package (and do not want to attach the entire namespace), or if there are functions with the same name from different packages, you must be more explicit and prefix the function call with the package name separated by `::`, e.g. `magrittr::divide_by(x, y)`. 
 
 > When you load a package with conflicting names, R will print a warning message.
 

@@ -10,10 +10,22 @@ Grouping and Summarizing Data
       - [Linear Regression and Beyond](#linear-regression-and-beyond)
   - [Hands-On Exercise](#hands-on-exercise)
 
-The important object you will learn in this section is how to summarize
-(large) data sets. Typically, the data is first split into several
-groups defined by a categorical variable (‘factor’) and then some sort
-of summary statistics are applied to each group.
+-----
+
+You will learn in this section is how to summarize (large) data sets.
+Typically, the data is first split into several groups defined by a
+categorical variable (‘factor’) and then some sort of summary statistics
+are applied to each group.
+
+If you have not done so yet, please attach the `tidyverse` and make sure
+you have the `plate_data` object from the [last
+section](part_11-tidying_tables.md)–exercises included. If not, here you
+go.
+
+``` r
+library(tidyverse)
+readRDS("part_12-plate_data.rds") -> plate_data
+```
 
 ## Making Groups
 
@@ -91,8 +103,8 @@ To remove the grouping, use `ungroup()`.
 ## Summarizing Groups
 
 A common summary of continuous data is to give averages and measure the
-spread e.g. using the standard deviation `sd(...)`, the median absolute
-deviation `mad(...)`, or the inter-quartile range `IQR(...)`. Given
+spread e.g. using the standard deviation `sd(x)`, the median absolute
+deviation `mad(x)`, or the inter-quartile range `IQR(x)`. Given
 `plate_data`, let’s calculate the average intensity for each `sample_id`
 and `concentration`.
 
@@ -256,8 +268,8 @@ respectively.
 
 If more than two groups are compared, we should adjust the p-values for
 the additional comparisons. In R, the function is a little bit
-misleadingly named `pairwise.t.test`, but can be used for paired and
-unpaired comparisons between multiple groups.
+misleadingly named `pairwise.t.test(x, g)`, but can be used for paired
+and unpaired comparisons between multiple groups.
 
 First, the same as above.
 
@@ -324,7 +336,7 @@ such as `cor.test`, `wilcox.test`, `chisq.test` etc.
 Another example on the same lines is a linear regression by group. Let’s
 try to describe the `intensity` observed in `plate_data` as a function
 of the `concentration`. Such a model is fit in R with the linear model
-`lm(...)` call.
+`lm` call.
 
 ``` r
 plate_data %>% 

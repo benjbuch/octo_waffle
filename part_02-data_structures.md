@@ -61,7 +61,7 @@ encountered data types are shown below.
 > limits of the machine.) `double` stands for ‘double-precision
 > floating-point format’.
 
-The data type can be queried using the `typeof(...)` function.
+The data type can be queried using the `typeof(x)` function.
 
 ``` r
 x <- pi
@@ -182,10 +182,9 @@ typeof(as.logical("T")) # logical
 R allows to create more sophisticated data structures from the simpler
 atomic data types. The structure of such objectes is called a ‘class’.
 Besides its usefulness for an object-oriented programming style, having
-a class associated to an object will cause functions such as
-`print(...)`, `plot(...)` and `summary(...)` to respond in an
-appropriate manner. Some functions accept only objects of specific
-classes.
+a class associated to an object will cause functions such as `print`,
+`plot` and `summary` to respond in an appropriate manner. Some functions
+accept only objects of specific classes.
 
 In RStudio, roughly speaking, the class of an object is shown next to
 its name in the ‘Environment’ pane. Note that `integer`, `double` and
@@ -268,14 +267,14 @@ Here are two examples to illustrate the concept.
     
         ## [1] "d" "f" "m"
 
-You can get the object’s class with `class(...)` and the attributes
-associated with it with `attributes(...)`.
+You can get the object’s class with `class(x)` and the attributes
+associated with it with `attributes(x)`.
 
-> Having said that `print(...)` is aware of an object’s class, be
-> reminded: The *good thing* is that `print(...)` will show you only the
-> ‘important’ aspects of the object. The *bad thing* is that you can
-> easily think that you are seeing the real object. In reality, you are
-> just seeing the self-portrait of the object that it wants you to see.
+> Having said that `print` is aware of an object’s class, be reminded:
+> The *good thing* is that `print(x)` will show you only the ‘important’
+> aspects of the object. The *bad thing* is that you can easily think
+> that you are seeing the real object. In reality, you are just seeing
+> the self-portrait of the object that it wants you to see.
 
 ## Vectorization in R
 
@@ -394,8 +393,8 @@ The `!` sign is used to *negate* logical vectors or boolean operations.
 
     ## [1]  TRUE  TRUE FALSE FALSE
 
-The boolean operators include `&` (and), `|` (or) and `xor(...)` (either
-or, but not both). They operate element-wise.
+The boolean operators include `&` (and), `|` (or) and `xor(x, y)`
+(either or, but not both). They operate element-wise.
 
 ``` r
 y; z

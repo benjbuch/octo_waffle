@@ -183,7 +183,7 @@ There are the ‘scoped’ variants,
 plate_data %>% select_if(is.numeric)
 # select columns and rename column names
 plate_data %>% select_all(toupper)
-plate_data %>% select_at(vars(ends_with("id")), ~str_c(., "iot"))
+plate_data %>% select_at(vars(ends_with("id")), ~ str_c(., "iot"))
 ```
 
 To rename columns only, there are `rename` variants of the above.
@@ -191,7 +191,7 @@ To rename columns only, there are `rename` variants of the above.
 ``` r
 plate_data %>% rename("conc" = "concentration") # with explicit names
 plate_data %>% rename(conc = concentration)     # with quasiquotation
-plate_data %>% rename_at(vars(ends_with("id")), ~str_c(., c("ea", "iot")))
+plate_data %>% rename_at(vars(ends_with("id")), ~ str_c(., c("ea", "iot")))
 ```
 
 Less importantly, `select` can be used for re-arranging columns.
@@ -390,7 +390,7 @@ as.data.frame(rs1)
     ## 2 2 6 10 2, 3, 4, 5, 6
 
 If we want to explicitly specify arguments by name, we have to wrap the
-mapping call as formula with `~` and can use `..1` (or `.x`) and `..2`
+mapping call as lambda with `~` and can use `..1` (or `.x`) and `..2`
 (or `.y`) to refer to the first and respectivley second input list.
 
 ``` r
@@ -412,7 +412,8 @@ syntax works, irrespective of the column order.
 
 ``` r
 ex1 %>% 
-  rename("from" = A, "to" = C, "by" = "B") %>% 
+  # you may quote any of these or none ...
+  rename(from = "A", "to" = C, "by" = "B") %>% 
   mutate(S = pmap(., seq)) %>% 
   as.data.frame
 ```
@@ -427,7 +428,7 @@ will complain with a warning about unused arguments (for each row\!).
 ``` r
 ex2 <- ex1 %>% bind_cols(D = c("apple", "banana"))
 ex2 %>% 
-  rename("from" = A, "to" = C, "by" = "B") %>% 
+  rename(from = A, to = C, by = B) %>% 
   mutate(S = pmap(., seq)) %>% 
   as.data.frame
 ```
@@ -457,8 +458,8 @@ ex2 %>%
     ## 1 1 3  8  apple 1, 4, 7
     ## 2 2 6 10 banana    2, 8
 
-What to do with this fancy new column containing lists? We could apply
-another function on them.
+What to do with this fancy new column containing lists? We could want to
+apply another function on them.
 
 ``` r
 ex2 %>% 
@@ -468,17 +469,16 @@ ex2 %>%
 
 ex2 %>% 
   mutate(S = pmap(list(from = A, to = C, by = B), seq)) %>% 
-  # wrong ...
+  # wrong as the entire column is unlisted
   mutate(S_mean = mean(unlist(S)))
 ```
 
-Indeed, we need `purrr::pmap` again.
+Indeed, we need `purrr::map` again.
 
 ``` r
 ex2 %>% 
   mutate(S = pmap(list(from = A, to = C, by = B), seq)) %>% 
-  # a list of lists is expected, therefore, wrap with list(...)
-  mutate(S_mean = pmap(list(S), mean))
+  mutate(S_mean = map(S, mean))
 ```
 
     ## # A tibble: 2 x 6
@@ -488,13 +488,13 @@ ex2 %>%
     ## 2     2     6    10 banana <dbl [2]> <dbl [1]>
 
 If we already know the data type of the return value of the mapped
-function, we can use an appropriate `purrr::pmap_...` derivate.
+function, we can use an appropriate `purrr::pmap_*` derivate.
 
 ``` r
 ex2 %>% 
   mutate(S = pmap(list(from = A, to = C, by = B), seq)) %>% 
   # coerce result to ‘double’ instead of ‘list’
-  mutate(S_mean = pmap_dbl(list(S), mean))
+  mutate(S_mean = map_dbl(S, mean))
 ```
 
     ## # A tibble: 2 x 6
@@ -504,7 +504,8 @@ ex2 %>%
     ## 2     2     6    10 banana <dbl [2]>      5
 
 Another useful application is to calculate the row-wise sum, mean,
-median, standard deviation etc. even on a subselection of columns.
+median, standard deviation etc. even on a subselection of columns. Since
+we want to pass multiple columns as arguments, we need `purrr::pmap`.
 
 ``` r
 ex3 <- tribble(
@@ -546,7 +547,7 @@ median(x, na.rm = FALSE, ...)
    var(x, y = NULL, na.rm = FALSE, use)
 ```
 
-To deal with these, `purrr` has a family of `lift_...` functions that
+To deal with these, `purrr` has a family of `lift_*` functions that
 convert functions between these different forms. For example,
 `purrr::lift_vd` converts a function that takes a ‘vector’ as input into
 one that accepts ‘dots’.
@@ -566,7 +567,7 @@ Note that if you have a frequent need to compute these summary
 statistics row-wise, on a subset of columns, it is highly suggestive
 that your data is in the wrong shape, i.e. it’s not tidy. In the next
 section, we explore approaches that are more transparent than using a
-`purrr::lift_...` with `purrr::pmap` inside `dplyr::mutate(...)` and,
+`purrr::lift_*` with `purrr::pmap` inside `dplyr::mutate(...)` and,
 consequently, more verbose.
 
 ## Hands-On Exercise
