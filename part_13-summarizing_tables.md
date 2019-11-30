@@ -45,15 +45,15 @@ plate_data %>% group_by(sample_id)
     ## # Groups:   sample_id [5]
     ##    sample_id replicate_id concentration intensity
     ##    <chr>     <chr>                <dbl>     <dbl>
-    ##  1 control   replicate_4              0     0.232
+    ##  1 control   replicate_4              0     0.290
     ##  2 control   replicate_4              1    NA    
     ##  3 control   replicate_4             10    NA    
-    ##  4 control   replicate_4            100    -0.365
+    ##  4 control   replicate_4            100    -0.456
     ##  5 control   replicate_4           1000    NA    
-    ##  6 control   replicate_3              0    -0.121
+    ##  6 control   replicate_3              0    -0.152
     ##  7 control   replicate_3              1    NA    
     ##  8 control   replicate_3             10    NA    
-    ##  9 control   replicate_3            100    -0.34 
+    ##  9 control   replicate_3            100    -0.426
     ## 10 control   replicate_3           1000    NA    
     ## # … with 90 more rows
 
@@ -122,16 +122,16 @@ plate_data %>%
     ## # Groups:   sample_id [5]
     ##    sample_id   concentration    mean     sd     N
     ##    <chr>               <dbl>   <dbl>  <dbl> <int>
-    ##  1 control                 0 -0.146  0.399      4
-    ##  2 control                 1  0.074  0.107      2
-    ##  3 control                10 -0.003  0.430      2
-    ##  4 control               100  0.0432 0.614      4
-    ##  5 control              1000  0.0325 0.0233     2
-    ##  6 treatment_A             0  0.244  0.517      4
-    ##  7 treatment_A             1  0.199  0.395      2
-    ##  8 treatment_A            10  2.61   0.644      2
-    ##  9 treatment_A           100  3.14   0.816      4
-    ## 10 treatment_A          1000  6.12   0.511      2
+    ##  1 control                 0 -0.0568 0.293      4
+    ##  2 control                 1  0.120  0.402      2
+    ##  3 control                10 -0.328  0.0686     2
+    ##  4 control               100 -0.0758 0.425      4
+    ##  5 control              1000 -0.253  1.04       2
+    ##  6 treatment_A             0  0.152  0.700      4
+    ##  7 treatment_A             1  0.761  1.02       2
+    ##  8 treatment_A            10  2.13   0.528      2
+    ##  9 treatment_A           100  3.26   1.13       4
+    ## 10 treatment_A          1000  6.26   0.374      2
     ## # … with 15 more rows
 
 Suspiciously, the standard deviation of some samples with four
@@ -345,18 +345,18 @@ plate_data %>%
 
     ## # A tibble: 10 x 6
     ## # Groups:   sample_id [5]
-    ##    sample_id   term                 estimate std.error statistic    p.value
-    ##    <chr>       <chr>                   <dbl>     <dbl>     <dbl>      <dbl>
-    ##  1 control     (Intercept)           -0.0744    0.157     -0.475    6.43e-1
-    ##  2 control     log10(concentration…   0.0501    0.0971     0.515    6.16e-1
-    ##  3 treatment_A (Intercept)            0.0728    0.303      0.241    8.14e-1
-    ##  4 treatment_A log10(concentration…   1.82      0.188      9.69     5.05e-7
-    ##  5 treatment_B (Intercept)            2.25     17.8        0.127    9.01e-1
-    ##  6 treatment_B log10(concentration…  47.9      11.0        4.34     9.58e-4
-    ##  7 treatment_C (Intercept)            0.316     2.01       0.157    8.78e-1
-    ##  8 treatment_C log10(concentration…  10.8       1.25       8.69     1.60e-6
-    ##  9 treatment_D (Intercept)            0.147     0.259      0.568    5.83e-1
-    ## 10 treatment_D log10(concentration…  -0.112     0.158     -0.711    4.93e-1
+    ##    sample_id   term                  estimate std.error statistic   p.value
+    ##    <chr>       <chr>                    <dbl>     <dbl>     <dbl>     <dbl>
+    ##  1 control     (Intercept)            -0.0313     0.171   -0.183    8.58e-1
+    ##  2 control     log10(concentration …  -0.0608     0.106   -0.572    5.78e-1
+    ##  3 treatment_A (Intercept)             0.0784     0.339    0.231    8.21e-1
+    ##  4 treatment_A log10(concentration …   1.85       0.210    8.79     1.41e-6
+    ##  5 treatment_B (Intercept)             1.21      17.3      0.0699   9.45e-1
+    ##  6 treatment_B log10(concentration …  49.3       10.7      4.59     6.22e-4
+    ##  7 treatment_C (Intercept)             0.100      2.07     0.0484   9.62e-1
+    ##  8 treatment_C log10(concentration …  11.1        1.28     8.64     1.70e-6
+    ##  9 treatment_D (Intercept)             0.407      0.304    1.34     2.10e-1
+    ## 10 treatment_D log10(concentration …  -0.279      0.185   -1.51     1.63e-1
 
 So far, we have used `broom::tidy` to get the parameters of the model.
 If we are interested in the statistical summary of the overall model, we
@@ -372,11 +372,11 @@ plate_data %>%
     ## # Groups:   sample_id [5]
     ##   sample_id r.squared adj.r.squared  sigma statistic p.value    df logLik
     ##   <chr>         <dbl>         <dbl>  <dbl>     <dbl>   <dbl> <int>  <dbl>
-    ## 1 control      0.0217       -0.0599  0.395     0.266 6.16e-1     2  -5.77
-    ## 2 treatmen…    0.887         0.877   0.762    93.8   5.05e-7     2 -15.0 
-    ## 3 treatmen…    0.611         0.579  44.8      18.9   9.58e-4     2 -72.0 
-    ## 4 treatmen…    0.863         0.851   5.06     75.5   1.60e-6     2 -41.5 
-    ## 5 treatmen…    0.0482       -0.0470  0.598     0.506 4.93e-1     2  -9.76
+    ## 1 control      0.0266       -0.0546  0.432     0.327 5.78e-1     2  -7.02
+    ## 2 treatmen…    0.866         0.854   0.853    77.3   1.41e-6     2 -16.6 
+    ## 3 treatmen…    0.637         0.607  43.6      21.1   6.22e-4     2 -71.6 
+    ## 4 treatmen…    0.861         0.850   5.21     74.6   1.70e-6     2 -41.9 
+    ## 5 treatmen…    0.185         0.104   0.702     2.27  1.63e-1     2 -11.7 
     ## # … with 4 more variables: AIC <dbl>, BIC <dbl>, deviance <dbl>,
     ## #   df.residual <int>
 

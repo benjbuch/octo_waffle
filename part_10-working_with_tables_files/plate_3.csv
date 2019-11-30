@@ -1,3 +1,3 @@
 sample_id,replicate_id,conc_1,conc_3,conc_2,conc_4,conc_0
-treatment_D,replicate_1,0.203,-0.025,0.444,-0.129,0.535
-treatment_D,replicate_2,0.434,-0.269,-0.481,0.391,0.114
+treatment_D,replicate_1,-0.219,0.79,-0.432,0.261,0.079
+treatment_D,replicate_2,-0.148,0.669,0.585,-0.027,0.601

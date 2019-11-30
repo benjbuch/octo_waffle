@@ -48,9 +48,9 @@ names(cond) <- paste(rep(c("control", paste("treatment", LETTERS[1:4], sep = "_"
 
 # generate random table (set 1)
 
-set.seed(1757)
+set.seed(22417)
 
-sapply(cond, function(i) rnorm(dose, mean = i * log10(dose + 1), sd = .4) )%>% 
+sapply(cond, function(i) rnorm(dose, mean = i * log10(dose + 1), sd = pmax(c(i * log10(dose + 1) * 0.1), .5))) %>% 
   round(digits = 3) %>% 
   data.frame(row.names = names(dose)) %>% t %>% 
   data.frame() %>% 
@@ -63,7 +63,7 @@ sapply(cond, function(i) rnorm(dose, mean = i * log10(dose + 1), sd = .4) )%>%
 
 set.seed(8041)
 
-sapply(cond, function(i) rnorm(dose, mean = i * log10(dose + 1), sd = .4) )%>% 
+sapply(cond, function(i) rnorm(dose, mean = i * log10(dose + 1), sd = pmax(c(i * log10(dose + 1) * 0.1), .5))) %>% 
   round(digits = 3) %>% 
   data.frame(row.names = names(dose)) %>% t %>% 
   as_tibble(rownames = "exp_id") %>%
@@ -158,7 +158,7 @@ plate_1 %>%
   geom_hline(yintercept = 0, linetype = "dashed") +
   stat_summary(fun.data = mean_sdl, geom = "linerange") +
   stat_summary(fun.data = mean_sdl, geom = "point") +
-  scale_x_log10() + 
+  scale_x_log10() +
   # -- stop counting --
   theme_classic(base_size = 12) + theme(
     axis.ticks  = element_line(colour = "black"),

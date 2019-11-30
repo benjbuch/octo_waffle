@@ -60,12 +60,12 @@ plate_1
 ```
 
     ## # A tibble: 4 x 5
-    ##       A      B      C      D      E
-    ##   <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-    ## 1 0.016  0.941 -0.307 -0.002  0.007
-    ## 2 0.049 -0.063  0.301  0.15  -0.704
-    ## 3 6.48   3.84   3.06   0.479  0.182
-    ## 4 5.76   3.73   2.15  -0.08   0.204
+    ##        A     B      C      D      E
+    ##    <dbl> <dbl>  <dbl>  <dbl>  <dbl>
+    ## 1 -0.986 0.349 -0.377 -0.165 -0.402
+    ## 2  0.48  0.23  -0.28   0.404  0.037
+    ## 3  5.99  4.71   2.50   0.04  -0.211
+    ## 4  6.52  3.57   1.76   1.48   0.081
 
 The column names have been taken from the first line of the file (since
 they were text). However, as we do know the actual names, we should use
@@ -106,10 +106,10 @@ plate_1
     ## # A tibble: 4 x 7
     ##   sample_id   replicate_id conc_1 conc_2 conc_3 conc_4 conc_0
     ##   <chr>       <chr>         <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-    ## 1 control     replicate_1   0.016  0.941 -0.307 -0.002  0.007
-    ## 2 control     replicate_2   0.049 -0.063  0.301  0.15  -0.704
-    ## 3 treatment_A replicate_1   6.48   3.84   3.06   0.479  0.182
-    ## 4 treatment_A replicate_2   5.76   3.73   2.15  -0.08   0.204
+    ## 1 control     replicate_1  -0.986  0.349 -0.377 -0.165 -0.402
+    ## 2 control     replicate_2   0.48   0.23  -0.28   0.404  0.037
+    ## 3 treatment_A replicate_1   5.99   4.71   2.50   0.04  -0.211
+    ## 4 treatment_A replicate_2   6.52   3.57   1.76   1.48   0.081
 
 If you had (for some reason) rownames in a `data.frame` that you want to
 keep in the `tidyverse`, use `dplyr::rownames_to_column()`.
@@ -171,17 +171,17 @@ plate_files
     ## # A tibble: 4 x 7
     ##   sample_id   replicate_id conc_1 conc_2 conc_3 conc_4 conc_0
     ##   <chr>       <chr>         <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-    ## 1 treatment_B replicate_1   119.    79.9  42.1   11.4   0.618
-    ## 2 treatment_B replicate_2   120.    79.5  41.8   12.4  -0.204
-    ## 3 treatment_C replicate_1    30.3   19.9  10.4    2.68 -0.341
-    ## 4 treatment_C replicate_2    30.1   19.6   9.76   2.70  1.05 
+    ## 1 treatment_B replicate_1   140.    83.2  41.3   12.8  -0.273
+    ## 2 treatment_B replicate_2   118.    75.5  43.5   12.7  -0.118
+    ## 3 treatment_C replicate_1    33.8   22.3   9.78   2.60  0.493
+    ## 4 treatment_C replicate_2    29.5   17.7   8.02   3.09  0.753
     ## 
     ## $`./part_10-working_with_tables_files/plate_3.csv`
     ## # A tibble: 2 x 7
     ##   sample_id   replicate_id conc_1 conc_3 conc_2 conc_4 conc_0
     ##   <chr>       <chr>         <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-    ## 1 treatment_D replicate_1   0.203 -0.025  0.444 -0.129  0.535
-    ## 2 treatment_D replicate_2   0.434 -0.269 -0.481  0.391  0.114
+    ## 1 treatment_D replicate_1  -0.219  0.79  -0.432  0.261  0.079
+    ## 2 treatment_D replicate_2  -0.148  0.669  0.585 -0.027  0.601
 
 The `plate_files` object is a `list` with two `tibble` objects
 (`dplyr`’s way of `data.frame`). Apparently, two columns have been
@@ -197,12 +197,12 @@ plate_files %>% bind_rows(.id = "file")
     ## # A tibble: 6 x 8
     ##   file           sample_id replicate_id  conc_1 conc_2 conc_3 conc_4 conc_0
     ##   <chr>          <chr>     <chr>          <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-    ## 1 ./part_10-wor… treatmen… replicate_1  119.    79.9   42.1   11.4    0.618
-    ## 2 ./part_10-wor… treatmen… replicate_2  120.    79.5   41.8   12.4   -0.204
-    ## 3 ./part_10-wor… treatmen… replicate_1   30.3   19.9   10.4    2.68  -0.341
-    ## 4 ./part_10-wor… treatmen… replicate_2   30.1   19.6    9.76   2.70   1.05 
-    ## 5 ./part_10-wor… treatmen… replicate_1    0.203  0.444 -0.025 -0.129  0.535
-    ## 6 ./part_10-wor… treatmen… replicate_2    0.434 -0.481 -0.269  0.391  0.114
+    ## 1 ./part_10-wor… treatmen… replicate_1  140.    83.2   41.3   12.8   -0.273
+    ## 2 ./part_10-wor… treatmen… replicate_2  118.    75.5   43.5   12.7   -0.118
+    ## 3 ./part_10-wor… treatmen… replicate_1   33.8   22.3    9.78   2.60   0.493
+    ## 4 ./part_10-wor… treatmen… replicate_2   29.5   17.7    8.02   3.09   0.753
+    ## 5 ./part_10-wor… treatmen… replicate_1   -0.219 -0.432  0.79   0.261  0.079
+    ## 6 ./part_10-wor… treatmen… replicate_2   -0.148  0.585  0.669 -0.027  0.601
 
 We have kept track of the file names (or even file paths) by specifying
 an `.id` column called `"file"` from the names of the `tibble` `list`.
@@ -216,12 +216,12 @@ plate_files %>% bind_rows(.id = "file") %>% mutate(file = str_extract(file, "pla
     ## # A tibble: 6 x 8
     ##   file    sample_id   replicate_id  conc_1 conc_2 conc_3 conc_4 conc_0
     ##   <chr>   <chr>       <chr>          <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-    ## 1 plate_2 treatment_B replicate_1  119.    79.9   42.1   11.4    0.618
-    ## 2 plate_2 treatment_B replicate_2  120.    79.5   41.8   12.4   -0.204
-    ## 3 plate_2 treatment_C replicate_1   30.3   19.9   10.4    2.68  -0.341
-    ## 4 plate_2 treatment_C replicate_2   30.1   19.6    9.76   2.70   1.05 
-    ## 5 plate_3 treatment_D replicate_1    0.203  0.444 -0.025 -0.129  0.535
-    ## 6 plate_3 treatment_D replicate_2    0.434 -0.481 -0.269  0.391  0.114
+    ## 1 plate_2 treatment_B replicate_1  140.    83.2   41.3   12.8   -0.273
+    ## 2 plate_2 treatment_B replicate_2  118.    75.5   43.5   12.7   -0.118
+    ## 3 plate_2 treatment_C replicate_1   33.8   22.3    9.78   2.60   0.493
+    ## 4 plate_2 treatment_C replicate_2   29.5   17.7    8.02   3.09   0.753
+    ## 5 plate_3 treatment_D replicate_1   -0.219 -0.432  0.79   0.261  0.079
+    ## 6 plate_3 treatment_D replicate_2   -0.148  0.585  0.669 -0.027  0.601
 
 For the moment, let’s combine the new data with `plate_1` without the
 file paths and call the object `plate_data`.
@@ -267,16 +267,16 @@ bind_cols(half_1, half_2)
     ## # A tibble: 10 x 6
     ##    sample_id   replicate_id  conc_1 sample_id1  replicate_id1 conc_2
     ##    <chr>       <chr>          <dbl> <chr>       <chr>          <dbl>
-    ##  1 control     replicate_1    0.016 treatment_B replicate_1   79.9  
-    ##  2 control     replicate_2    0.049 treatment_D replicate_2   -0.481
-    ##  3 treatment_A replicate_1    6.48  control     replicate_2   -0.063
-    ##  4 treatment_A replicate_2    5.76  treatment_A replicate_1    3.84 
-    ##  5 treatment_B replicate_1  119.    treatment_B replicate_2   79.5  
-    ##  6 treatment_B replicate_2  120.    treatment_D replicate_1    0.444
-    ##  7 treatment_C replicate_1   30.3   control     replicate_1    0.941
-    ##  8 treatment_C replicate_2   30.1   treatment_C replicate_1   19.9  
-    ##  9 treatment_D replicate_1    0.203 treatment_C replicate_2   19.6  
-    ## 10 treatment_D replicate_2    0.434 treatment_A replicate_2    3.73
+    ##  1 control     replicate_1   -0.986 treatment_B replicate_1   83.2  
+    ##  2 control     replicate_2    0.48  treatment_D replicate_2    0.585
+    ##  3 treatment_A replicate_1    5.99  control     replicate_2    0.23 
+    ##  4 treatment_A replicate_2    6.52  treatment_A replicate_1    4.71 
+    ##  5 treatment_B replicate_1  140.    treatment_B replicate_2   75.5  
+    ##  6 treatment_B replicate_2  118.    treatment_D replicate_1   -0.432
+    ##  7 treatment_C replicate_1   33.8   control     replicate_1    0.349
+    ##  8 treatment_C replicate_2   29.5   treatment_C replicate_1   22.3  
+    ##  9 treatment_D replicate_1   -0.219 treatment_C replicate_2   17.7  
+    ## 10 treatment_D replicate_2   -0.148 treatment_A replicate_2    3.57
 
 To properly merge `half_1` and `half_2`, we need to merge the tables
 based on the colums `sample_id` and `replicate_id`. This is what
@@ -290,16 +290,16 @@ inner_join(half_1, half_2, by = c("sample_id", "replicate_id"))
     ## # A tibble: 10 x 4
     ##    sample_id   replicate_id  conc_1 conc_2
     ##    <chr>       <chr>          <dbl>  <dbl>
-    ##  1 control     replicate_1    0.016  0.941
-    ##  2 control     replicate_2    0.049 -0.063
-    ##  3 treatment_A replicate_1    6.48   3.84 
-    ##  4 treatment_A replicate_2    5.76   3.73 
-    ##  5 treatment_B replicate_1  119.    79.9  
-    ##  6 treatment_B replicate_2  120.    79.5  
-    ##  7 treatment_C replicate_1   30.3   19.9  
-    ##  8 treatment_C replicate_2   30.1   19.6  
-    ##  9 treatment_D replicate_1    0.203  0.444
-    ## 10 treatment_D replicate_2    0.434 -0.481
+    ##  1 control     replicate_1   -0.986  0.349
+    ##  2 control     replicate_2    0.48   0.23 
+    ##  3 treatment_A replicate_1    5.99   4.71 
+    ##  4 treatment_A replicate_2    6.52   3.57 
+    ##  5 treatment_B replicate_1  140.    83.2  
+    ##  6 treatment_B replicate_2  118.    75.5  
+    ##  7 treatment_C replicate_1   33.8   22.3  
+    ##  8 treatment_C replicate_2   29.5   17.7  
+    ##  9 treatment_D replicate_1   -0.219 -0.432
+    ## 10 treatment_D replicate_2   -0.148  0.585
 
 If you want to keep rows that are in one table, but not in another,
 there are also the functions `dpylr::left_join(x, y)` and
@@ -331,10 +331,10 @@ readxl::read_excel("./part_10-working_with_tables_files/plate_1.xlsx")
     ## # A tibble: 4 x 7
     ##   ...1        ...2        conc_1 conc_2 conc_3 conc_4 conc_5
     ##   <chr>       <chr>        <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-    ## 1 control     replicate_1  0.016  0.941 -0.307 -0.002  0.007
-    ## 2 control     replicate_2  0.049 -0.063  0.301  0.15  -0.704
-    ## 3 treatment_A replicate_1  6.48   3.84   3.06   0.479  0.182
-    ## 4 treatment_A replicate_2  5.76   3.73   2.15  -0.08   0.204
+    ## 1 control     replicate_1 -0.986  0.349 -0.377 -0.165 -0.402
+    ## 2 control     replicate_2  0.48   0.23  -0.28   0.404  0.037
+    ## 3 treatment_A replicate_1  5.99   4.71   2.50   0.04  -0.211
+    ## 4 treatment_A replicate_2  6.52   3.57   1.76   1.48   0.081
 
 The blank column headers will get a new, unique name (e.g. `...1`,
 `...2` etc.) and the content of merged cells will be assigned to the
@@ -382,13 +382,13 @@ A tidier ‘wide format’ of the same data would look like that:
 
 |    replicate\_id    | concentration  | control | treatment\_A |
 | :-----------------: | :------------: | :-----: | :----------: |
-| <b>replicate\_1</b> | <b>conc\_1</b> |  0.016  |    6.477     |
-| <b>replicate\_1</b> | <b>conc\_2</b> |  0.941  |    3.839     |
-| <b>replicate\_1</b> | <b>conc\_3</b> | \-0.307 |    3.064     |
-| <b>replicate\_1</b> | <b>conc\_4</b> | \-0.002 |    0.479     |
-| <b>replicate\_1</b> | <b>conc\_0</b> |  0.007  |    0.182     |
-| <b>replicate\_2</b> | <b>conc\_1</b> |  0.049  |    5.755     |
-| <b>replicate\_2</b> | <b>conc\_2</b> | \-0.063 |    3.728     |
+| <b>replicate\_1</b> | <b>conc\_1</b> | \-0.986 |    5.992     |
+| <b>replicate\_1</b> | <b>conc\_2</b> |  0.349  |    4.711     |
+| <b>replicate\_1</b> | <b>conc\_3</b> | \-0.377 |    2.504     |
+| <b>replicate\_1</b> | <b>conc\_4</b> | \-0.165 |    0.040     |
+| <b>replicate\_1</b> | <b>conc\_0</b> | \-0.402 |   \-0.211    |
+| <b>replicate\_2</b> | <b>conc\_1</b> |  0.480  |    6.521     |
+| <b>replicate\_2</b> | <b>conc\_2</b> |  0.230  |    3.574     |
 
 *(table abridged)*
 
@@ -397,15 +397,15 @@ The longer the table, the tidier the data. Here is the ‘long format’ of
 
 |   sample\_id   |    replicate\_id    | concentration  | intensity |
 | :------------: | :-----------------: | :------------: | :-------: |
-| <b>control</b> | <b>replicate\_1</b> | <b>conc\_1</b> |   0.016   |
-| <b>control</b> | <b>replicate\_1</b> | <b>conc\_2</b> |   0.941   |
-| <b>control</b> | <b>replicate\_1</b> | <b>conc\_3</b> |  \-0.307  |
-| <b>control</b> | <b>replicate\_1</b> | <b>conc\_4</b> |  \-0.002  |
-| <b>control</b> | <b>replicate\_1</b> | <b>conc\_0</b> |   0.007   |
-| <b>control</b> | <b>replicate\_2</b> | <b>conc\_1</b> |   0.049   |
-| <b>control</b> | <b>replicate\_2</b> | <b>conc\_2</b> |  \-0.063  |
-| <b>control</b> | <b>replicate\_2</b> | <b>conc\_3</b> |   0.301   |
-| <b>control</b> | <b>replicate\_2</b> | <b>conc\_4</b> |   0.150   |
+| <b>control</b> | <b>replicate\_1</b> | <b>conc\_1</b> |  \-0.986  |
+| <b>control</b> | <b>replicate\_1</b> | <b>conc\_2</b> |   0.349   |
+| <b>control</b> | <b>replicate\_1</b> | <b>conc\_3</b> |  \-0.377  |
+| <b>control</b> | <b>replicate\_1</b> | <b>conc\_4</b> |  \-0.165  |
+| <b>control</b> | <b>replicate\_1</b> | <b>conc\_0</b> |  \-0.402  |
+| <b>control</b> | <b>replicate\_2</b> | <b>conc\_1</b> |   0.480   |
+| <b>control</b> | <b>replicate\_2</b> | <b>conc\_2</b> |   0.230   |
+| <b>control</b> | <b>replicate\_2</b> | <b>conc\_3</b> |  \-0.280  |
+| <b>control</b> | <b>replicate\_2</b> | <b>conc\_4</b> |   0.404   |
 
 *(table abridged)*
 
@@ -445,9 +445,9 @@ plate_1 %>%
     ## # A tibble: 3 x 4
     ##   sample_id replicate_id concentration intensity
     ##   <chr>     <chr>        <chr>             <dbl>
-    ## 1 control   replicate_1  conc_1            0.016
-    ## 2 control   replicate_1  conc_2            0.941
-    ## 3 control   replicate_1  conc_3           -0.307
+    ## 1 control   replicate_1  conc_1           -0.986
+    ## 2 control   replicate_1  conc_2            0.349
+    ## 3 control   replicate_1  conc_3           -0.377
 
 Instead of selecting the columns `conc_1:conc_0`, we could have
 specified the columns which *not* to gather; these are somtimes called
@@ -498,9 +498,9 @@ plate_1 %>%
     ## # A tibble: 3 x 4
     ##   replicate_id concentration control treatment_A
     ##   <chr>        <chr>           <dbl>       <dbl>
-    ## 1 replicate_1  conc_1          0.016        6.48
-    ## 2 replicate_1  conc_2          0.941        3.84
-    ## 3 replicate_1  conc_3         -0.307        3.06
+    ## 1 replicate_1  conc_1         -0.986        5.99
+    ## 2 replicate_1  conc_2          0.349        4.71
+    ## 3 replicate_1  conc_3         -0.377        2.50
 
 This format of `plate_1` could be useful if we wanted to subtract the
 control measurements from the treated samples. Here,
@@ -522,9 +522,9 @@ plate_1.wide %>%
     ## # A tibble: 3 x 5
     ##   replicate_id concentration control treatment_A tratment_A.corrected
     ##   <chr>        <chr>           <dbl>       <dbl>                <dbl>
-    ## 1 replicate_1  conc_1          0.016        6.48                 6.46
-    ## 2 replicate_1  conc_2          0.941        3.84                 2.90
-    ## 3 replicate_1  conc_3         -0.307        3.06                 3.37
+    ## 1 replicate_1  conc_1         -0.986        5.99                 6.98
+    ## 2 replicate_1  conc_2          0.349        4.71                 4.36
+    ## 3 replicate_1  conc_3         -0.377        2.50                 2.88
 
 ``` r
 plate_1.wide %>% 
@@ -535,9 +535,9 @@ plate_1.wide %>%
     ## # A tibble: 3 x 4
     ##   replicate_id concentration control treatment_A
     ##   <chr>        <chr>           <dbl>       <dbl>
-    ## 1 replicate_1  conc_1          0.016        6.46
-    ## 2 replicate_1  conc_2          0.941        2.90
-    ## 3 replicate_1  conc_3         -0.307        3.37
+    ## 1 replicate_1  conc_1         -0.986        6.98
+    ## 2 replicate_1  conc_2          0.349        4.36
+    ## 3 replicate_1  conc_3         -0.377        2.88
 
 You can check out more examples in the `tidyr` [vignette on
 pivoting](https://tidyr.tidyverse.org/dev/articles/pivot.html).
@@ -560,9 +560,9 @@ plate_1 %>%
     ## # A tibble: 3 x 6
     ##   experiment              conc_1 conc_2 conc_3 conc_4 conc_0
     ##   <chr>                    <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-    ## 1 control/replicate_1      0.016  0.941 -0.307 -0.002  0.007
-    ## 2 control/replicate_2      0.049 -0.063  0.301  0.15  -0.704
-    ## 3 treatment_A/replicate_1  6.48   3.84   3.06   0.479  0.182
+    ## 1 control/replicate_1     -0.986  0.349 -0.377 -0.165 -0.402
+    ## 2 control/replicate_2      0.48   0.23  -0.28   0.404  0.037
+    ## 3 treatment_A/replicate_1  5.99   4.71   2.50   0.04  -0.211
 
 The `tidyr::separate(column)` function does the reverse. By default, any
 non-alphanumeric character will be used to split the column, which can
@@ -583,9 +583,9 @@ plate_1 %>%
     ## # A tibble: 3 x 8
     ##   treatment specimen replicate_id conc_1 conc_2 conc_3 conc_4 conc_0
     ##   <chr>     <chr>    <chr>         <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-    ## 1 control   <NA>     replicate_1   0.016  0.941 -0.307 -0.002  0.007
-    ## 2 control   <NA>     replicate_2   0.049 -0.063  0.301  0.15  -0.704
-    ## 3 treatment A        replicate_1   6.48   3.84   3.06   0.479  0.182
+    ## 1 control   <NA>     replicate_1  -0.986  0.349 -0.377 -0.165 -0.402
+    ## 2 control   <NA>     replicate_2   0.48   0.23  -0.28   0.404  0.037
+    ## 3 treatment A        replicate_1   5.99   4.71   2.50   0.04  -0.211
 
 ``` r
 plate_1 %>% 
@@ -601,9 +601,9 @@ plate_1 %>%
     ## # A tibble: 3 x 10
     ##   piece_1 piece_2 piece_3 piece_4 piece_5 conc_1 conc_2 conc_3 conc_4
     ##   <chr>   <chr>   <chr>   <chr>   <chr>    <dbl>  <dbl>  <dbl>  <dbl>
-    ## 1 control replic… 1       <NA>    <NA>     0.016  0.941 -0.307 -0.002
-    ## 2 control replic… 2       <NA>    <NA>     0.049 -0.063  0.301  0.15 
-    ## 3 treatm… A       replic… 1       <NA>     6.48   3.84   3.06   0.479
+    ## 1 control replic… 1       <NA>    <NA>    -0.986  0.349 -0.377 -0.165
+    ## 2 control replic… 2       <NA>    <NA>     0.48   0.23  -0.28   0.404
+    ## 3 treatm… A       replic… 1       <NA>     5.99   4.71   2.50   0.04 
     ## # … with 1 more variable: conc_0 <dbl>
 
 ## Hands-On Exercise

@@ -24,14 +24,14 @@ puristic …
 library(tidyverse)
 ```
 
-    ## ── Attaching packages ─────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+    ## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
 
     ## ✔ ggplot2 3.2.1     ✔ purrr   0.3.3
     ## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
     ## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
     ## ✔ readr   1.3.1     ✔ forcats 0.4.0
 
-    ## ── Conflicts ────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
 
@@ -46,22 +46,22 @@ package.
 In worst case, the data acquired from each position on the plate was
 saved like this:
 
-|          |   A   |    B    |    C    |    D    |    E    |
-| :------: | :---: | :-----: | :-----: | :-----: | :-----: |
-| <b>1</b> | 0.016 |  0.941  | \-0.307 | \-0.002 |  0.007  |
-| <b>2</b> | 0.049 | \-0.063 |  0.301  |  0.150  | \-0.704 |
-| <b>3</b> | 6.477 |  3.839  |  3.064  |  0.479  |  0.182  |
-| <b>4</b> | 5.755 |  3.728  |  2.153  | \-0.080 |  0.204  |
+|          |    A    |   B   |    C    |    D    |    E    |
+| :------: | :-----: | :---: | :-----: | :-----: | :-----: |
+| <b>1</b> | \-0.986 | 0.349 | \-0.377 | \-0.165 | \-0.402 |
+| <b>2</b> |  0.480  | 0.230 | \-0.280 |  0.404  |  0.037  |
+| <b>3</b> |  5.992  | 4.711 |  2.504  |  0.040  | \-0.211 |
+| <b>4</b> |  6.521  | 3.574 |  1.757  |  1.482  |  0.081  |
 
 Certainly, the sample assignment was documented (somewhere), so that we
 know *the actual data* should be annotated like this.
 
 |                     |                     | conc\_1 | conc\_2 | conc\_3 | conc\_4 | conc\_0 |
 | :-----------------: | :-----------------: | :-----: | :-----: | :-----: | :-----: | :-----: |
-|   <b>control</b>    | <b>replicate\_1</b> |  0.016  |  0.941  | \-0.307 | \-0.002 |  0.007  |
-|   <b>control</b>    | <b>replicate\_2</b> |  0.049  | \-0.063 |  0.301  |  0.150  | \-0.704 |
-| <b>treatment\_A</b> | <b>replicate\_1</b> |  6.477  |  3.839  |  3.064  |  0.479  |  0.182  |
-| <b>treatment\_A</b> | <b>replicate\_2</b> |  5.755  |  3.728  |  2.153  | \-0.080 |  0.204  |
+|   <b>control</b>    | <b>replicate\_1</b> | \-0.986 |  0.349  | \-0.377 | \-0.165 | \-0.402 |
+|   <b>control</b>    | <b>replicate\_2</b> |  0.480  |  0.230  | \-0.280 |  0.404  |  0.037  |
+| <b>treatment\_A</b> | <b>replicate\_1</b> |  5.992  |  4.711  |  2.504  |  0.040  | \-0.211 |
+| <b>treatment\_A</b> | <b>replicate\_2</b> |  6.521  |  3.574  |  1.757  |  1.482  |  0.081  |
 
 Imagine this data appearing in some spreadsheet software.
 
@@ -78,16 +78,16 @@ The following answer takes just four lines of code in R …
 
 |   sample\_id | concentration |    mean |    sd |
 | -----------: | ------------: | ------: | ----: |
-|      control |          0 µM | \-0.348 | 0.503 |
-|      control |          1 µM |   0.074 | 0.107 |
-|      control |         10 µM | \-0.003 | 0.430 |
-|      control |        100 µM |   0.439 | 0.710 |
-|      control |       1000 µM |   0.032 | 0.023 |
-| treatment\_A |          0 µM |   0.193 | 0.016 |
-| treatment\_A |          1 µM |   0.199 | 0.395 |
-| treatment\_A |         10 µM |   2.609 | 0.644 |
-| treatment\_A |        100 µM |   3.784 | 0.078 |
-| treatment\_A |       1000 µM |   6.116 | 0.511 |
+|      control |          0 µM | \-0.183 | 0.310 |
+|      control |          1 µM |   0.120 | 0.402 |
+|      control |         10 µM | \-0.328 | 0.069 |
+|      control |        100 µM |   0.290 | 0.084 |
+|      control |       1000 µM | \-0.253 | 1.037 |
+| treatment\_A |          0 µM | \-0.065 | 0.206 |
+| treatment\_A |          1 µM |   0.761 | 1.020 |
+| treatment\_A |         10 µM |   2.131 | 0.528 |
+| treatment\_A |        100 µM |   4.143 | 0.804 |
+| treatment\_A |       1000 µM |   6.256 | 0.374 |
 
 … and six more lines for a plot.
 

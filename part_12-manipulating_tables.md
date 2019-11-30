@@ -36,12 +36,12 @@ Having combined and tidied the plate data, you will have an object
 
 | sample\_id | replicate\_id | concentration | intensity |
 | :--------: | :-----------: | :-----------: | :-------: |
-|  control   |     rep.A     |       0       |  \-0.121  |
+|  control   |     rep.A     |       0       |  \-0.152  |
 |  control   |     rep.A     |       1       |    NA     |
 |  control   |     rep.A     |      10       |    NA     |
-|  control   |     rep.A     |      100      |  \-0.340  |
+|  control   |     rep.A     |      100      |  \-0.426  |
 |  control   |     rep.A     |     1000      |    NA     |
-|  control   |     rep.B     |       0       |   0.232   |
+|  control   |     rep.B     |       0       |   0.290   |
 |  control   |     rep.B     |       1       |    NA     |
 
 *(table abridged)*
