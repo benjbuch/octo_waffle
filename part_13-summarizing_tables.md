@@ -19,8 +19,8 @@ are applied to each group.
 
 If you have not done so yet, please attach the `tidyverse` and make sure
 you have the `plate_data` object from the [last
-section](part_11-tidying_tables.md)–exercises included. If not, here you
-go.
+section](part_12-manipulating_tables.md)–exercises included. If not,
+here you go.
 
 ``` r
 library(tidyverse)
@@ -30,8 +30,8 @@ readRDS("part_12-plate_data.rds") -> plate_data
 ## Making Groups
 
 `group_by(...)` specifies the columns containing the categorical
-variables on which you want to split your data set. Note that it is
-*not* necessary (but sometimes useful) to convert the column into a
+variables on which you want to split your data set. It is *not*
+necessary (although sometimes useful) to convert the column into a
 `factor`.
 
 Grouping does not change how the data looks like, apart from listing how
@@ -102,9 +102,9 @@ To remove the grouping, use `ungroup()`.
 
 ## Summarizing Groups
 
-A common summary of continuous data is to give averages and measure the
-spread e.g. using the standard deviation `sd(x)`, the median absolute
-deviation `mad(x)`, or the inter-quartile range `IQR(x)`. Given
+A common summary of continuous data is to give the average and a measure
+of the spread e.g. using the standard deviation `sd(x)`, the median
+absolute deviation `mad(x)`, or the interquartile range `IQR(x)`. Given
 `plate_data`, let’s calculate the average intensity for each `sample_id`
 and `concentration`.
 
@@ -135,9 +135,8 @@ plate_data %>%
     ## # … with 15 more rows
 
 Suspiciously, the standard deviation of some samples with four
-replicates (`replicate_1`, `replicate_2`, `replicate_3` and
-`replicate_4`) are higher than the others. We shall keep this in mind as
-there might be something ‘wrong’ with one of the replicates.
+replicates are higher than the samples with just two replicates. Might
+there be something ‘wrong’ with one of `replicate_3` or `replicate_4`?
 
 For categorical data, we are more likely to be interested in the number
 of observations, `n()`, or the number of unique values a variable takes
@@ -157,7 +156,7 @@ multivariate comparisons or to fit models through data based on grouped
 
 In this section, we will use a built-in data set in R, `reshape2::tips`,
 which contains a record on the tips a waiter received over several
-months in restaurant.
+months in a restaurant.
 
 ``` r
 reshape2::tips %>% as_tibble()
@@ -198,7 +197,7 @@ t.test(tip ~ sex, data = reshape2::tips)
     ##             2.833448             3.089618
 
 However, if we wanted to perform this test by weekday, we were left with
-subsetting the data (manually) by day and analyze each subset.
+subsetting the data by day and analyze each subset.
 
 ``` r
 reshape2::tips[which(reshape2::tips$day == "Fri"), ] -> tips.Fri
@@ -387,13 +386,13 @@ linear and non-linear models.
 ## Hands-On Exercise
 
 Unfortunately, some of the fits on `plate_data` are not of satisfactory
-quality. Let’s try to figure out if there is a bad replicate in our
-data.
+quality. Maybe we can figure out if this is because of a bad replicate
+in our data.
 
 1.  We will group `plate_data` by `sample_id` and `replicate_id`. One of
     the groups has no values recorded at all, which will cause troubles
     in later steps. Figure out which one it is and exlude it by
     filtering the rows accordingly.
 
-2.  Now, perform the fit with `lm` and have a look only at the intercept
-    terms. How much do they differ between replicates?
+2.  Now, perform the fit with `lm` and have a look only at the slopes.
+    How much do they differ between replicates?

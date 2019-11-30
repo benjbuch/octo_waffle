@@ -394,7 +394,7 @@ mapping call as lambda with `~` and can use `..1` (or `.x`) and `..2`
 (or `.y`) to refer to the first and respectivley second input list.
 
 ``` r
-ex1 %>% mutate(S = map2(A, B, ~seq(from = ..1, to = 10, by = ..2))) %>% 
+ex1 %>% mutate(S = map2(A, B, ~ seq(from = ..1, to = 10, by = ..2))) %>% 
   as.data.frame
 ```
 
@@ -408,7 +408,8 @@ arguments. Here are some foolproof alternatives.
 
 If the entire table has *the exact same number and the exact same column
 names* as the input arguments of the function, this simple `purrr::pmap`
-syntax works, irrespective of the column order.
+syntax works irrespective of the column order: `data.frame` and alike
+are just `list` objects\!
 
 ``` r
 ex1 %>% 
@@ -473,7 +474,7 @@ ex2 %>%
   mutate(S_mean = mean(unlist(S)))
 ```
 
-Indeed, we need `purrr::map` again.
+Of course, we need `purrr::map` again.
 
 ``` r
 ex2 %>% 
@@ -509,10 +510,10 @@ we want to pass multiple columns as arguments, we need `purrr::pmap`.
 
 ``` r
 ex3 <- tribble(
-  ~ name, ~ t1, ~t2, ~t3,
-  "Abby",    1,   4,   6,
-  "Bess",    7,   2,   5,
-  "Carl",    9,   8,   3
+  ~name,  ~t1, ~t2, ~t3,
+  "Abby",   1,   4,   6,
+  "Bess",   7,   2,   5,
+  "Carl",   9,   8,   3
 )
 
 ex3 %>% mutate(t_sum = pmap_dbl(list(t1, t2, t3), sum))

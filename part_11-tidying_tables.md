@@ -68,8 +68,8 @@ plate_1
     ## 4 5.76   3.73   2.15  -0.08   0.204
 
 The column names have been taken from the first line of the file (since
-they were text). However, as we do know the actual names, so we should
-use them. They can be set either using `colnames(plate_1)<-`, or during
+they were text). However, as we do know the actual names, we should use
+them. They can be set either using `colnames(plate_1)<-` or during
 import. In the latter case, we can (and should) skip the first line of
 the file since it’s obsolete.
 
@@ -207,7 +207,21 @@ plate_files %>% bind_rows(.id = "file")
 We have kept track of the file names (or even file paths) by specifying
 an `.id` column called `"file"` from the names of the `tibble` `list`.
 If need be, we could extract metadata stored in the file name or file
-path by creating new columns. (See next session.)
+path by creating new columns. (Details in the next session.)
+
+``` r
+plate_files %>% bind_rows(.id = "file") %>% mutate(file = str_extract(file, "plate_[0-9]+"))
+```
+
+    ## # A tibble: 6 x 8
+    ##   file    sample_id   replicate_id  conc_1 conc_2 conc_3 conc_4 conc_0
+    ##   <chr>   <chr>       <chr>          <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+    ## 1 plate_2 treatment_B replicate_1  119.    79.9   42.1   11.4    0.618
+    ## 2 plate_2 treatment_B replicate_2  120.    79.5   41.8   12.4   -0.204
+    ## 3 plate_2 treatment_C replicate_1   30.3   19.9   10.4    2.68  -0.341
+    ## 4 plate_2 treatment_C replicate_2   30.1   19.6    9.76   2.70   1.05 
+    ## 5 plate_3 treatment_D replicate_1    0.203  0.444 -0.025 -0.129  0.535
+    ## 6 plate_3 treatment_D replicate_2    0.434 -0.481 -0.269  0.391  0.114
 
 For the moment, let’s combine the new data with `plate_1` without the
 file paths and call the object `plate_data`.
