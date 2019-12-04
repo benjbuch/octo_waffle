@@ -53,13 +53,18 @@ A cheat sheet for the introduction in [RMD](part_00-cheat_sheet.Rmd) or [DOCX](p
 We focus on using packages from the [`tidyverse`](https://www.tidyverse.org).
 
 1. [Working with Tables](part_10-working_with_tables.md)
-    * Importing and Tidying Tabulated Data
-    * Manipulating and Creating Rows and Columns
-    * Summarizing Tabulated Data
-2. Making Figures
-3. Good Practices
-4. Import, Export, Save
+    * [Importing and Tidying Tabulated Data](part_11-tidying_tables.md)
+    * [Manipulating and Creating Rows and Columns](part_12-manipulating_tables.md)
+    * [Summarizing Tabulated Data](part_13-summarizing_tables.md)
+    * What about `data.table`?
+2. [Making Figures](part_20-making_figures.md)
+    * [Plot Types](part_21-plot_types.md)
+    * [More Plotting Scenarios](part_22-plotting_scenarios.md)
+    * [Plot Themes](part_23-plot_themes.md)
+    * [Arranging Plots into Figures](part_24-arrangin_plots.md)
+3. [Good Practices](part_30-good_practices.md)
+4. [Import, Export, Save](part_40-import_export_save.md)
 
 ## Acknowledgements
 
-Some of the material has been adapted from Sean Davi's [Introduction to R](https://seandavi.github.io/ITR/index.html) and Patrick Burn's [Impatient R](https://www.burns-stat.com/documents/tutorials/impatient-r/). 
+Some of the material has been adapted from Sean Davi's [Introduction to R](https://seandavi.github.io/ITR/index.html), Patrick Burn's [Impatient R](https://www.burns-stat.com/documents/tutorials/impatient-r/) and G. Grolemund and H. Wickham's [R for Data Science](https://r4ds.had.co.nz).
