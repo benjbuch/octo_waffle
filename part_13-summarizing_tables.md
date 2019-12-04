@@ -104,9 +104,47 @@ To remove the grouping, use `ungroup()`.
 
 A common summary of continuous data is to give the average and a measure
 of the spread e.g. using the standard deviation `sd(x)`, the median
-absolute deviation `mad(x)`, or the interquartile range `IQR(x)`. Given
-`plate_data`, let’s calculate the average intensity for each `sample_id`
-and `concentration`.
+absolute deviation `mad(x)`, or the interquartile range `IQR(x)`.
+
+Let’s have a look at a simple case first to identify the differences.
+
+``` r
+df <- data.frame(g = rep(c("a", "b"), each = 2), x = seq(1, 4)) 
+
+df %>% mutate(y = mean(x))
+```
+
+    ##   g x   y
+    ## 1 a 1 2.5
+    ## 2 a 2 2.5
+    ## 3 b 3 2.5
+    ## 4 b 4 2.5
+
+``` r
+df %>% group_by(g) %>% mutate(y = mean(x))
+```
+
+    ## # A tibble: 4 x 3
+    ## # Groups:   g [2]
+    ##   g         x     y
+    ##   <fct> <int> <dbl>
+    ## 1 a         1   1.5
+    ## 2 a         2   1.5
+    ## 3 b         3   3.5
+    ## 4 b         4   3.5
+
+``` r
+df %>% group_by(g) %>% summarize(y = mean(x))
+```
+
+    ## # A tibble: 2 x 2
+    ##   g         y
+    ##   <fct> <dbl>
+    ## 1 a       1.5
+    ## 2 b       3.5
+
+Given `plate_data`, let’s calculate the average intensity for each
+`sample_id` and `concentration`.
 
 ``` r
 plate_data %>% 
@@ -141,6 +179,40 @@ there be something ‘wrong’ with one of `replicate_3` or `replicate_4`?
 For categorical data, we are more likely to be interested in the number
 of observations, `n()`, or the number of unique values a variable takes
 within a group, `n_distinct(...)`.
+
+A routine task is for example to calculate the proportional composition.
+
+``` r
+mtcars %>%
+    group_by(am, gear) %>%
+    summarise(n = n()) %>%
+    mutate(freq = n / sum(n))
+```
+
+    ## # A tibble: 4 x 4
+    ## # Groups:   am [2]
+    ##      am  gear     n  freq
+    ##   <dbl> <dbl> <int> <dbl>
+    ## 1     0     3    15 0.789
+    ## 2     0     4     4 0.211
+    ## 3     1     4     8 0.615
+    ## 4     1     5     5 0.385
+
+``` r
+mtcars %>%
+    group_by(am, gear) %>%
+    summarise(n = n()) %>%
+    mutate(freq = prop.table(n))
+```
+
+    ## # A tibble: 4 x 4
+    ## # Groups:   am [2]
+    ##      am  gear     n  freq
+    ##   <dbl> <dbl> <int> <dbl>
+    ## 1     0     3    15 0.789
+    ## 2     0     4     4 0.211
+    ## 3     1     4     8 0.615
+    ## 4     1     5     5 0.385
 
 There are many more summary functions. Have a look on this [cheat
 sheet](https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf).

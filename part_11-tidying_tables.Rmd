@@ -163,6 +163,53 @@ Another problem you might be facing is that within Excel, it is tempting to put 
 
 > If you plan to import from Excel, keep it simple and put one set of data per sheet. Ideally, export as `.csv`.
 
+### Creating a `data.frame` from Scratch
+
+Sometimes it's necessary to quickly make a `data.frame` or related objects.
+
+This base R approach works _always_.
+
+```{r}
+set.seed(181096)
+```
+```{r}
+# simulate some data
+status <- factor(rep(c("smoker", "non-smoker"), each = 50))
+risk_non_smoker <- rnorm(50)
+risk_smoker <- 2 + risk_non_smoker
+
+# create a data.frame by column
+smoking_risk <- data.frame(status = status, risk = c(risk_smoker, risk_non_smoker))
+
+head(smoking_risk)
+
+# create a quick plot
+plot(risk ~ status, data = smoking_risk)
+```
+
+Remember that a `data.frame` is basically a `list` of vectors (of identical length) that can contain a different type of data each. This is why tables (if not imported) are created by column from vectors. 
+
+The `tidyverse` provides and uses a special case of the `data.frame` class, which is the `tibble`. It has a couple of advantages (see `?tibble::tibble`).
+
+`tibble` objects are created like `data.frame` objects.
+
+```{r}
+smoking_risk <- tibble(status = status, risk = c(risk_smoker, risk_non_smoker))
+
+smoking_risk # no head() call required, prints only top rows
+```
+
+If for some reason you want to create a `tibble` by rows, use `tibble::tribble`.
+
+```{r}
+tribble(
+  ~colA, ~colB,
+  "a",   1,
+  "b",   2,
+  "c",   3
+)
+```
+
 ## Tidying Data
 
 Data can be tabulated in one of two ways: A tidy and a messy one.

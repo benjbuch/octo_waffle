@@ -48,7 +48,19 @@ To remove the grouping, use `ungroup()`.
 
 ## Summarizing Groups
 
-A common summary of continuous data is to give the average and a measure of the spread e.g. using the standard deviation `sd(x)`, the median absolute deviation `mad(x)`, or the interquartile range `IQR(x)`. Given `plate_data`, let's calculate the average intensity for each `sample_id` and `concentration`.
+A common summary of continuous data is to give the average and a measure of the spread e.g. using the standard deviation `sd(x)`, the median absolute deviation `mad(x)`, or the interquartile range `IQR(x)`. 
+
+Let's have a look at a simple case first to identify the differences.
+
+```{r}
+df <- data.frame(g = rep(c("a", "b"), each = 2), x = seq(1, 4)) 
+
+df %>% mutate(y = mean(x))
+df %>% group_by(g) %>% mutate(y = mean(x))
+df %>% group_by(g) %>% summarize(y = mean(x))
+```
+
+Given `plate_data`, let's calculate the average intensity for each `sample_id` and `concentration`.
 
 ```{r}
 plate_data %>% 
@@ -63,6 +75,21 @@ plate_data %>%
 Suspiciously, the standard deviation of some samples with four replicates are higher than the samples with just two replicates. Might there be something ‘wrong’ with one of `replicate_3` or `replicate_4`?
 
 For categorical data, we are more likely to be interested in the number of observations, `n()`, or the number of unique values a variable takes within a group, `n_distinct(...)`. 
+
+A routine task is for example to calculate the proportional composition.
+
+```{r}
+mtcars %>%
+    group_by(am, gear) %>%
+    summarise(n = n()) %>%
+    mutate(freq = n / sum(n))
+
+mtcars %>%
+    group_by(am, gear) %>%
+    summarise(n = n()) %>%
+    mutate(freq = prop.table(n))
+```
+
 
 There are many more summary functions. Have a look on this [cheat sheet](https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf).
 

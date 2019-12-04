@@ -9,6 +9,8 @@ Importing and Tidying Data
         `row_bind`](#combining-data-from-multiple-files-with-row_bind)
       - [Combining Data with `join`](#combining-data-with-join)
       - [Importing Data from Excel](#importing-data-from-excel)
+      - [Creating a `data.frame` from
+        Scratch](#creating-a-data.frame-from-scratch)
   - [Tidying Data](#tidying-data)
       - [Interconverting Wide and Long Table
         Formats](#interconverting-wide-and-long-table-formats)
@@ -353,6 +355,94 @@ from your side after.
 
 > If you plan to import from Excel, keep it simple and put one set of
 > data per sheet. Ideally, export as `.csv`.
+
+### Creating a `data.frame` from Scratch
+
+Sometimes it’s necessary to quickly make a `data.frame` or related
+objects.
+
+This base R approach works *always*.
+
+``` r
+set.seed(181096)
+```
+
+``` r
+# simulate some data
+status <- factor(rep(c("smoker", "non-smoker"), each = 50))
+risk_non_smoker <- rnorm(50)
+risk_smoker <- 2 + risk_non_smoker
+
+# create a data.frame by column
+smoking_risk <- data.frame(status = status, risk = c(risk_smoker, risk_non_smoker))
+
+head(smoking_risk)
+```
+
+    ##   status       risk
+    ## 1 smoker  2.6992083
+    ## 2 smoker -0.4244009
+    ## 3 smoker  2.1020269
+    ## 4 smoker  0.4823049
+    ## 5 smoker  2.0833528
+    ## 6 smoker  2.4069171
+
+``` r
+# create a quick plot
+plot(risk ~ status, data = smoking_risk)
+```
+
+![](part_11-tidying_tables_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+
+Remember that a `data.frame` is basically a `list` of vectors (of
+identical length) that can contain a different type of data each. This
+is why tables (if not imported) are created by column from vectors.
+
+The `tidyverse` provides and uses a special case of the `data.frame`
+class, which is the `tibble`. It has a couple of advantages (see
+`?tibble::tibble`).
+
+`tibble` objects are created like `data.frame` objects.
+
+``` r
+smoking_risk <- tibble(status = status, risk = c(risk_smoker, risk_non_smoker))
+
+smoking_risk # no head() call required, prints only top rows
+```
+
+    ## # A tibble: 100 x 2
+    ##    status   risk
+    ##    <fct>   <dbl>
+    ##  1 smoker  2.70 
+    ##  2 smoker -0.424
+    ##  3 smoker  2.10 
+    ##  4 smoker  0.482
+    ##  5 smoker  2.08 
+    ##  6 smoker  2.41 
+    ##  7 smoker  2.48 
+    ##  8 smoker  2.11 
+    ##  9 smoker  1.63 
+    ## 10 smoker  1.34 
+    ## # … with 90 more rows
+
+If for some reason you want to create a `tibble` by rows, use
+`tibble::tribble`.
+
+``` r
+tribble(
+  ~colA, ~colB,
+  "a",   1,
+  "b",   2,
+  "c",   3
+)
+```
+
+    ## # A tibble: 3 x 2
+    ##   colA   colB
+    ##   <chr> <dbl>
+    ## 1 a         1
+    ## 2 b         2
+    ## 3 c         3
 
 ## Tidying Data
 
