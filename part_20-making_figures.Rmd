@@ -7,13 +7,14 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, fig.width = 6, fig.height = 3, dpi = 120, warning = FALSE)
+set.seed(3000)
 ```
 
 ***
 
 This section is about data visualization; a powerful tool for explorative data analysis.
 
-If you have not done so yet, please attach the `tidyverse` and make sure you have the `plate_data` object from [this section](part_12-manipulating_tables.md). If not, here you go.
+If you have not done so yet, please attach the `tidyverse` and make sure you have the `plate_data` object from [this section](part_12-manipulating_tables.html). If not, here you go.
 
 ```{r message=FALSE}
 library(tidyverse)

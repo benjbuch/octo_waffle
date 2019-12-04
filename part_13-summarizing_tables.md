@@ -19,7 +19,7 @@ are applied to each group.
 
 If you have not done so yet, please attach the `tidyverse` and make sure
 you have the `plate_data` object from the [last
-section](part_12-manipulating_tables.md)–exercises included. If not,
+section](part_12-manipulating_tables.html)–exercises included. If not,
 here you go.
 
 ``` r

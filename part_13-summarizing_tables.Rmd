@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 You will learn in this section is how to summarize (large) data sets. Typically, the data is first split into several groups defined by a categorical variable (‘factor’) and then some sort of summary statistics are applied to each group.
 
-If you have not done so yet, please attach the `tidyverse` and make sure you have the `plate_data` object from the [last section](part_12-manipulating_tables.md)--exercises included. If not, here you go.
+If you have not done so yet, please attach the `tidyverse` and make sure you have the `plate_data` object from the [last section](part_12-manipulating_tables.html)--exercises included. If not, here you go.
 
 ```{r message=FALSE}
 library(tidyverse)

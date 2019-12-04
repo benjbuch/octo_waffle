@@ -23,8 +23,8 @@ variables based on exisiting values to the data.
 
 If you have not done so yet, please attach the `tidyverse` and make sure
 you have the `plate_data` object from the [last
-section](part_11-tidying_tables.md)–exercises included. If not, here you
-go.
+section](part_11-tidying_tables.html)–exercises included. If not, here
+you go.
 
 ``` r
 library(tidyverse)

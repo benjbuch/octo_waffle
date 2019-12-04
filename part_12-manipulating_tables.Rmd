@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 In this section, you will learn how to select specific entries (rows) based on their content from a table. Also, you will learn how to retrieve specific variables (columns) from the table and/or add new variables based on exisiting values to the data.
 
-If you have not done so yet, please attach the `tidyverse` and make sure you have the `plate_data` object from the [last section](part_11-tidying_tables.md)--exercises included. If not, here you go.
+If you have not done so yet, please attach the `tidyverse` and make sure you have the `plate_data` object from the [last section](part_11-tidying_tables.html)--exercises included. If not, here you go.
 
 ```{r message=FALSE}
 library(tidyverse)

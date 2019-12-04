@@ -35,7 +35,7 @@ such as a semicolon or a white space (e.g. tab, blank).
 ### Importing Data from a Single File
 
 The data of the plate mentioned in [this session’s
-introduction](part_10-working_with_tables.md) was saved as a
+introduction](part_10-working_with_tables.html) was saved as a
 comma-delimited file called ‘plate\_1.csv’. You can find it in the
 sub-folder ‘part\_10-working\_with\_tables\_files’. We are going to
 import this file using `readr::read_csv(file)`. This function will try

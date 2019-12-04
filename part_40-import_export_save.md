@@ -80,8 +80,9 @@ correctly into R.
     during import.
 
   - If you want to use multi-word names and values, stick to [one of the
-    following styles](part_30-good_practices.md): `CellNumber`,
-    `cell.number`, or `cell_number`.
+    following
+    styles](part_30-good_practices.html#comments-spaces-names):
+    `CellNumber`, `cell.number`, or `cell_number`.
 
   - Short names are preferred over longer names.
 
@@ -115,8 +116,9 @@ number of columns**. Failure to meet this criterion will result in a
 warning or an error message.
 
 Small files can conveniently be imported using `readr::read_csv(...)` as
-outlined in [the ‘Importing and Tidying Tabulated
-Data’](part_11-tidying_tables.md) section.
+outlined in the [‘Importing and Tidying Tabulated
+Data’](part_11-tidying_tables.html#importing-data-from-delimited-files)
+section.
 
 Here is the fast (and preferred) approach to import large files,
 e.g. `.csv` files exported from a FACS software, using

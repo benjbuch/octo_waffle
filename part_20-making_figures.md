@@ -20,7 +20,7 @@ explorative data analysis.
 
 If you have not done so yet, please attach the `tidyverse` and make sure
 you have the `plate_data` object from [this
-section](part_12-manipulating_tables.md). If not, here you go.
+section](part_12-manipulating_tables.html). If not, here you go.
 
 ``` r
 library(tidyverse)

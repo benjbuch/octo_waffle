@@ -23,7 +23,7 @@ A common standard to store tabulated data is as comma-separated values. Typicall
 
 ### Importing Data from a Single File
 
-The data of the plate mentioned in [this session's introduction](part_10-working_with_tables.md) was saved as a comma-delimited file called ‘plate_1.csv’. You can find it in the sub-folder ‘part_10-working_with_tables_files’. We are going to import this file using `readr::read_csv(file)`. This function will try to guess the data type stored in each column.
+The data of the plate mentioned in [this session's introduction](part_10-working_with_tables.html) was saved as a comma-delimited file called ‘plate_1.csv’. You can find it in the sub-folder ‘part_10-working_with_tables_files’. We are going to import this file using `readr::read_csv(file)`. This function will try to guess the data type stored in each column.
 
 > In the file path, `.` refers to the current working directory, `getwd()`, so that we can use relative paths.
 

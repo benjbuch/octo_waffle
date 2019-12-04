@@ -61,7 +61,7 @@ We focus on using packages from the [`tidyverse`](https://www.tidyverse.org).
     * [Plot Types](part_21-plot_types.md)
     * [More Plotting Scenarios](part_22-plotting_scenarios.md)
     * [Plot Themes](part_23-plot_themes.md)
-    * [Arranging Plots into Figures](part_24-arrangin_plots.md)
+    * [Arranging Plots into Figures](part_24-arranging_plots.md)
 3. [Good Practices](part_30-good_practices.md)
 4. [Import, Export, Save](part_40-import_export_save.md)
 
