@@ -1,0 +1,81 @@
+---
+title: "Useful Statements"
+output: 
+  github_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Base R Statements
+
+### Repeating Vector Elements
+
+```{r}
+rep(c(1, 2), times = 2)
+rep(c(1, 2), each = 2)
+```
+
+### Making Combinations
+
+In case you need all combinations of any sorts.
+
+```{r}
+expand.grid(Name_2 = c("a", "b", "c"), Name_1 = c(1, 2, 3, 4), c("good", "bad"))
+```
+
+### Sampling at Random
+
+Sampling random integers.
+
+```{r include=FALSE}
+set.seed(210834)
+```
+```{r}
+sample(1:10, size = 5, replace = TRUE)
+```
+
+Sampling values from frequency distributions.
+
+```{r}
+# from a uniform distribution
+runif(5, min = 0, max = 1)
+# from a normal distribution
+rnorm(5, mean = 0, sd = 1)
+# from a Poisson distribution
+rpois(5, lambda = 2)
+# from a binomial distribution
+rbinom(5, size = 10, prob = .5)
+```
+
+### Working with Dates
+
+When was the last time (and when will be the next time) in the 21st century that 1st of December is First Advent Sunday?
+
+```{r}
+year_range <- 2000:2100
+year_range[which(weekdays(as.Date(paste0('0112', year_range), '%d%m%Y')) == "Sunday")]
+```
+
+## `tidyverse` Statements
+
+```{r message=FALSE}
+library(tidyverse)
+```
+
+### Matching Nearby Ranges
+
+Floating point number representations are limited in their precision. This is why `sqrt(2)^2 == 2` is `FALSE` (within the limits of your computer's accuracy, `.Machine$double.eps`). A a safe way of comparing two vectors of floating point numbers is `dplyr::near`.
+
+```{r}
+# within machine accuracy
+near(sqrt(2)^2, 2)
+# within user-defined range
+near(3, 2.6, tol = .5)
+```
+
+## More Pipes
+
+See [this chapter](https://r4ds.had.co.nz/pipes.html) in G. Grolemund and H. Wickham's _R for Data Science_.
