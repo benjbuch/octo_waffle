@@ -380,6 +380,14 @@ Note that if you have a frequent need to compute these summary statistics row-wi
 1. Change `"rep.A"` and `"rep.B"` into `"replicate_3"` and `"replicate_4"` respectively, arrange by `sample_id` and `replicate_id` (descending), then store the result as `plate_data`.
 
 ```{r include=FALSE}
+# solution 1
+plate_data %>% mutate(replicate_id = case_when(
+  replicate_id == "rep.A" ~ "replicate_3",
+  replicate_id == "rep.B" ~ "replicate_4",
+  TRUE ~ replicate_id
+))
+
+# solution 2
 plate_data %>% 
   mutate(replicate_id = recode(replicate_id,
                                rep.A = "replicate_3",
@@ -394,7 +402,9 @@ plate_data %>%
   # make long table wide
   pivot_wider(names_from = "sample_id", values_from = "intensity") %>% 
   # subtract control in place using a lambda
-  mutate_at(vars(starts_with("treatment")), ~ . - control)
+  mutate_at(vars(starts_with("treatment")), ~ . - control) %>% 
+  # and back
+  pivot_longer(control:treatment_D, names_to = "sample_id", values_to = "intensity")
 ```
 
 ```{r include=FALSE}

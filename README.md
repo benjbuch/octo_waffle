@@ -48,7 +48,7 @@ You may wish to consult the [answer key](answer_key) on certain problems.
 
 A cheat sheet for the introduction in [RMD](part_00-cheat_sheet.Rmd) or [DOCX](part_00-cheat_sheet.docx) format at your disposal.
 
-## Syllabus
+## Syllabus: Data Analysis
 
 We focus on using packages from the [`tidyverse`](https://www.tidyverse.org).
 
@@ -64,6 +64,10 @@ We focus on using packages from the [`tidyverse`](https://www.tidyverse.org).
     * [Arranging Plots into Figures](part_24-arranging_plots.md)
 3. [Good Practices](part_30-good_practices.md)
 4. [Import, Export, Save](part_40-import_export_save.md)
+
+## Miscellaneous
+
+[Useful Statements](part_04-useful_statements.md)
 
 ## Acknowledgements
 
